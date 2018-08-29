@@ -2,7 +2,7 @@
   "name": "ride-repl",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/repl/index.jsx",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js --env",
