@@ -78,10 +78,10 @@ class App extends Component {
     bindConsole(this.console);
 
     // add all waves functions to iframe global scope
-    const iframeWindow = getContainer().contentWindow;
-    debugger
-    const w = waves()
-    Object.keys(w).forEach(key => iframeWindow[key] = w[key]);
+    // const iframeWindow = getContainer().contentWindow;
+
+    // const w = waves()
+    // Object.keys(w).forEach(key => iframeWindow[key] = w[key]);
 
     const query = decodeURIComponent(window.location.search.substr(1));
     if (query) {
@@ -90,7 +90,7 @@ class App extends Component {
       this.onRun(':welcome');
     }
 
-    console.log(iframeWindow)
+    //console.log(iframeWindow)
     // const iframeWindow = getContainer().contentWindow;
     // Object.keys(this.props.global).forEach(key => {
     //   iframeWindow[key] = this.props.global[key];
