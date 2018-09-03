@@ -42,13 +42,13 @@ const finalCreateStore = compose(...middleware)(createStore);
 const defaults = {};
 try {
   defaults.settings = JSON.parse(
-    localStorage.getItem('console.settings') || '{}'
+    localStorage.getItem('jsconsole.settings') || '{}'
   );
   defaults.history = JSON.parse(
-    sessionStorage.getItem('console.history') || '[]'
+    sessionStorage.getItem('jsconsole.history') || '[]'
   );
   defaults.env = JSON.parse(
-    sessionStorage.getItem('console.env') || '{}'
+    sessionStorage.getItem('jsconsole.env') || '{}'
   );
 } catch (e) {
   console.log(e);

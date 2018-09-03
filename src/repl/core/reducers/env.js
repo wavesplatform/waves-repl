@@ -6,7 +6,7 @@ const defaultState = {
 
 const reducer = (state = defaultState, action) => {
   if (action.type === SET_ENV) {
-    return { ...state, env: action.value };
+    return action.value;
   }
   return state;
 };
