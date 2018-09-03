@@ -22,10 +22,13 @@ const middleware = [
       save('settings', state.settings, 'local');
     }
 
-    if (action.type === ADD_HISTORY || action.type === SET_ENV) {
-      save('env', state.env);
+    if (action.type === ADD_HISTORY || action.type === ) {
+      save('history', state.history);
     }
 
+    if (action.type === SET_ENV) {
+      save('env', state.env);
+    }
     return nextAction;
   }),
 ];
