@@ -10,7 +10,7 @@ import {
   MandatoryAssetId, OrderType,
   Recipient,
   StringWithLength, Transfers
-} from '..';
+} from '../index';
 import {
   IBURN_PROPS, ICANCEL_LEASING_PROPS, ICANCEL_ORDER_PROPS, ICREATE_ALIAS_PROPS, IDEFAULT_PROPS,
   IISSUE_PROPS, ILEASE_PROPS, IORDER_PROPS, IREISSUE_PROPS,

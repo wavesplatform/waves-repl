@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import MonacoEditor from 'react-monaco-editor';
 import keycodes from '../lib/keycodes';
-import { wavesDocs } from '../../../waves-docs';
+import { wavesDocs } from '../../waves-docs';
 
 class Input extends Component {
   constructor(props) {

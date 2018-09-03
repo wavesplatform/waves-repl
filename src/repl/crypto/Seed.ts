@@ -1,6 +1,6 @@
 import { IKeyPair } from './interface';
 import { config } from './config/Config';
-import { libs, utils } from '.';
+import { libs, utils } from './index';
 import dictionary from './dictionary';
 import { MAINNET_BYTE } from './constants';
 

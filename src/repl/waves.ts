@@ -28,7 +28,7 @@ import {
   TRANSFER2,
   Seed,
   utils,
-} from './crypto'
+} from './crypto/index'
 import Axios from 'axios';
 //import { IEnvironmentState, defaultEnv, IAppState } from '../state';
 import base58 from './crypto/libs/base58';
@@ -45,7 +45,7 @@ export interface KeyPair {
 }
 const env: any = {}
 
-export const waves = () => {
+export const waves = (env) => {
 
   // const file = (tabName: string): string =>
   //   (store.getState().coding.editors.filter(e => e.label == tabName)[0] || { code: '' }).code

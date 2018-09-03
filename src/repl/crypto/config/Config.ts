@@ -1,4 +1,4 @@
-import { MAINNET_BYTE } from '..';
+import { MAINNET_BYTE } from '../index';
 import { IConfig, IConfigOptions } from './interface';
 
 

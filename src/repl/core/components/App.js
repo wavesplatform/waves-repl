@@ -5,8 +5,10 @@ import classnames from 'classnames';
 import Console from './Console';
 import Input from '../containers/Input';
 
-import run, { bindConsole, createContainer } from '../lib/run';
+import run, { bindConsole, createContainer, getContainer } from '../lib/run';
 import internalCommands from '../lib/internal-commands';
+
+import {waves} from "../../waves";
 
 // this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
@@ -14,8 +16,6 @@ const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backs
 class App extends Component {
   constructor(props) {
     super(props);
-
-    this.getEnv = props.getEnv;
 
     this.onRun = this.onRun.bind(this);
     this.triggerFocus = this.triggerFocus.bind(this);
@@ -76,6 +76,13 @@ class App extends Component {
   componentDidMount() {
     createContainer();
     bindConsole(this.console);
+
+    // add all waves functions to iframe global scope
+    const iframeWindow = getContainer().contentWindow;
+    debugger
+    const w = waves()
+    Object.keys(w).forEach(key => iframeWindow[key] = w[key]);
+
     const query = decodeURIComponent(window.location.search.substr(1));
     if (query) {
       this.onRun(query);
@@ -83,7 +90,7 @@ class App extends Component {
       this.onRun(':welcome');
     }
 
-
+    console.log(iframeWindow)
     // const iframeWindow = getContainer().contentWindow;
     // Object.keys(this.props.global).forEach(key => {
     //   iframeWindow[key] = this.props.global[key];

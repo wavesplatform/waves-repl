@@ -4,7 +4,7 @@ import base58 from '../libs/base58';
 import convert from '../utils/convert';
 import { concatUint8Arrays } from '../utils/concat';
 import { DATA_ENTRIES_BYTE_LIMIT, STUB_NAME } from '../constants';
-import { config } from '..';
+import { config } from '../index';
 import { ALIAS_VERSION, TRANSFER_ATTACHMENT_BYTE_LIMIT, WAVES_BLOCKCHAIN_ID, WAVES_ID } from '../constants';
 
 
