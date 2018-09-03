@@ -22,7 +22,7 @@ const middleware = [
       save('settings', state.settings, 'local');
     }
 
-    if (action.type === ADD_HISTORY || action.type === ) {
+    if (action.type === ADD_HISTORY) {
       save('history', state.history);
     }
 
