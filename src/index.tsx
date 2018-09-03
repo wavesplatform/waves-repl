@@ -6,7 +6,15 @@ import {render} from "react-dom"
 import {Repl} from './repl'
 
 
-render(<Repl />,  document.getElementById("root"))
+function getEnv(){
+    return 'Env'
+}
+
+function getCode(){
+    return 'code'
+}
+
+render(<Repl getEnv={getEnv} getCode={getCode}/>,  document.getElementById("root"))
 
 // const App = connect((state) => ({
 //     coding: state.coding

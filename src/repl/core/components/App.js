@@ -15,6 +15,8 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.getEnv = props.getEnv;
+
     this.onRun = this.onRun.bind(this);
     this.triggerFocus = this.triggerFocus.bind(this);
   }

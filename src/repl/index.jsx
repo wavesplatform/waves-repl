@@ -7,9 +7,9 @@ import './core/jsconsole.css';
 const rootEl = document.getElementById('root');
 const App = require('./core/containers/App').default;
 
-export const Repl = () => {
+export const Repl = ({getEnv, getCode}) => {
   return (
-    <Provider store={store}>
+    <Provider store={store} getEnv={getEnv} getCode={getCode}>
       <App />
     </Provider>
   );

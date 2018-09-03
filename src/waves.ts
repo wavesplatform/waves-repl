@@ -43,11 +43,12 @@ export interface KeyPair {
   public: string
   private: string
 }
+const env: any = {}
 
-export const waves = (env, store) => {
+export const waves = () => {
 
-  const file = (tabName: string): string =>
-    (store.getState().coding.editors.filter(e => e.label == tabName)[0] || { code: '' }).code
+  // const file = (tabName: string): string =>
+  //   (store.getState().coding.editors.filter(e => e.label == tabName)[0] || { code: '' }).code
 
   /**
    * @preserve
@@ -81,7 +82,7 @@ export const waves = (env, store) => {
   }
 
   const _ = {
-    file,
+    ///file,
     keyPair,
     publicKey,
     privateKey,

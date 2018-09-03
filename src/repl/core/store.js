@@ -2,6 +2,7 @@ import reducers from './reducers';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { SET_THEME, SET_LAYOUT } from './actions/Settings';
 import { ADD_HISTORY } from './actions/Input';
+import { SET_ENV} from "./actions/Env";
 
 const save = (key, value, store = 'session') => {
   try {
@@ -21,8 +22,8 @@ const middleware = [
       save('settings', state.settings, 'local');
     }
 
-    if (action.type === ADD_HISTORY) {
-      save('history', state.history);
+    if (action.type === ADD_HISTORY || action.type === SET_ENV) {
+      save('env', state.env);
     }
 
     return nextAction;
@@ -42,6 +43,9 @@ try {
   );
   defaults.history = JSON.parse(
     sessionStorage.getItem('console.history') || '[]'
+  );
+  defaults.env = JSON.parse(
+    sessionStorage.getItem('console.env') || '{}'
   );
 } catch (e) {
   console.log(e);
