@@ -129,6 +129,7 @@ class App extends Component {
           onClear={() => {
             this.console.clear();
           }}
+          theme={this.props.theme}
         />
       </div>
     );

@@ -3,9 +3,14 @@ import MonacoEditor from 'react-monaco-editor';
 import keycodes from '../lib/keycodes';
 import { wavesDocs } from '../../waves-docs';
 
+const themeMap = {
+    dark: 'vs-dark',
+    light: 'vs'
+}
 class Input extends Component {
   constructor(props) {
     super(props);
+    console.log(props)
     this.input = null;
     this.monaco = null;
     // history is set in the componentDidMount
@@ -14,6 +19,7 @@ class Input extends Component {
       multiline: false,
       rows: 1,
       historyCursor: props.history.length,
+      theme: props.theme || 'light'
     };
     this.onChange = this.onChange.bind(this);
     this.onKeyPress = this.onKeyPress.bind(this);
@@ -66,6 +72,7 @@ class Input extends Component {
         }
         this.setState({ historyCursor, value: history[historyCursor] });
         e.preventDefault();
+        this.input.editor.setPosition({ column:  history[historyCursor].length, lineNumber: 1 })
         return;
       }
 
@@ -92,6 +99,8 @@ class Input extends Component {
         return;
       }
 
+
+      // ToDo: add line as ts lib only on successful run
       this.monaco.languages.typescript.typescriptDefaults.addExtraLib(command);
 
       this.props.addHistory(command);
@@ -124,6 +133,7 @@ class Input extends Component {
       <div className="Input" style={{ overflowX: 'hidden', height: '40px' }}>
         <MonacoEditor
           language="typescript"
+          theme={themeMap[this.state.theme]}
           value={this.state.value}
           height={30}
           ref={e => {
@@ -133,7 +143,7 @@ class Input extends Component {
           onChange={this.onChange}
           editorDidMount={this.editorDidMount}
           options={{
-            language: 'typescript',
+            //language: 'typescript',
             selectOnLineNumbers: false,
             glyphMargin: false,
             autoClosingBrackets: true,

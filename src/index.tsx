@@ -6,6 +6,8 @@ function updateEnv(p){
     Repl.updateEnv(p)
 }
 
-render(<div id='repl'><Repl /></div>,  document.getElementById("root"))
+render(<div id='repl'><Repl theme='dark'/></div>,  document.getElementById("root"))
 
 global['updateEnv'] = updateEnv
+
+updateEnv({SEED: 'SEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED', CHAIN_ID: 'T'})
