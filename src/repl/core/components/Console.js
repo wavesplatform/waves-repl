@@ -67,23 +67,23 @@ class Console extends Component {
   constructor(props) {
     super(props);
     this.state = (props.commands || []).reduce((acc, curr) => {
-      acc[getNext()] = curr;
+      acc.commands[getNext()] = curr;
       return acc;
-    }, {});
+    }, {commands:{}});
     this.log = this.log.bind(this);
     this.clear = this.clear.bind(this);
     this.push = this.push.bind(this);
     this.scrollToBottom = props.scrollToBottom
+      window.riderepl = this
   }
 
   push(command) {
     const next = getNext();
-    this.setState({ [next]: command });
+    this.setState({commands: Object.assign({}, this.state.commands,{ [next]: command })});
   }
 
   clear() {
-    this.state = {}; // eslint-disable-line react/no-direct-mutation-state
-    this.forceUpdate();
+    this.setState({commands:{}});
   }
 
   error(...rest) {
@@ -152,7 +152,7 @@ class Console extends Component {
   }
 
   render() {
-    const commands = this.state || {};
+    const commands = this.state.commands || {};
     const keys = Object.keys(commands);
     if (this.props.reverse) {
       keys.reverse();
