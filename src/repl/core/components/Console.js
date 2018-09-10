@@ -73,6 +73,7 @@ class Console extends Component {
     this.log = this.log.bind(this);
     this.clear = this.clear.bind(this);
     this.push = this.push.bind(this);
+    this.scrollToBottom = props.scrollToBottom
   }
 
   push(command) {
@@ -94,6 +95,10 @@ class Console extends Component {
       type: 'log',
     });
   };
+
+  componentDidUpdate(){
+    this.scrollToBottom();
+  }
 
   assert(test, ...rest) {
     // intentional loose assertion test - matches devtools

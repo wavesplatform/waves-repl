@@ -72,7 +72,6 @@ class Input extends Component {
         }
         this.setState({ historyCursor, value: history[historyCursor] });
         e.preventDefault();
-        this.input.editor.setPosition({ column:  history[historyCursor].length, lineNumber: 1 })
         return;
       }
 
@@ -108,7 +107,7 @@ class Input extends Component {
       e.preventDefault();
       await this.props.onRun(command);
 
-      document.getElementById('repl').scrollBy(0, 1000);
+      //document.getElementById('repl').scrollBy(0, 1000);
       return;
     }
   }
