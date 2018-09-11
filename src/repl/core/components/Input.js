@@ -3,7 +3,7 @@ import MonacoEditor from 'react-monaco-editor';
 import keycodes from '../lib/keycodes';
 import { wavesDocs } from '../../waves-docs';
 
-const themeMap = {
+const THEME_MAP = {
     dark: 'vs-dark',
     light: 'vs'
 }
@@ -132,7 +132,7 @@ class Input extends Component {
       <div className="Input" style={{ overflowX: 'hidden', height: '40px' }}>
         <MonacoEditor
           language="typescript"
-          theme={themeMap[this.state.theme]}
+          theme={THEME_MAP[this.state.theme]}
           value={this.state.value}
           height={30}
           ref={e => {

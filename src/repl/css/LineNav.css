@@ -53,19 +53,19 @@
 }
 
 .icon.copy {
-  background-image: url(/console/copy.svg);
+  background-image: svg-load('../svg/copy.svg');
 }
 
 .icon.link {
-  background-image: url(/console/link.svg);
+  background-image: svg-load('../svg/link.svg');
 }
 
 .icon.search {
-  background-image: url(/console/search.svg);
+  background-image: svg-load('../svg/search.svg');
 }
 
 .icon.expand {
-  background-image: url(/console/expand.svg);
+  background-image: svg-load('../svg/expand.svg');
   padding: 0;
   background-color: transparent;
   margin: 0;

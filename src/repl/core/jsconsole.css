@@ -139,7 +139,7 @@ body, html, #root {
 .Input:before {
   position: absolute;
   content: '';
-  background-image: url(/console/prompt.svg);
+  background-image: svg-load('../svg/prompt.svg');
   background-size: contain;
   top: 0.9rem;
   left: 0.4rem;
@@ -150,7 +150,7 @@ body, html, #root {
 }
 
 .Line .input:before {
-  background-image: url(/console/in.svg);
+  background-image: svg-load('../svg/in.svg');
 }
 
 .Input .cli,
@@ -206,7 +206,7 @@ body, html, #root {
 }
 
 .Line .input:before {
-  background-image: url(/console/in.svg);
+  background-image: svg-load('../svg/in.svg');
   top: 0.9rem;
 }
 
@@ -215,7 +215,7 @@ body, html, #root {
 }
 
 .Line .output:before {
-  background-image: url(/console/out.svg);
+  background-image:  svg-load('../svg/out.svg');
 }
 
 .Line .output.log:before {
@@ -223,7 +223,7 @@ body, html, #root {
 }
 
 .Line .error.output:before {
-  background-image: url(/console/error.svg);
+  background-image:  svg-load('../svg/error.svg');
 }
 
 .Line:hover .LineNav,
@@ -362,19 +362,19 @@ body, html, #root {
 }
 
 .icon.copy {
-  background-image: url(/console/copy.svg);
+  background-image:  svg-load('../svg/copy.svg');
 }
 
 .icon.link {
-  background-image: url(/console/link.svg);
+  background-image:  svg-load('../svg/link.svg');
 }
 
 .icon.search {
-  background-image: url(/console/search.svg);
+  background-image:  svg-load('../svg/search.svg');
 }
 
 .icon.expand {
-  background-image: url(/console/expand.svg);
+  background-image:  svg-load('../svg/expand.svg');
   padding: 0;
   background-color: transparent;
   margin: 0;

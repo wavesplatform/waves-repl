@@ -18,7 +18,7 @@
 .Input:before {
   position: absolute;
   content: '';
-  background-image: url(/console/prompt.svg);
+  background-image: svg-load('src/repl/svg/prompt.svg');
   background-size: contain;
   top: 0.9rem;
   left: 0.4rem;
@@ -29,7 +29,7 @@
 }
 
 .Line .input:before {
-  background-image: url(/console/in.svg);
+  background-image: svg-load('../svg/in.svg');
 }
 
 .Input .cli,
