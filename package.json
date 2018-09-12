@@ -1,6 +1,6 @@
 {
   "name": "waves-repl",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "JS REPL for waves blockchain. Built on top of jsconsole",
   "main": "src/repl/index.jsx",
   "scripts": {

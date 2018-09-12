@@ -45,8 +45,8 @@ export interface KeyPair {
 
 export const waves = (env) => {
 
-    const file = (tabName: string): string => ''
-       //(store.getState().coding.editors.filter(e => e.label == tabName)[0] || { code: '' }).code
+    const file = (tabName: string): string =>
+       (env.editors.filter(e => e.label == tabName)[0] || { code: '' }).code
 
     /**
      * @preserve
