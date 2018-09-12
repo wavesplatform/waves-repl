@@ -9,7 +9,7 @@ render(<div id='repl'><Repl theme='dark'/></div>,  document.getElementById("root
 // Add update env to global scope for debug purposes
 global['updateEnv'] = Repl.updateEnv
 
-// Try to aquire vscode api and send command asking for current settings
+// Try to aquire vscode api and send command, asking for current settings
 try {
     const vscode = eval('acquireVsCodeApi()')
     vscode.postMessage({command: 'GetDefaultSettings'})

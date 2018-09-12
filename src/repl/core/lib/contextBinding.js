@@ -7,7 +7,8 @@ export const bindWavesLib = (env) => {
         const iframeWindow = getContainer().contentWindow;
         const w = waves(env)
         Object.keys(w).forEach(key => iframeWindow[key] = w[key]);
+        iframeWindow['env'] = env
     } catch (e) {
-
+        console.error(e)
     }
 }

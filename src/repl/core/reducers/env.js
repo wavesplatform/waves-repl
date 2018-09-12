@@ -1,17 +1,12 @@
-import { SET_ENV } from '../actions/Env';
-import { bindWavesLib } from '../lib/bindWavesLib';
+import {SET_ENV} from '../actions/Env';
 
-const defaultState = {
-
-};
+const defaultState = {};
 
 const reducer = (state = defaultState, action) => {
-  if (action.type === SET_ENV) {
-    const newState = Object.assign({}, state, action.value)
-    bindWavesLib(newState)
-    return newState
-  }
-  return state;
+    if (action.type === SET_ENV) {
+        return Object.assign({}, state, action.value)
+    }
+    return state;
 };
 
 export default reducer;

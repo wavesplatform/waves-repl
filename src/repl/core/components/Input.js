@@ -10,7 +10,7 @@ const THEME_MAP = {
 class Input extends Component {
   constructor(props) {
     super(props);
-    console.log(props)
+
     this.input = null;
     this.monaco = null;
     // history is set in the componentDidMount
