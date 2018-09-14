@@ -1,13 +1,24 @@
 import {getContainer} from '../lib/run';
-import {waves} from "../../waves";
+import {WavesConsoleAPI} from "../../WavesConsoleAPI";
 
-export const bindWavesLib = (env) => {
+const consoleApi = new WavesConsoleAPI()
+
+export const updateIFrameEnv = (env) => {
     // add all waves functions to iframe global scope
     try {
+        WavesConsoleAPI.setEnv(env)
         const iframeWindow = getContainer().contentWindow;
-        const w = waves(env)
-        Object.keys(w).forEach(key => iframeWindow[key] = w[key]);
+        // Object.keys(consoleApi).forEach(key => iframeWindow[key] = w[key]);
         iframeWindow['env'] = env
+    } catch (e) {
+        console.error(e)
+    }
+}
+
+export const bindAPItoIFrame = () => {
+    try {
+        const iframeWindow = getContainer().contentWindow;
+        Object.keys(consoleApi).forEach(key => iframeWindow[key] = consoleApi[key]);
     } catch (e) {
         console.error(e)
     }
