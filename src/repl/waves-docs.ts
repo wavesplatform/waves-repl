@@ -35,9 +35,13 @@ declare function issue(txParams: {
    */
   timestamp?: number,
   /** 
-   * Transaction version, default: 1
+   * Transaction version, default: 2
    */
-  version?: number
+  version?: number,
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
 },  seed?: string)
 
 /**
@@ -67,9 +71,13 @@ declare function reissue(txParams: {
    */
   timestamp?: number,
   /** 
-   * version - Transaction version, default: 1
+   * version - Transaction version, default: 2
    */
   version?: number
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
 }, seed?: string)
 
 /**
@@ -107,7 +115,7 @@ declare function burn(txParams: {
  */
 declare function transfer(txParams: {
   /** 
-   * Amount to transfer
+   * Amount to transfer in minimal units. E.x. for waves 100000000 equals 1.0 Waves
    */
   amount: number,
   /** 
@@ -117,7 +125,7 @@ declare function transfer(txParams: {
   /** 
    *  Asset Id to transfer, in case you want to transfer WAVES use default, default: ''
    */
-  assetId: string,
+  assetId?: string,
   /** 
    * Attachment to transfer, default: ''
    */
@@ -125,7 +133,7 @@ declare function transfer(txParams: {
   /** 
    * Asset Id to pay fee with, in case you want to pay fee with WAVES use default, default: ''
    */
-  feeAssetId: string = 'WAVES',
+  feeAssetId?: string = 'WAVES',
   /** 
    * Transaction fee, default: 100000.
    */
@@ -133,11 +141,11 @@ declare function transfer(txParams: {
   /** 
    * Transaction timestamp, default: Date.now()
    */
-  timestamp: number = Date.now(),
+  timestamp?: number = Date.now(),
   /** 
    * Transaction version, default: 1
    */
-  version: number = 1
+  version?: number = 1
 },   seed?: string) 
     
 /**
@@ -322,7 +330,7 @@ declare const env: {
 /**
  * Open editor tab content
  */
-declare const contract: string
+declare function contract(): string
 
 /**
  * Gets editor contents for tab.

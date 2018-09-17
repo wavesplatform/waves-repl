@@ -13,13 +13,15 @@ export class WavesConsoleAPI {
 
     constructor() {
         Object.keys(wt).forEach(key => {
-            this[key] = (params, seed) => wt[key](seed || WavesConsoleAPI.env.SEED, params)
+            this[key] = (params, seed) => wt[key](seed || WavesConsoleAPI.env.SEED,
+                {...params, chainId: WavesConsoleAPI.env.CHAIN_ID})
         })
     }
 
     public file = (tabName: string): string =>
         (WavesConsoleAPI.env.editors.filter(e => e.label == tabName)[0] || {code: ''}).code
 
+    public contract = (): string => ''
 
     public keyPair = (seed: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
 
