@@ -262,6 +262,10 @@ declare function setScript(txParams: {
    * Transaction version, default: 1
    */
   version?: number = 1,
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
 }, seed: string = env.SEED)
 
 
