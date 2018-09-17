@@ -3,6 +3,7 @@ import {keyPair, KeyPair, address} from 'waves-crypto'
 
 import Axios from 'axios';
 import {compile as cmpl} from "@waves/ride-js"
+import {SET_SCRIPT, TRANSACTION_TYPE_NUMBER} from "./crypto";
 
 export class WavesConsoleAPI {
     static env: any;
@@ -21,7 +22,7 @@ export class WavesConsoleAPI {
     public file = (tabName: string): string =>
         (WavesConsoleAPI.env.editors.filter(e => e.label == tabName)[0] || {code: ''}).code
 
-    public contract = (): string => ''
+    public contract = (): string => WavesConsoleAPI.env.editors[WavesConsoleAPI.env.selectedEditor]
 
     public keyPair = (seed: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
 
@@ -53,7 +54,40 @@ export class WavesConsoleAPI {
         const binstr = Array.prototype.map.call(buf, ch => String.fromCharCode(ch)).join('');
         return btoa(binstr)
     }
-}
 
-// const api = new WavesConsoleAPI()
-// console.log(Object.getOwnPropertyNames(api))
+    // TEMPORARY!!!!
+    public setScript = (params: {
+                            script: string,
+                            fee: number,
+                            timestamp: number
+                            version: number,
+                            chainId: string
+                        }
+    ) => {
+        let {script, fee, timestamp, version, chainId} = params
+        fee = fee || 1000000
+        timestamp = timestamp || Date.now()
+        chainId = WavesConsoleAPI.env.CHAIN_ID.charCodeAt(0)
+        version = version || 1
+        const tx: any = {
+            type: TRANSACTION_TYPE_NUMBER.SET_SCRIPT,
+            version,
+            senderPublicKey: this.publicKey(undefined),
+            script: 'base64:' + script,
+            fee,
+            timestamp
+        }
+
+        const signature = new SET_SCRIPT({
+            chainId,
+            fee,
+            script: tx.script,
+            senderPublicKey: tx.senderPublicKey,
+            timestamp
+        }).getSignature(this.privateKey(undefined))
+
+        return {
+            ...tx, fee, proofs: [signature]
+        }
+    }
+}
