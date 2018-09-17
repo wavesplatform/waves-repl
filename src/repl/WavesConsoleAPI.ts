@@ -1,11 +1,8 @@
 import * as wt from 'waves-transactions'
+import {keyPair, KeyPair, address} from 'waves-crypto'
+
 import Axios from 'axios';
 import {compile as cmpl} from "@waves/ride-js"
-
-export interface KeyPair {
-    public: string
-    private: string
-}
 
 export class WavesConsoleAPI {
     static env: any;
@@ -16,9 +13,26 @@ export class WavesConsoleAPI {
 
     constructor() {
         Object.keys(wt).forEach(key => {
-            this[key] = (params) => wt[key](WavesConsoleAPI.env.SEED, params)
+            this[key] = (params, seed) => wt[key](seed || WavesConsoleAPI.env.SEED, params)
         })
     }
+
+    public file = (tabName: string): string =>
+        (WavesConsoleAPI.env.editors.filter(e => e.label == tabName)[0] || {code: ''}).code
+
+
+    public keyPair = (seed: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
+
+    public publicKey = (seed: string): string =>
+        this.keyPair(seed).public
+
+    public privateKey = (seed: string): string =>
+        this.keyPair(seed).private
+
+    public address = (keyPairOrSeed: KeyPair | string) => address(
+        keyPairOrSeed || WavesConsoleAPI.env.SEED,
+        WavesConsoleAPI.env.CHAIN_ID
+    )
 
     public compile = (code: string): string => {
         const r = cmpl(code)
