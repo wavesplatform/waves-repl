@@ -22,7 +22,13 @@ export class WavesConsoleAPI {
     public file = (tabName: string): string =>
         (WavesConsoleAPI.env.editors.filter(e => e.label == tabName)[0] || {code: ''}).code
 
-    public contract = (): string => WavesConsoleAPI.env.editors[WavesConsoleAPI.env.selectedEditor]
+    public contract = (): string => {
+        try {
+            return  WavesConsoleAPI.env.editors[WavesConsoleAPI.env.selectedEditor].code
+        }catch (e) {
+            return ''
+        }
+    }
 
     public keyPair = (seed: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
 
