@@ -3,7 +3,7 @@ import {createStore, compose, applyMiddleware} from 'redux';
 import {SET_THEME, SET_LAYOUT} from './actions/Settings';
 import {ADD_HISTORY} from './actions/Input';
 import {SET_ENV} from "./actions/Env";
-import {bindWavesLib} from './lib/contextBinding';
+import {updateIFrameEnv} from './lib/contextBinding';
 
 const save = (key, value, store = 'session') => {
     try {
@@ -38,7 +38,7 @@ const syncIFrameEnvMiddleware = applyMiddleware(store => next => action => {
     const state = store.getState(); // new state after action was applied
 
     if (action.type === SET_ENV) {
-        bindWavesLib(state.env)
+        updateIFrameEnv(state.env)
     }
     return nextAction;
 });

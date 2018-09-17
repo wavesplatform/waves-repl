@@ -2,127 +2,202 @@ export const wavesDocs = `
 
 /**
  * Creates signed issue transaction.
- * @param {string} name - Name of asset, max 16 symbols.
- * @param {string} description - Description of asset, max 1000 symbols.
- * @param {number} decimals - How many decimals your asset will have, range 0-8.
- * @param {number} quantity - The total supply of your token.
- * @param {boolean} reissuable - Re-issuable defines if an asset issuer can increase the token's supply at a later point or not.
- * @param {number} fee - Transaction fee, default: 100000000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function issue(
+declare function issue(txParams: {
+  /** 
+   * Name of asset, max 16 symbols 
+   */
   name: string,
+  /** 
+   * Description of asset, max 1000 symbols  
+   */
   description: string,
+  /** 
+   * How many decimals your asset will have, range 0-8
+   */
   decimals: number,
+  /** 
+   * The total supply of your token
+   */
   quantity: number,
+  /** 
+   * Re-issuable defines if an asset issuer can increase the token's supply at a later point or not
+   */
   reissuable: boolean,
-  fee: number = 100000000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-)
+  /** 
+   * Transaction fee, default: 100000000
+   */
+  fee?: number,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+  timestamp?: number,
+  /** 
+   * Transaction version, default: 2
+   */
+  version?: number,
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
+},  seed?: string)
 
 /**
  * Creates signed reissue transaction.
- * @param {string} assetId - Id of earlier issued asset.
- * @param {number} quantity - The total supply of your token (will be added to the old one).
- * @param {boolean} reissuable - Re-issuable defines if an asset issuer can increase the token's supply at a later point or not.
- * @param {number} fee - Transaction fee, default: 100000000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function reissue(
+declare function reissue(txParams: {
+  /** 
+   * Id of earlier issued asset
+   */
   assetId: string,
+  /** 
+   * The total supply of your token (will be added to the old one)
+   */
   quantity: number,
+  /** 
+   * Re-issuable defines if an asset issuer can increase the token's supply at a later point or not
+   */
   reissuable: boolean,
-  fee: number = 100000000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-)
+  /** 
+   * Transaction fee, default: 100000000
+   */
+  fee?: number,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+  timestamp?: number,
+  /** 
+   * version - Transaction version, default: 2
+   */
+  version?: number
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
+}, seed?: string)
 
 /**
  * Creates signed burn transaction.
- * @param {string} assetId - Id of earlier issued asset.
- * @param {number} quantity - Amount to burn.
- * @param {number} fee - Transaction fee, default: 100000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function burn(
+declare function burn(txParams: {
+  /** 
+   * Id of earlier issued asset
+   */
   assetId: string,
+ /** 
+   * Amount to burn
+   */
   quantity: number,
-  fee: number = 100000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-) 
+  /** 
+   * Transaction fee, default: 100000
+   */
+  fee?: number,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+  timestamp?: number = Date.now(),
+  /** 
+   * version - Transaction version, default: 1
+   */
+  version?: number
+}, seed?: string) 
 
 /**
  * Creates signed transfer transaction.
- * @param {number} amount - Amount to transfer.
- * @param {string} recipient - Recipient address to transfer funds to.
- * @param {string} assetId - Asset Id to transfer, in case you want to transfer WAVES use default, default: ''.
- * @param {string} attachment - Attachment to transfer, default: ''.
- * @param {number} feeAssetId - Asset Id to pay fee with, in case you want to pay fee with WAVES use default, default: ''.
- * @param {number} fee - Transaction fee, default: 100000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function transfer(
+declare function transfer(txParams: {
+  /** 
+   * Amount to transfer in minimal units. E.x. for waves 100000000 equals 1.0 Waves
+   */
   amount: number,
+  /** 
+   * Recipient address to transfer funds to
+   */
   recipient: string,
-  assetId: string = 'WAVES',
-  attachment: string = '',
-  feeAssetId: string = 'WAVES',
-  fee: number = 100000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-) 
+  /** 
+   *  Asset Id to transfer, in case you want to transfer WAVES use default, default: ''
+   */
+  assetId?: string,
+  /** 
+   * Attachment to transfer, default: ''
+   */
+  attachment?: string = '',
+  /** 
+   * Asset Id to pay fee with, in case you want to pay fee with WAVES use default, default: ''
+   */
+  feeAssetId?: string = 'WAVES',
+  /** 
+   * Transaction fee, default: 100000.
+   */
+  fee?: number = 100000,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+  timestamp?: number = Date.now(),
+  /** 
+   * Transaction version, default: 1
+   */
+  version?: number = 1
+},   seed?: string) 
     
 /**
  * Creates signed lease transaction.
- * @param {number} amount - Amount to lease.
- * @param {string} recipient - Recipient address to lease to.
- * @param {number} fee - Transaction fee, default: 200000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function lease(
+declare function lease(txParams: {
+  /** 
+   * Amount to lease
+   */
   amount: number,
+  /** 
+   * Recipient address to lease to
+   */
   recipient: string,
+  /** 
+   * Transaction fee, default: 200000.
+   */
   fee: number = 200000,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
   timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-)
+  /** 
+   * Transaction version, default: 1.
+   */
+  version: number = 1
+},  seed: string = env.SEED)
 
 /**
- * Creates signed lease transaction.
- * @param {number} txId - Id of previous lease transaction.
- * @param {number} fee - Transaction fee, default: 100000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * Creates signed cancelLease transaction.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function cancelLease(
-  txId: string,
-  fee: number = 100000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  chainId: string = env.CHAIN_ID,
-  seed: string = env.SEED
-) 
+declare function cancelLease(txParams: {
+  /** 
+   * Id of previous lease transaction
+   */
+    leaseId: string,
+   /** 
+   * Transaction fee, default: 100000
+   */
+    fee?: number,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+    timestamp?: number
+},  seed: string = env.SEED) 
 
 /**
- * Creates signed lease transaction.
+ * Creates signed createAlias transaction. Not implemented
  * @param {string} alias - Alias for a sender's address.
  * @param {number} fee - Transaction fee, default: 100000.
  * @param {number} timestamp - Transaction timestamp, default: Date.now().
@@ -139,28 +214,86 @@ declare function createAlias(
 
 /**
  * Creates signed massTransfer transaction.
- * @param {(string | number)[]} transfers - Array of recepients and amounts, example: [100, '3N84Z1vMsHTpFEi6pBh8EdefQCmWLgC5hnH', 200, 'addr2'].
- * @param {string} assetId - Asset Id to transfer, in case you want to transfer WAVES use default, default: ''.
- * @param {number} fee - Transaction fee, default: 200000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function massTransfer(
-  transfers: (string | number)[],
+declare function massTransfer(txParams: {
+  /** 
+   *Array of objects representing transfer. Contains recipient and amount field
+   */
+  transfers: {recipient: string, amount:number}[],
+  /** 
+   * Asset Id to transfer, in case you want to transfer WAVES use default, default: ''
+   */
   assetId: string = 'WAVES',
+  /** 
+   * Transaction fee, default: 100000 + 50000 * (transfers.length + 1)
+   */
   fee: number = 100000 + 50000 * (transfers.length + 1),
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
   timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED)
+  /** 
+   * Transaction version, default: 1
+   */
+  version: number = 1
+ }, seed: string = env.SEED)
 
-declare function script(
+/**
+ * Creates signed setScript transaction.
+ * @param {Object} txParams - Transaction parameters
+ * @param {string} seed - Seed to sign transaction, default: env.SEED.
+ */
+declare function setScript(txParams: {
+  /** 
+   * Compiled script in base64 format
+   */
   script: string,
-  fee: number = 1000000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-)
+  /** 
+   * Transaction fee, default: 1000000
+   */
+  fee?: number = 1000000,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+  timestamp?: number = Date.now(),
+  /** 
+   * Transaction version, default: 1
+   */
+  version?: number = 1,
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
+}, seed: string = env.SEED)
+
+
+
+/**
+ * Creates signed data transaction.
+ * @param {Object} txParams - Transaction parameters
+ * @param {string} seed - Seed to sign transaction, default: env.SEED.
+ */
+declare function data(txParams: {
+  /** 
+   * Array of data entries: {key:string, value:  string | number | boolean | Buffer | Uint8Array | number[]}
+   */
+  data: [],
+  /** 
+   * Transaction fee, default: Math.floor(1 + (bytes.length + 8 - 1) / 1024) * 100000)
+   */
+  fee?: number,
+  /** 
+   * Transaction timestamp, default: Date.now()
+   */
+  timestamp?: number = Date.now(),
+  /** 
+   * Transaction version, default: 1
+   */
+  version?: number = 1,
+}, seed: string = env.SEED)
+
 
 /**
  * Sends transaction to the Waves network using env.API_BASE endpoint.
@@ -198,7 +331,10 @@ declare const env: {
   CHAIN_ID: string
 }
 
-declare const contract: string
+/**
+ * Open editor tab content
+ */
+declare function contract(): string
 
 /**
  * Gets editor contents for tab.
@@ -206,8 +342,10 @@ declare const contract: string
  */
 declare function file(tabName:string):string
 
+/**
+ * Gets editor contents for tab.
+ * @param {string} code - Contract code
+ */
 declare function compile(code:string):string
-
-declare function foo(code:{name: string, age:number}):string
 
 `
