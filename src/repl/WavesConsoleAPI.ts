@@ -50,10 +50,10 @@ export class WavesConsoleAPI {
         return this.bufferToBase64(new Uint8Array(r.result))
     }
 
-    public broadcast = (tx: any) => {
-        return Axios.post(WavesConsoleAPI.env.API_BASE + 'transactions/broadcast', tx)
-            .then(x => x.data)
-            .catch(x => x.response.data)
+    public broadcast = async (tx: any) => {
+        const url = new URL('transactions/broadcast', WavesConsoleAPI.env.API_BASE).href;
+        const resp = await Axios.post(url, tx)
+        return resp.data
     }
 
     private bufferToBase64(buf) {
