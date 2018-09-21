@@ -27,6 +27,10 @@ declare function issue(txParams: {
    */
   reissuable: boolean,
   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
+  /** 
    * Transaction fee, default: 100000000
    */
   fee?: number,
@@ -63,6 +67,10 @@ declare function reissue(txParams: {
    */
   reissuable: boolean,
   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
+  /** 
    * Transaction fee, default: 100000000
    */
   fee?: number,
@@ -94,6 +102,10 @@ declare function burn(txParams: {
    * Amount to burn
    */
   quantity: number,
+   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
   /** 
    * Transaction fee, default: 100000
    */
@@ -134,6 +146,10 @@ declare function transfer(txParams: {
    * Asset Id to pay fee with, in case you want to pay fee with WAVES use default, default: ''
    */
   feeAssetId?: string = 'WAVES',
+   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
   /** 
    * Transaction fee, default: 100000.
    */
@@ -163,17 +179,21 @@ declare function lease(txParams: {
    */
   recipient: string,
   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
+  /** 
    * Transaction fee, default: 200000.
    */
-  fee: number = 200000,
+  fee?: number = 200000,
   /** 
    * Transaction timestamp, default: Date.now()
    */
-  timestamp: number = Date.now(),
+  timestamp?: number = Date.now(),
   /** 
    * Transaction version, default: 1.
    */
-  version: number = 1
+  version?: number = 1
 },  seed: string = env.SEED)
 
 /**
@@ -186,6 +206,10 @@ declare function cancelLease(txParams: {
    * Id of previous lease transaction
    */
     leaseId: string,
+   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
    /** 
    * Transaction fee, default: 100000
    */
@@ -210,6 +234,10 @@ declare function alias(txParams:{
    * Alias for a sender's address.
    */
    alias: string,
+   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
   /** 
    * Transaction fee, default: 100000
    */
@@ -239,17 +267,21 @@ declare function massTransfer(txParams: {
    */
   assetId: string = 'WAVES',
   /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
+  senderPublicKey?: string,
+  /** 
    * Transaction fee, default: 100000 + 50000 * (transfers.length + 1)
    */
-  fee: number = 100000 + 50000 * (transfers.length + 1),
+  fee?: number = 100000 + 50000 * (transfers.length + 1),
   /** 
    * Transaction timestamp, default: Date.now()
    */
-  timestamp: number = Date.now(),
+  timestamp?: number = Date.now(),
   /** 
    * Transaction version, default: 1
    */
-  version: number = 1
+  version?: number = 1
  }, seed: string = env.SEED)
 
 /**
@@ -262,6 +294,9 @@ declare function setScript(txParams: {
    * Compiled script in base64 format
    */
   script: string,
+  /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
   /** 
    * Transaction fee, default: 1000000
    */
@@ -292,6 +327,9 @@ declare function data(txParams: {
    * Array of data entries: {key:string, value:  string | number | boolean | Buffer | Uint8Array | number[]}
    */
   data: [],
+    /** 
+   * Account public key from which this tx should be sent. Default to the one who signs tx
+   */
   /** 
    * Transaction fee, default: Math.floor(1 + (bytes.length + 8 - 1) / 1024) * 100000)
    */
