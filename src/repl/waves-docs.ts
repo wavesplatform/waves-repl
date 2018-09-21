@@ -193,24 +193,36 @@ declare function cancelLease(txParams: {
   /** 
    * Transaction timestamp, default: Date.now()
    */
-    timestamp?: number
+    timestamp?: number,
+  /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
 },  seed: string = env.SEED) 
 
 /**
  * Creates signed createAlias transaction. Not implemented
- * @param {string} alias - Alias for a sender's address.
- * @param {number} fee - Transaction fee, default: 100000.
- * @param {number} timestamp - Transaction timestamp, default: Date.now().
- * @param {number} version - Transaction version, default: 1.
+ * @param {Object} txParams - Transaction parameters
  * @param {string} seed - Seed to sign transaction, default: env.SEED.
  */
-declare function createAlias(
-  alias: string,
-  fee: number = 100000,
-  timestamp: number = Date.now(),
-  version: number = 1,
-  seed: string = env.SEED
-) 
+declare function alias(txParams:{
+  /** 
+   * Alias for a sender's address.
+   */
+   alias: string,
+  /** 
+   * Transaction fee, default: 100000
+   */
+   fee?: number,
+   /** 
+   * Transaction timestamp, default: Date.now()
+   */
+   timestamp?: number,
+   /** 
+   * Network byte, default env.CHAIN_ID
+   */
+  chainId?: string
+}, seed: string = env.SEED ) 
 
 /**
  * Creates signed massTransfer transaction.
