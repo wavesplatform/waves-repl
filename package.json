@@ -35,7 +35,7 @@
     "react-redux": "^5.0.7",
     "react-resize-detector": "^2.3.0",
     "redux": "^4.0.0",
-    "waves-transactions": "^1.0.18"
+    "waves-transactions": "^1.0.19"
   },
   "devDependencies": {
     "@remy/eslint": "^3.0.0",
