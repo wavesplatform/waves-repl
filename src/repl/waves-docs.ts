@@ -35,10 +35,6 @@ declare function issue(txParams: {
    */
   fee?: number,
   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number,
-  /** 
    * Transaction version, default: 2
    */
   version?: number,
@@ -75,10 +71,6 @@ declare function reissue(txParams: {
    */
   fee?: number,
   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number,
-  /** 
    * version - Transaction version, default: 2
    */
   version?: number
@@ -110,10 +102,6 @@ declare function burn(txParams: {
    * Transaction fee, default: 100000
    */
   fee?: number,
-  /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number = Date.now(),
   /** 
    * version - Transaction version, default: 1
    */
@@ -155,10 +143,6 @@ declare function transfer(txParams: {
    */
   fee?: number = 100000,
   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number = Date.now(),
-  /** 
    * Transaction version, default: 1
    */
   version?: number = 1
@@ -187,10 +171,6 @@ declare function lease(txParams: {
    */
   fee?: number = 200000,
   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number = Date.now(),
-  /** 
    * Transaction version, default: 1.
    */
   version?: number = 1
@@ -215,10 +195,6 @@ declare function cancelLease(txParams: {
    */
     fee?: number,
   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-    timestamp?: number,
-  /** 
    * Network byte, default env.CHAIN_ID
    */
   chainId?: string
@@ -242,10 +218,6 @@ declare function alias(txParams:{
    * Transaction fee, default: 100000
    */
    fee?: number,
-   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-   timestamp?: number,
    /** 
    * Network byte, default env.CHAIN_ID
    */
@@ -275,10 +247,6 @@ declare function massTransfer(txParams: {
    */
   fee?: number = 100000 + 50000 * (transfers.length + 1),
   /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number = Date.now(),
-  /** 
    * Transaction version, default: 1
    */
   version?: number = 1
@@ -301,10 +269,6 @@ declare function setScript(txParams: {
    * Transaction fee, default: 1000000
    */
   fee?: number = 1000000,
-  /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number = Date.now(),
   /** 
    * Transaction version, default: 1
    */
@@ -334,10 +298,6 @@ declare function data(txParams: {
    * Transaction fee, default: Math.floor(1 + (bytes.length + 8 - 1) / 1024) * 100000)
    */
   fee?: number,
-  /** 
-   * Transaction timestamp, default: Date.now()
-   */
-  timestamp?: number = Date.now(),
   /** 
    * Transaction version, default: 1
    */

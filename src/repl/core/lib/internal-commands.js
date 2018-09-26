@@ -1,7 +1,7 @@
 const version = process.env.REACT_APP_VERSION;
 
 const welcome = () => ({
-  value: `Waves console 0.0.2
+  value: `Waves console 1.0.8
 Use <strong>:help</strong> to show commands`,
   html: true,
 });
