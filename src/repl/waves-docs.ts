@@ -265,6 +265,7 @@ declare function setScript(txParams: {
   /** 
    * Account public key from which this tx should be sent. Default to the one who signs tx
    */
+  senderPublicKey?: string,
   /** 
    * Transaction fee, default: 1000000
    */
@@ -291,9 +292,10 @@ declare function data(txParams: {
    * Array of data entries: {key:string, value:  string | number | boolean | Buffer | Uint8Array | number[]}
    */
   data: [],
-    /** 
+  /** 
    * Account public key from which this tx should be sent. Default to the one who signs tx
    */
+  senderPublicKey?: string,
   /** 
    * Transaction fee, default: Math.floor(1 + (bytes.length + 8 - 1) / 1024) * 100000)
    */
