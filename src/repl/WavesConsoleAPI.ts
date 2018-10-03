@@ -1,4 +1,4 @@
-import * as wt from 'waves-transactions'
+import * as wt from 'waves-transactions/src'
 import {keyPair, KeyPair, address} from 'waves-crypto'
 
 import Axios from 'axios';
@@ -25,35 +25,43 @@ export class WavesConsoleAPI {
         try {
             return  WavesConsoleAPI.env.editors[WavesConsoleAPI.env.selectedEditor].code
         }catch (e) {
-            return ''
+            throw new Error('No active contract tab found')
         }
-    }
+    };
 
     public keyPair = (seed: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
 
     public publicKey = (seed: string): string =>
-        this.keyPair(seed).public
+        this.keyPair(seed).public;
 
     public privateKey = (seed: string): string =>
-        this.keyPair(seed).private
+        this.keyPair(seed).private;
 
     public address = (keyPairOrSeed: KeyPair | string) => address(
         keyPairOrSeed || WavesConsoleAPI.env.SEED,
         WavesConsoleAPI.env.CHAIN_ID
-    )
+    );
 
     public compile = (code: string): string => {
-        const r = cmpl(code)
+        const r = cmpl(code);
         if (r.error)
-            return r.error
-        return this.bufferToBase64(new Uint8Array(r.result))
-    }
+            throw new Error(r.error);
+        return this.bufferToBase64(new Uint8Array(r.result));
+    };
 
     public broadcast = async (tx: any) => {
         const url = new URL('transactions/broadcast', WavesConsoleAPI.env.API_BASE).href;
-        const resp = await Axios.post(url, tx)
+        const resp = await Axios.post(url, tx);
         return resp.data
-    }
+    };
+
+    public deploy = async (params?: {fee?:number, senderPublicKey?:string, script?:string}, seed?: string | string[]) => {
+        let txParams = params || {};
+        txParams.script = txParams.script === undefined ? this.compile(this.contract()) : txParams.script
+
+        const setScriptTx = this['setScript'](txParams, seed);
+        return this.broadcast(setScriptTx);
+    };
 
     private bufferToBase64(buf) {
         const binstr = Array.prototype.map.call(buf, ch => String.fromCharCode(ch)).join('');
