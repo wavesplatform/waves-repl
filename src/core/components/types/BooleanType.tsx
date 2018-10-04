@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-class BooleanType extends Component {
+export class BooleanType extends React.Component<{value:boolean}> {
   shouldComponentUpdate() {
     return false;
   }
@@ -10,5 +10,3 @@ class BooleanType extends Component {
     return <div className="bool type">{value ? 'true' : 'false'}</div>;
   }
 }
-
-export default BooleanType;

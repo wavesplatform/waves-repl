@@ -5,9 +5,11 @@ import {ADD_HISTORY} from './actions/Input';
 import {SET_ENV} from "./actions/Env";
 import {updateIFrameEnv} from './lib/contextBinding';
 
-const save = (key, value, store = 'session') => {
+
+const save = (key: string, value:any, store = 'session') => {
+    const storage = store === 'session' ? window.sessionStorage : window.localStorage
     try {
-        window[`${store}Storage`].setItem(
+        storage.setItem(
             `jsconsole.${key}`,
             JSON.stringify(value)
         );
@@ -17,7 +19,7 @@ const save = (key, value, store = 'session') => {
 
 const saveToStorageMiddleware = applyMiddleware(store => next => action => {
     const nextAction = next(action);
-    const state = store.getState(); // new state after action was applied
+    const state:any = store.getState(); // new state after action was applied
 
     if (action.type === SET_THEME || action.type === SET_LAYOUT) {
         save('settings', state.settings, 'local');
@@ -35,7 +37,7 @@ const saveToStorageMiddleware = applyMiddleware(store => next => action => {
 
 const syncIFrameEnvMiddleware = applyMiddleware(store => next => action => {
     const nextAction = next(action);
-    const state = store.getState(); // new state after action was applied
+    const state:any = store.getState(); // new state after action was applied
 
     if (action.type === SET_ENV) {
         updateIFrameEnv(state.env)
@@ -48,13 +50,13 @@ const middlewares = [
     syncIFrameEnvMiddleware
 ];
 
-if (window.__REDUX_DEVTOOLS_EXTENSION__) {
-    middlewares.push(window.__REDUX_DEVTOOLS_EXTENSION__());
+if ((<any>window).__REDUX_DEVTOOLS_EXTENSION__) {
+    middlewares.push((<any>window).__REDUX_DEVTOOLS_EXTENSION__());
 }
 
-const finalCreateStore = compose(...middlewares)(createStore);
+//const finalCreateStore = compose(...middlewares)(createStore);
 
-const defaults = {};
+const defaults:any = {};
 try {
     defaults.settings = JSON.parse(
         localStorage.getItem('jsconsole.settings') || '{}'
@@ -69,5 +71,6 @@ try {
     console.log(e);
 }
 
-const store = finalCreateStore(reducers, defaults);
+const store = createStore(reducers, compose(...middlewares))
+//const store = finalCreateStore(reducers, defaults);
 export default store;

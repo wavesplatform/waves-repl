@@ -1,8 +1,14 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import which from '../../lib/which-type';
 
-class EntryType extends Component {
-  constructor(props) {
+interface IEntryTypeProps {
+    allowOpen: boolean,
+    open: boolean,
+    value: [string, any],
+}
+
+export class EntryType extends React.Component<IEntryTypeProps, {open:boolean}> {
+  constructor(props: IEntryTypeProps) {
     super(props);
     this.toggle = this.toggle.bind(this);
 
@@ -11,7 +17,7 @@ class EntryType extends Component {
     };
   }
 
-  toggle(e) {
+  toggle(e: React.MouseEvent) {
     if (!this.props.allowOpen) {
       return;
     }
@@ -68,5 +74,3 @@ class EntryType extends Component {
     );
   }
 }
-
-export default EntryType;

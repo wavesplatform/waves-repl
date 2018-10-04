@@ -1,16 +1,18 @@
-import ArrayType from '../components/types/ArrayType';
+import {ArrayType} from '../components/types/ArrayType';
 import ObjectType from '../components/types/ObjectType';
 import FunctionType from '../components/types/FunctionType';
 import ErrorType from '../components/types/ErrorType';
 import NullType from '../components/types/NullType';
-import UndefinedType from '../components/types/UndefinedType';
+//import {UndefinedType} from '../components/types/UndefinedType';
 import NumberType from '../components/types/NumberType';
 import StringType from '../components/types/StringType';
 import BooleanType from '../components/types/BooleanType';
 import SetType from '../components/types/SetType';
 import PromiseType from '../components/types/PromiseType';
 
-function whichType(value) {
+type GenericType = (ArrayType | ObjectType | FunctionType | ErrorType | NullType |
+    NumberType | StringType | BooleanType | SetType | PromiseType)
+function whichType(value:any): {
   let type = '[object Object]';
   try {
     type = ({}).toString.call(value);

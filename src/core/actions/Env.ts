@@ -1,2 +1,2 @@
 export const SET_ENV = 'SET_ENV';
-export function setEnv(value) { return { type: SET_ENV, value }; };
+export function setEnv(value: any) { return { type: SET_ENV, value }; };
