@@ -9,7 +9,6 @@ export class LineNav extends React.Component<any, any> {
         super(props);
         this.preCopy = this.preCopy.bind(this);
         this.toggleFilter = this.toggleFilter.bind(this);
-        this.onPermalink = this.onPermalink.bind(this);
 
         const type = {}.toString.call(props.value) || 'string';
         this.state = {
@@ -18,12 +17,6 @@ export class LineNav extends React.Component<any, any> {
             filter: false,
             copyAsHTML: type.includes('Element'),
         };
-    }
-
-    onPermalink(e: React.MouseEvent<HTMLAnchorElement>) {
-        // let this throw if no support
-        window.history.pushState(null, document.title, (e as any).target.search);
-        e.preventDefault();
     }
 
     async preCopy() {
@@ -74,7 +67,7 @@ export class LineNav extends React.Component<any, any> {
     }
 
     render() {
-        const {command, value, onFilter} = this.props;
+        const {value, onFilter} = this.props;
         const {text, filter, copyAsHTML} = this.state;
 
         const copyAs =
@@ -94,15 +87,6 @@ export class LineNav extends React.Component<any, any> {
                         search
                     </button>
                 </Filter>}
-                {command &&
-                <a
-                    onClick={this.onPermalink}
-                    title="Permalink"
-                    className="icon link"
-                    href={`?${escape(command)}`}
-                >
-                    link
-                </a>}
                 <CopyToClipboard text={text}>
                     <button
                         title={copyAs}
