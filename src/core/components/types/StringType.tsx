@@ -14,7 +14,7 @@ interface IStringTypeState {
     expanded: boolean
 }
 
-class StringType extends React.Component<IStringTypeProps, IStringTypeState> {
+export class StringType extends React.Component<IStringTypeProps, IStringTypeState> {
     private string?: HTMLDivElement | null;
 
     constructor(props: IStringTypeProps) {
@@ -74,5 +74,3 @@ class StringType extends React.Component<IStringTypeProps, IStringTypeState> {
         );
     }
 }
-
-export default StringType;

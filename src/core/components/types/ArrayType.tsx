@@ -1,6 +1,7 @@
 import * as React from 'react';
 import {zip, flatten} from 'lodash'
 import which from '../../lib/which-type';
+import {ITypeState} from "./ITypeState";
 
 interface IArrayTypeProps {
     allowOpen: boolean,
@@ -10,7 +11,7 @@ interface IArrayTypeProps {
     filter?: any
 }
 
-export class ArrayType extends React.Component<IArrayTypeProps, {open:boolean}> {
+export class ArrayType extends React.Component<IArrayTypeProps, ITypeState> {
 
     constructor(props: IArrayTypeProps) {
         super(props);

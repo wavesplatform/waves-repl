@@ -3,7 +3,8 @@
     "strict": true ,
     "target": "es6",
     "jsx": "react",
-    "module": "commonjs"
+    "module": "commonjs",
+    "lib": ["es7"]
   },
   "exclude": [
     "node_modules"
