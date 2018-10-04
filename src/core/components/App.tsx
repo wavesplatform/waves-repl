@@ -2,18 +2,23 @@ import * as React from 'react';
 import * as PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-import Console from './Console';
-import Input from '../containers/Input';
+import {Console} from './Console';
+import {Input} from '../containers/Input';
 
 import run, {bindConsole, createContainer, getContainer} from '../lib/run';
-//import internalCommands from '../lib/internal-commands';
+import internalCommands from '../lib/internal-commands';
 import {bindAPItoIFrame} from '../lib/contextBinding';
 
 // this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
 
-class App extends React.Component {
+export class App extends React.Component<any, any> {
     private console: any;
+    private messagesEnd?: HTMLDivElement | null;
+    private app: any;
+    private input: any;
+
+    static contextTypes = {store: PropTypes.object};
 
     constructor(props: any) {
         super(props);
@@ -41,12 +46,13 @@ class App extends React.Component {
             return;
         }
 
-        let [cmd, ...args]:any[] = command.slice(1).split(' ');
+        let [cmd, ...args]: any[] = command.slice(1).split(' ');
 
         if (/^\d+$/.test(cmd)) {
             args = [parseInt(cmd, 10)];
             cmd = 'history';
         }
+
 
         if (!internalCommands[cmd]) {
             console.push({
@@ -91,7 +97,7 @@ class App extends React.Component {
     }
 
 
-    triggerFocus(e) {
+    triggerFocus(e: any) {
         if (e.target.nodeName === 'INPUT') return;
         if (e.metaKey || e.ctrlKey || e.altKey) return;
         if (e.code && !doStuffKeys.test(e.code)) return;
@@ -100,6 +106,7 @@ class App extends React.Component {
     }
 
     scrollToBottom() {
+        if (!this.messagesEnd) return
         this.messagesEnd.scrollIntoView({behavior: "smooth"});
     }
 
@@ -110,7 +117,7 @@ class App extends React.Component {
 
         return (
             <div
-                tabIndex="-1"
+                tabIndex={-1}
                 onKeyDown={this.triggerFocus}
                 ref={e => (this.app = e)}
                 className={className}
@@ -119,10 +126,10 @@ class App extends React.Component {
                     ref={e => (this.console = e)}
                     commands={commands}
                     reverse={layout === 'top'}
-                    scrollToBottom={()=>this.scrollToBottom()}
+                    scrollToBottom={() => this.scrollToBottom()}
                 />
                 <Input
-                    inputRef={e => (this.input = e)}
+                    inputRef={(e:any) => (this.input = e)}
                     onRun={this.onRun}
                     autoFocus={window.top === window}
                     onClear={() => {
@@ -130,12 +137,12 @@ class App extends React.Component {
                     }}
                     theme={this.props.theme}
                 />
-                <div ref={el => { this.messagesEnd = el; }} />
+                <div ref={el => {
+                    this.messagesEnd = el;
+                }}/>
             </div>
         );
     }
 }
 
-App.contextTypes = {store: PropTypes.object};
 
-export default App;

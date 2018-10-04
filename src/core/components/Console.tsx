@@ -1,5 +1,5 @@
 import * as React from 'react';
-import Line from './Line';
+import {Line} from './Line';
 
 let guid = 0;
 const getNext = () => guid++;
@@ -18,7 +18,7 @@ class AssertError extends Error {
 }
 // AssertError.prototype = new Error();
 
-function interpolate(...args) {
+function interpolate(...args:any) {
     let [string, ...rest] = args;
     let html = false;
 
@@ -69,21 +69,23 @@ function interpolate(...args) {
     return {html, args};
 }
 
-class Console extends React.Component {
-    constructor(props) {
+export class Console extends React.Component<any,any> {
+    private readonly scrollToBottom: any
+
+    constructor(props:any) {
         super(props);
-        this.state = (props.commands || []).reduce((acc, curr) => {
+        this.state = (props.commands || []).reduce((acc:any, curr:any) => {
             acc.commands[getNext()] = curr;
             return acc;
         }, {commands: {}});
         this.log = this.log.bind(this);
         this.clear = this.clear.bind(this);
         this.push = this.push.bind(this);
-        this.scrollToBottom = props.scrollToBottom
-        window.riderepl = this
+        this.scrollToBottom = props.scrollToBottom;
+        (window as any).riderepl = this
     }
 
-    push(command) {
+    push(command: any) {
         const next = getNext();
         this.setState({commands: Object.assign({}, this.state.commands, {[next]: command})});
     }
@@ -92,7 +94,7 @@ class Console extends React.Component {
         this.setState({commands: {}});
     }
 
-    error(...rest) {
+    error(...rest:any) {
         const {html, args} = interpolate(...rest);
         this.push({
             error: true,
@@ -106,7 +108,7 @@ class Console extends React.Component {
         this.scrollToBottom();
     }
 
-    assert(test, ...rest) {
+    assert(test:any, ...rest:any) {
         // intentional loose assertion test - matches devtools
         if (!test) {
             let msg = rest.shift();
@@ -122,7 +124,7 @@ class Console extends React.Component {
         }
     }
 
-    dir(...rest) {
+    dir(...rest:any) {
         const {html, args} = interpolate(...rest);
 
         this.push({
@@ -133,7 +135,7 @@ class Console extends React.Component {
         });
     };
 
-    warn(...rest) {
+    warn(...rest:any) {
         const {html, args} = interpolate(...rest);
         this.push({
             error: true,
@@ -144,15 +146,15 @@ class Console extends React.Component {
         });
     }
 
-    debug(...args) {
+    debug(...args:any) {
         return this.log(...args);
     };
 
-    info(...args) {
+    info(...args:any) {
         return this.log(...args);
     };
 
-    log(...rest) {
+    log(...rest:any) {
         const {html, args} = interpolate(...rest);
 
         this.push({
@@ -181,5 +183,3 @@ class Console extends React.Component {
         );
     }
 }
-
-export default Console;

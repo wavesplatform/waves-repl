@@ -10,19 +10,6 @@ import {BooleanType} from '../components/types/BooleanType';
 import {SetType} from '../components/types/SetType';
 import {PromiseType} from '../components/types/PromiseType';
 
-// type GenericType =
-//     typeof ArrayType
-//     | typeof ObjectType
-//     | typeof FunctionType
-//     | typeof ErrorType
-//     | typeof NullType
-//     | typeof UndefinedType
-//     | typeof NumberType
-//     | typeof StringType
-//     | typeof BooleanType
-//     | typeof SetType
-//     | typeof PromiseType
-
 function whichType(value: any) {
     let type = '[object Object]';
     try {

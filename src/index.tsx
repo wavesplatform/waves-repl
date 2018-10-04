@@ -3,7 +3,7 @@ import {Provider} from 'react-redux';
 import store from './core/store';
 import {setEnv} from './core/actions/Env'
 import {setTheme} from './core/actions/Settings'
-import {default as App} from './core/containers/App'
+import {App} from './core/containers/App'
 import './css/index.css';
 import './core/jsconsole.css';
 

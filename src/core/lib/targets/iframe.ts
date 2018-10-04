@@ -1,5 +1,5 @@
 /*global document */
-export const container = document.createElement('iframe');
+export const container:any = document.createElement('iframe');
 container.width = container.height = 1;
 container.style.opacity = 0;
 container.style.border = 0;
@@ -8,8 +8,8 @@ container.style.top = '-100px';
 container.setAttribute('name', '<proxy>');
 document.body.appendChild(container);
 
-export default function run(command) {
-  const res = {
+export default function run(command:any) {
+  const res:any = {
     error: false,
     command,
   };

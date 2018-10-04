@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import App from '../components/App';
+import {App as AppComponent} from '../components/App';
 import { setTheme, setLayout } from '../actions/Settings';
 import { setEnv } from "../actions/Env";
 
-export default connect(({settings}) => ({
+export const App =  connect(({settings}:any) => ({
   theme: settings.theme,
   layout: settings.layout,
   env: settings.env
-}), { setTheme, setLayout, setEnv })(App);
+}), { setTheme, setLayout, setEnv })(AppComponent);

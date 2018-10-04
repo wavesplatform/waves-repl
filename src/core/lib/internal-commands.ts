@@ -49,7 +49,7 @@ const clear = ({console}:any) => {
 };
 
 
-const commands = {
+const commands: any = {
     welcome,
     help,
     about,

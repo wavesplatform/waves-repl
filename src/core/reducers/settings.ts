@@ -6,7 +6,7 @@ const defaultState = {
   remote: false,
 };
 
-const reducer = (state = defaultState, action) => {
+const reducer = (state = defaultState, action:any) => {
   if (action.type === SET_THEME) {
     return { ...state, theme: action.value };
   }

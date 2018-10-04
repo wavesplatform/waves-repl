@@ -1,4 +1,4 @@
-import * as wt from 'waves-transactions/src'
+import * as wt from 'waves-transactions'
 import {keyPair, KeyPair, address} from 'waves-crypto'
 
 import Axios from 'axios';
@@ -6,20 +6,20 @@ import {compile as cmpl} from "@waves/ride-js"
 
 export class WavesConsoleAPI {
     static env: any;
-
+    [key:string]: any;
     public static setEnv(env: any) {
         WavesConsoleAPI.env = env;
     }
 
     constructor() {
         Object.keys(wt).forEach(key => {
-            this[key] = (params, seed) => wt[key](seed || WavesConsoleAPI.env.SEED,
+            this[key] = (params:any, seed:any) => (wt as any)[key](seed || WavesConsoleAPI.env.SEED,
                 {...params, chainId: WavesConsoleAPI.env.CHAIN_ID})
         })
     }
 
     public file = (tabName: string): string =>
-        (WavesConsoleAPI.env.editors.filter(e => e.label == tabName)[0] || {code: ''}).code
+        (WavesConsoleAPI.env.editors.filter((e:any) => e.label == tabName)[0] || {code: ''}).code
 
     public contract = (): string => {
         try {
@@ -63,8 +63,8 @@ export class WavesConsoleAPI {
         return this.broadcast(setScriptTx);
     };
 
-    private bufferToBase64(buf) {
-        const binstr = Array.prototype.map.call(buf, ch => String.fromCharCode(ch)).join('');
+    private bufferToBase64(buf: Uint8Array) {
+        const binstr = Array.prototype.map.call(buf, (ch:number) => String.fromCharCode(ch)).join('');
         return btoa(binstr)
     }
 }

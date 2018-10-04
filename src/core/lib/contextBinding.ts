@@ -1,9 +1,9 @@
-import {getContainer} from '../lib/run';
+import {getContainer} from './run';
 import {WavesConsoleAPI} from "../../WavesConsoleAPI";
 
 const consoleApi = new WavesConsoleAPI()
 
-export const updateIFrameEnv = (env) => {
+export const updateIFrameEnv = (env:any) => {
     // add all waves functions to iframe global scope
     try {
         WavesConsoleAPI.setEnv(env)

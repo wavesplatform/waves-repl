@@ -1,5 +1,5 @@
 import * as React from 'react';
-import LineNav from './LineNav';
+import {LineNav} from './LineNav';
 import which from '../lib/which-type';
 
 export class Line extends React.Component<any, any> {
@@ -11,11 +11,7 @@ export class Line extends React.Component<any, any> {
     }
 
     shouldComponentUpdate(nextProps: any, nextState: any) {
-        if (this.state.filter !== nextState.filter) {
-            return true;
-        }
-
-        return false; // this prevents bananas amount of rendering
+        return this.state.filter !== nextState.filter;
     }
 
     render() {
@@ -53,7 +49,7 @@ export class Line extends React.Component<any, any> {
             line = (
                 <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
                     <LineNav
-                        onFilter={filter => {
+                        onFilter={(filter:any) => {
                             this.setState({filter});
                         }}
                         value={
