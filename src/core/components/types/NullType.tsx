@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-export class NullType extends React.Component {
+export class NullType extends React.Component<any> {
     shouldComponentUpdate() {
         return false;
     }

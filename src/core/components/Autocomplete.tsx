@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 
-class Autocomplete extends Component {
+export class Autocomplete extends React.Component {
   render() {
     return (
       <div className="Autocomplete">
@@ -11,4 +11,3 @@ class Autocomplete extends Component {
   }
 }
 
-export default Autocomplete;

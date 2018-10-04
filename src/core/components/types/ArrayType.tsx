@@ -11,7 +11,7 @@ interface IArrayTypeProps {
     filter?: any
 }
 
-export class ArrayType extends React.Component<IArrayTypeProps, ITypeState> {
+export class ArrayType extends React.Component<any, ITypeState> {
 
     constructor(props: IArrayTypeProps) {
         super(props);
@@ -46,7 +46,7 @@ export class ArrayType extends React.Component<IArrayTypeProps, ITypeState> {
             );
         }
 
-        let types = value.slice(0, open ? value.length : 10).map((_, i) => {
+        let types = value.slice(0, open ? value.length : 10).map((_:string, i: number) => {
             const Type = which(_);
             return (
                 <Type
@@ -133,7 +133,7 @@ export class ArrayType extends React.Component<IArrayTypeProps, ITypeState> {
                     <span className="arb-info">({length})</span>[
                 </div>
                 <div className="group">
-                    {types.map((type, i) => {
+                    {types.map((type:any, i: number) => {
                         if (
                             filter === null ||
                             filter === undefined ||

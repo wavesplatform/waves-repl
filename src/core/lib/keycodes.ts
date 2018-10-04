@@ -155,4 +155,4 @@ export default {
   233 : 'XF86Forward',
   234 : 'XF86Back',
   255 : 'toggle touchpad'
-};
+} as {[key:number]: string};

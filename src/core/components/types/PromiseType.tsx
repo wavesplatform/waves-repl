@@ -14,7 +14,7 @@ interface IPromiseTypeState extends ITypeState {
     status: string
 }
 
-export class PromiseType extends React.Component<IPromiseTypeProps, IPromiseTypeState> {
+export class PromiseType extends React.Component<any, IPromiseTypeState> {
     constructor(props: IPromiseTypeProps) {
         super(props);
         this.toggle = this.toggle.bind(this);

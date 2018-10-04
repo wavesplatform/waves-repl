@@ -10,7 +10,7 @@ interface IErrorTypeProps {
     value: { name?: string }
 }
 
-export class ErrorType extends React.Component<IErrorTypeProps, ITypeState> {
+export class ErrorType extends React.Component<any, ITypeState> {
     constructor(props: IErrorTypeProps) {
         super(props);
 

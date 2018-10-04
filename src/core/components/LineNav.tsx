@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import Filter from './Filter';
-import CopyToClipboard from 'react-copy-to-clipboard';
+import * as React from 'react';
+import {Filter} from './Filter';
+import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-class LineNav extends Component {
+class LineNav extends React.Component {
   constructor(props) {
     super(props);
     this.preCopy = this.preCopy.bind(this);

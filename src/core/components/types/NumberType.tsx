@@ -4,7 +4,7 @@ interface INumberTypeProps {
     value: number
 }
 
-export class NumberType extends React.Component<INumberTypeProps> {
+export class NumberType extends React.Component<any> {
     shouldComponentUpdate() {
         return false;
     }

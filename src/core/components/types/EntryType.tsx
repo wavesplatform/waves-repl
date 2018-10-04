@@ -9,7 +9,7 @@ interface IEntryTypeProps {
     shallow?: boolean
 }
 
-export class EntryType extends React.Component<IEntryTypeProps, ITypeState> {
+export class EntryType extends React.Component<any, ITypeState> {
     constructor(props: IEntryTypeProps) {
         super(props);
         this.toggle = this.toggle.bind(this);

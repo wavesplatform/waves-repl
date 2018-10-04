@@ -14,7 +14,7 @@ interface IStringTypeState {
     expanded: boolean
 }
 
-export class StringType extends React.Component<IStringTypeProps, IStringTypeState> {
+export class StringType extends React.Component<any, IStringTypeState> {
     private string?: HTMLDivElement | null;
 
     constructor(props: IStringTypeProps) {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-export class BooleanType extends React.Component<{ value: boolean }> {
+export class BooleanType extends React.Component<any> {
     shouldComponentUpdate() {
         return false;
     }

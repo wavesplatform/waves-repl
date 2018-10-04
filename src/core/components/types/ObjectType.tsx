@@ -1,6 +1,6 @@
 import * as React from 'react';
 import which from '../../lib/which-type';
-import StringType from './StringType';
+import {StringType} from './StringType';
 import {zip, flatten} from 'lodash';
 import {ITypeState} from "./ITypeState";
 
@@ -35,7 +35,7 @@ interface IObjectTypeProps {
     type?: string
 }
 
-export class ObjectType extends React.Component<IObjectTypeProps, ITypeState> {
+export class ObjectType extends React.Component<any, ITypeState> {
     constructor(props: IObjectTypeProps) {
         super(props);
         this.toggle = this.toggle.bind(this);
@@ -137,7 +137,7 @@ export class ObjectType extends React.Component<IObjectTypeProps, ITypeState> {
             types.push(
                 <span key="objectType-0" className="more">
           …
-        </span>
+        </span>  as any
             );
         }
 
@@ -174,7 +174,7 @@ export class ObjectType extends React.Component<IObjectTypeProps, ITypeState> {
                             return (
                                 <span key={`sep-${i}`} className="sep">
                   ,
-                </span>
+                </span> as any
                             );
                         }
                     )

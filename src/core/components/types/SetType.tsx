@@ -12,7 +12,7 @@ interface ISetTypeProps {
     displayName?: string
 }
 
-export class SetType extends React.Component<ISetTypeProps, ITypeState> {
+export class SetType extends React.Component<any, ITypeState> {
     constructor(props: ISetTypeProps) {
         super(props);
         this.toggle = this.toggle.bind(this);

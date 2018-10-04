@@ -1,27 +1,29 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
+import * as PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import Console from './Console';
 import Input from '../containers/Input';
 
 import run, {bindConsole, createContainer, getContainer} from '../lib/run';
-import internalCommands from '../lib/internal-commands';
+//import internalCommands from '../lib/internal-commands';
 import {bindAPItoIFrame} from '../lib/contextBinding';
 
 // this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
 
-class App extends Component {
-    constructor(props) {
+class App extends React.Component {
+    private console: any;
+
+    constructor(props: any) {
         super(props);
 
         this.onRun = this.onRun.bind(this);
         this.triggerFocus = this.triggerFocus.bind(this);
-        window.sccc = this.scrollToBottom.bind(this)
+        (window as any).sccc = this.scrollToBottom.bind(this)
     }
 
-    async onRun(command) {
+    async onRun(command: string) {
         const console = this.console;
 
         if (command[0] !== ':') {
@@ -39,7 +41,7 @@ class App extends Component {
             return;
         }
 
-        let [cmd, ...args] = command.slice(1).split(' ');
+        let [cmd, ...args]:any[] = command.slice(1).split(' ');
 
         if (/^\d+$/.test(cmd)) {
             args = [parseInt(cmd, 10)];
