@@ -20,7 +20,7 @@ export const bindConsole = (__console: any) => {
     ];
 
     apply.forEach(method => {
-        container.contentWindow.console[method] = (...args: any) => {
+        container.contentWindow.console[method] = (...args: any[]) => {
             (window as any).console[method].apply(window.console, args);
             __console[method].apply(__console, args);
         };

@@ -5,7 +5,10 @@
     "jsx": "react",
     "module": "commonjs",
     "lib": ["es7", "dom"],
-    "typeRoots": ["node_modules/@types", "src/types"]
+    "typeRoots": ["node_modules/@types",
+      "typings"
+    ],
+    "declaration": true
   },
   "exclude": [
     "node_modules"

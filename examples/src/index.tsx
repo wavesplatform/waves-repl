@@ -3,7 +3,7 @@ import {render} from 'react-dom';
 import {Repl} from '../../src';
 
 const App: React.StatelessComponent = () => (
-    <Repl/>
+    <Repl theme="dark"/>
 );
 
 render(<App />, document.getElementById("root"));

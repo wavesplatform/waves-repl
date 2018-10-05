@@ -168,3 +168,4 @@ typings/
 # Serverless directories
 .serverless
 .idea
+dist

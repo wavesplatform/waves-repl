@@ -1,11 +1,15 @@
 {
   "name": "waves-repl",
-  "version": "0.0.1",
+  "version": "0.1.1",
   "description": "Interactive console to interact with waves blockchain",
   "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --mode development"
+    "start": "webpack-dev-server --mode development --env example",
+    "build": "",
+    "dist": "rimraf dist && webpack --config webpack.config.js --env",
+    "prepublishOnly": "npm run dist"
   },
   "author": "wavesplatform",
   "license": "MIT",
@@ -26,17 +30,19 @@
     "waves-transactions": "latest"
   },
   "devDependencies": {
-    "@types/long": "^4.0.0",
     "@types/babylon": "^6.16.3",
     "@types/babylon-walk": "^3.10.1",
     "@types/classnames": "^2.2.6",
     "@types/lodash": "^4.14.116",
+    "@types/long": "^4.0.0",
     "@types/react": "^16.4.14",
     "@types/react-copy-to-clipboard": "^4.2.6",
     "@types/react-dom": "^16.0.8",
     "@types/react-redux": "^6.0.9",
     "autoprefixer": "^9.1.5",
+    "copy-webpack-plugin": "^4.5.2",
     "css-loader": "^1.0.0",
+    "dts-bundle-webpack": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-inline-svg": "^3.1.1",
@@ -44,6 +50,7 @@
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-redux": "^5.0.7",
+    "rimraf": "^2.6.2",
     "style-loader": "^0.23.0",
     "ts-loader": "^5.2.1",
     "typescript": "^3.1.1",

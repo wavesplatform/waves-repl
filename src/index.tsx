@@ -7,10 +7,13 @@ import {App} from './core/containers/App'
 import './css/index.css';
 import './core/jsconsole.css';
 
-export class Repl extends React.Component {
+interface IReplProps {
+    theme: string
+}
+export class Repl extends React.Component<IReplProps> {
 
-    constructor(props: any){
-        super(props)
+    constructor(props: IReplProps){
+        super(props);
         if (props.theme){
             store.dispatch(setTheme(props.theme))
         }
