@@ -18,7 +18,7 @@ class AssertError extends Error {
 }
 // AssertError.prototype = new Error();
 
-function interpolate(...args:any) {
+function interpolate(...args:any[]) {
     let [string, ...rest] = args;
     let html = false;
 
@@ -108,7 +108,7 @@ export class Console extends React.Component<any,any> {
         this.scrollToBottom();
     }
 
-    assert(test:any, ...rest:any) {
+    assert(test:any, ...rest:any[]) {
         // intentional loose assertion test - matches devtools
         if (!test) {
             let msg = rest.shift();
@@ -124,7 +124,7 @@ export class Console extends React.Component<any,any> {
         }
     }
 
-    dir(...rest:any) {
+    dir(...rest:any[]) {
         const {html, args} = interpolate(...rest);
 
         this.push({
@@ -135,7 +135,7 @@ export class Console extends React.Component<any,any> {
         });
     };
 
-    warn(...rest:any) {
+    warn(...rest:any[]) {
         const {html, args} = interpolate(...rest);
         this.push({
             error: true,
@@ -146,15 +146,15 @@ export class Console extends React.Component<any,any> {
         });
     }
 
-    debug(...args:any) {
+    debug(...args:any[]) {
         return this.log(...args);
     };
 
-    info(...args:any) {
+    info(...args:any[]) {
         return this.log(...args);
     };
 
-    log(...rest:any) {
+    log(...rest:any[]) {
         const {html, args} = interpolate(...rest);
 
         this.push({

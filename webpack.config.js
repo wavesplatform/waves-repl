@@ -13,14 +13,14 @@ module.exports = (arg) => {
         path: path.join(__dirname, "dist")
     };
     let plugins = [
-        new copy([{from: 'README.md'}, {from: 'package.json'}]),
-        new DtsBundleWebpack({
-            name:'waves-repl',
-            baseDir: 'src',
-            main: 'src/index.d.ts',
-            out: '../dist/index.d.ts',
-            removeSource: true
-        })
+        new copy([{from: 'src/index.d.ts'}]),
+        // new DtsBundleWebpack({
+        //     name:'waves-repl',
+        //     baseDir: 'src',
+        //     main: 'src/index.d.ts',
+        //     out: '../dist/index.d.ts',
+        //     removeSource: true
+        // })
     ];
 
     if (arg === 'example') {

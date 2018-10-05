@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
-    "strict": true ,
+    "strict": true,
     "target": "es6",
     "jsx": "react",
     "module": "commonjs",
-    "lib": ["es7", "dom"],
-    "typeRoots": ["node_modules/@types",
+    "lib": [
+      "es7",
+      "dom"
+    ],
+    "typeRoots": [
+      "node_modules/@types",
       "typings"
     ],
-    "declaration": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "exclude": [
     "node_modules"

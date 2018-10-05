@@ -494,3 +494,7 @@ ASALocalRun/
 src
 examples
 typings
+.git
+webpack.config.js
+package-lock.json
+tsconfig.json
