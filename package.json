@@ -6,7 +6,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --mode development --env example",
+    "start": "webpack-dev-server --mode development",F
     "copyCssSvg": "copyfiles -f src/css/* dist/css && copyfiles -f src/svg/* dist/svg && copyfiles -f src/core/jsconsole.css src/core/logo.svg dist/core",
     "dist": "rimraf dist && tsc && npm run copyCssSvg",
     "prepublishOnly": "npm run dist"
@@ -43,14 +43,10 @@
     "copy-webpack-plugin": "^4.5.2",
     "copyfiles": "^2.1.0",
     "css-loader": "^1.0.0",
-    "dts-bundle-webpack": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
     "postcss-flexbugs-fixes": "^4.1.0",
     "postcss-inline-svg": "^3.1.1",
     "postcss-loader": "^3.0.0",
-    "react": "^16.5.2",
-    "react-dom": "^16.5.2",
-    "react-redux": "^5.0.7",
     "rimraf": "^2.6.2",
     "style-loader": "^0.23.0",
     "ts-loader": "^5.2.1",

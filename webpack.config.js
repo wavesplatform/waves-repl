@@ -1,88 +1,60 @@
 /*** webpack.config.js ***/
-const autoprefixer = require('autoprefixer');
+const autoprefixer = require('autoprefixer')
 const path = require('path');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const copy = require('copy-webpack-plugin');
-const DtsBundleWebpack = require('dts-bundle-webpack');
-
-
-module.exports = (arg) => {
-    let entry = path.join(__dirname, "src/index.tsx");
-    let output = {
-        filename: 'index.js',
-        path: path.join(__dirname, "dist")
-    };
-    let plugins = [
-        new copy([{from: 'src/index.d.ts'}]),
-        // new DtsBundleWebpack({
-        //     name:'waves-repl',
-        //     baseDir: 'src',
-        //     main: 'src/index.d.ts',
-        //     out: '../dist/index.d.ts',
-        //     removeSource: true
-        // })
-    ];
-
-    if (arg === 'example') {
-        entry = path.join(__dirname, "examples/src/index.tsx");
-
-        plugins = [new HtmlWebpackPlugin({
-            template: path.join(__dirname, "examples/src/index.html"),
-            filename: "./index.html"
-        })]
-    }
-    return {
-        entry,
-        output,
-        module: {
-            rules: [
-                {
-                    test: /\.(ts|tsx)$/,
-                    use: "ts-loader",
-                    exclude: /node_modules/
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        require.resolve('style-loader'),
-                        {
-                            loader: require.resolve('css-loader'),
-                            options: {
-                                importLoaders: 1,
-                            },
+const htmlWebpackPlugin = new HtmlWebpackPlugin({
+    template: path.join(__dirname, "examples/src/index.html"),
+    filename: "./index.html"
+});
+module.exports = {
+    entry: path.join(__dirname, "examples/src/index.tsx"),
+    module: {
+        rules: [
+            {
+                test: /\.(ts|tsx)$/,
+                use: "ts-loader",
+                exclude: /node_modules/
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    require.resolve('style-loader'),
+                    {
+                        loader: require.resolve('css-loader'),
+                        options: {
+                            importLoaders: 1,
                         },
-                        {
-                            loader: require.resolve('postcss-loader'),
-                            options: {
-                                // Necessary for external CSS imports to work
-                                // https://github.com/facebookincubator/create-react-app/issues/2677
-                                ident: 'postcss',
-                                plugins: () => [
-                                    require('postcss-flexbugs-fixes'),
-                                    require('postcss-inline-svg'),
-                                    autoprefixer({
-                                        browsers: [
-                                            '>1%',
-                                            'last 4 versions',
-                                            'Firefox ESR',
-                                            'not ie < 9', // React doesn't support IE8 anyway
-                                        ],
-                                        flexbox: 'no-2009',
-                                    }),
-                                ],
-                            },
+                    },
+                    {
+                        loader: require.resolve('postcss-loader'),
+                        options: {
+                            // Necessary for external CSS imports to work
+                            // https://github.com/facebookincubator/create-react-app/issues/2677
+                            ident: 'postcss',
+                            plugins: () => [
+                                require('postcss-flexbugs-fixes'),
+                                require('postcss-inline-svg'),
+                                autoprefixer({
+                                    browsers: [
+                                        '>1%',
+                                        'last 4 versions',
+                                        'Firefox ESR',
+                                        'not ie < 9', // React doesn't support IE8 anyway
+                                    ],
+                                    flexbox: 'no-2009',
+                                }),
+                            ],
                         },
-                    ],
-                }
-            ]
-        },
-        plugins,
-        resolve: {
-            extensions: [".js", ".jsx", ".ts", ".tsx"]
-        },
-        devServer: {
-            port: 3001
-        }
+                    },
+                ],
+            }
+        ]
+    },
+    plugins: [htmlWebpackPlugin],
+    resolve: {
+        extensions: [".js", ".jsx", ".ts", ".tsx"]
+    },
+    devServer: {
+        port: 3001
     }
-}
-;
+};
