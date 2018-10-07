@@ -5,7 +5,7 @@ interface IResp {
     html: boolean
 }
 const welcome: () => IResp = () => ({
-    value: `Waves console 1.0.8
+    value: `Waves console 1.1
 Use <strong>:help</strong> to show commands`,
     html: true,
 });

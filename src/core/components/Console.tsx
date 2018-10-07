@@ -94,7 +94,7 @@ export class Console extends React.Component<any,any> {
         this.setState({commands: {}});
     }
 
-    error(...rest:any) {
+    error(...rest: any[]) {
         const {html, args} = interpolate(...rest);
         this.push({
             error: true,

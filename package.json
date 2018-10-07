@@ -1,14 +1,14 @@
 {
   "name": "waves-repl",
-  "version": "0.1.5",
+  "version": "1.1.0",
   "description": "Interactive console to interact with waves blockchain",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development --env example",
-    "build": "",
-    "dist": "rimraf dist && webpack --config webpack.config.js --env",
+    "copyCssSvg": "copyfiles -f src/css/* dist/css && copyfiles -f src/svg/* dist/svg && copyfiles -f src/core/jsconsole.css src/core/logo.svg dist/core",
+    "dist": "rimraf dist && tsc && npm run copyCssSvg",
     "prepublishOnly": "npm run dist"
   },
   "author": "wavesplatform",
@@ -41,6 +41,7 @@
     "@types/react-redux": "^6.0.9",
     "autoprefixer": "^9.1.5",
     "copy-webpack-plugin": "^4.5.2",
+    "copyfiles": "^2.1.0",
     "css-loader": "^1.0.0",
     "dts-bundle-webpack": "^1.0.0",
     "html-webpack-plugin": "^3.2.0",
