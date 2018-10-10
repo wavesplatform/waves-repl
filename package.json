@@ -6,7 +6,7 @@
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --mode development",F
+    "start": "webpack-dev-server --mode development",
     "copyCssSvg": "copyfiles -f src/css/* dist/css && copyfiles -f src/svg/* dist/svg && copyfiles -f src/core/jsconsole.css src/core/logo.svg dist/core",
     "dist": "rimraf dist && tsc && npm run copyCssSvg",
     "prepublishOnly": "npm run dist"
@@ -25,6 +25,8 @@
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
     "react-copy-to-clipboard": "^5.0.1",
+    "react": "^16.3.2",
+    "react-dom": "^16.3.2",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "waves-transactions": "latest"
