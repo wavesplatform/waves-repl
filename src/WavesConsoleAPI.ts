@@ -15,7 +15,7 @@ export class WavesConsoleAPI {
     constructor() {
         Object.keys(wt).forEach(key => {
             this[key] = (params: any, seed: any) => (wt as any)[key](seed || WavesConsoleAPI.env.SEED,
-                {...params, chainId: WavesConsoleAPI.env.CHAIN_ID})
+                {...params, chainId: WavesConsoleAPI.env.CHAIN_ID});
         })
     }
 
@@ -68,4 +68,418 @@ export class WavesConsoleAPI {
         const binstr = Array.prototype.map.call(buf, (ch: number) => String.fromCharCode(ch)).join('');
         return btoa(binstr)
     }
+
+    public help = (func?: Function): string => {
+        var
+            al0: string = '',
+            params: Array<any> = [],
+            aliases: Array<string> = [];
+
+        // Try to find function name
+        for (al0 in this) {
+            if ((typeof func != 'function' || func == this[al0])) {
+                params = this[al0].toString().match(/^\(([^)]*)\)/g);
+                params = params instanceof Array && params.length ? params : [''];
+                params = params[0].replace(/[()]/g, '').split(/\s*,\s*/);
+
+                aliases.push(<any>{alias: al0, params : params});
+            }
+        }
+
+        // Compile help text from pieces
+        return WavesConsoleAPIHelp.compileText(aliases);
+    }
+
+}
+
+/**
+ * Item for commands list
+ *
+ * @interface WavesConsoleAPIHelpCommand
+ */
+interface WavesConsoleAPIHelpCommand {
+    readonly summary?: string,
+    readonly description?: string
+}
+
+/**
+ * Item for variables types list
+ *
+ * @interface WavesConsoleAPIHelpVariable
+ */
+interface WavesConsoleAPIHelpVariable {
+    readonly type?: string,
+    readonly summary?: string
+}
+
+/**
+ * Item for common texts pieces (headers, etc)
+ *
+ * @interface WavesConsoleApiHelpCommon
+ */
+interface WavesConsoleApiHelpCommon {
+    readonly header?: string,
+    readonly summary?: string
+}
+
+/**
+ * Help parsers and text compilers
+ *
+ * @static
+ * @class WavesConsoleAPIHelp
+ */
+export class WavesConsoleAPIHelp {
+
+    /**
+     * Common texts pieces
+     *
+     * @static
+     * @member {object} common
+     */
+    public static common: {[key:string]:WavesConsoleApiHelpCommon} = {
+        list: {
+            header: 'Available functions:'
+        },
+        args: {
+            header: 'Arguments:'
+        }
+    }
+
+    /**
+     * Commands descriptions vocabulary
+     *
+     * @static
+     * @member {object} texts
+     */
+    public static texts: {[key:string]:WavesConsoleAPIHelpCommand} = {
+        file: {
+            summary: '' +
+                'Get contract text by tab name',
+            description: '' +
+                'Used inside web-ide or vscode plugin.'
+        },
+        data: {
+            summary: '' +
+                'Creates and signs DataTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed DataTransaction as a second agrument.'
+        },
+        issue: {
+            summary: '' +
+                'Creates and signs IssueTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed IssueTransaction as a second agrument.'
+        },
+        contract: {
+            summary: '' +
+                'Get contract text from currently opened tab',
+            description: '' +
+                ''
+        },
+        keyPair: {
+            summary: '' +
+                'Get object with public and private keys from default seed',
+            description: '' +
+                ''
+        },
+        publicKey: {
+            summary: '' +
+                'Get public key from the default seed',
+            description: '' +
+                ''
+        },
+        privateKey: {
+            summary: '' +
+                'Get private key from the default seed',
+            description: '' +
+                ''
+        },
+        address: {
+            summary: '' +
+                'Get address from the default seed',
+            description: '' +
+                ''
+        },
+        compile: {
+            summary: '' +
+                'Compile contract. Accepts plain text of a contract as an argument.',
+            description: '' +
+                'Returns compiled contract in base64.'
+        },
+        broadcast: {
+            summary: '' +
+                'Broadcast signed tx using node REST API',
+            description: '' +
+                'Returns Promise.'
+        },
+        deploy: {
+            summary: '' +
+                'Compile currently selected contract and deploy it to default account',
+            description: '' +
+                ''
+        },
+        help: {
+            summary: '' +
+                'Help for the available API functions',
+            description: '' +
+                'You can use help() to get list of available functions ' +
+                'or help(functionName) to get info for the specified function.'
+        },
+        transfer: {
+            summary: '' +
+                'Send transfer transaction',
+            description: '' +
+                ''
+        },
+        massTransfer: {
+            summary: '' +
+                'Creates and signs MassTransferTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed MassTransferTransaction as a second agrument.'
+        },
+        reissue: {
+            summary: '' +
+                'Creates and signs ReissueTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use already ' +
+                'signed ReissueTransaction as a second agrument.'
+        },
+        burn: {
+            summary: '' +
+                'Creates and signs BurnTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed BurnTransaction as a second agrument.'
+        },
+        lease: {
+            summary: '' +
+                'Creates and signs LeaseTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed LeaseTransaction as a second agrument.'
+        },
+        cancelLease: {
+            summary: '' +
+                'Creates and signs CancelLeaseTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed CancelLeaseTransaction as a second agrument.'
+        },
+        alias: {
+            summary: '' +
+                'Creates and signs AliasTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed AliasTransaction as a second agrument.'
+        },
+        setScript: {
+            summary: '' +
+                'Creates and signs SetScriptTransaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed SetScriptTransaction as a second agrument.'
+        }
+    };
+
+    /**
+     * Variables types vocabulary
+     *
+     * @static
+     * @member {object} types
+     */
+    public static types: {[key:string]:WavesConsoleAPIHelpVariable} = {
+        tx: {
+            summary: 'Transaction object obtained from WavesTransactions library',
+            type: 'object'
+        },
+        code: {
+            summary: 'Text of the contract',
+            type: 'string'
+        },
+        seed: {
+            summary: 'Seed string obtained from node',
+            type: 'string'
+        },
+        func: {
+            summary: 'Name of the function from API',
+            type: 'function'
+        },
+        params: {
+            summary: 'Object obtained from WavesTransactions library',
+            type: 'object'
+        },
+        tabName: {
+            summary: 'Tab name for web-ide or vscode plugin',
+            type: 'string'
+        },
+        keyPairOrSeed: {
+            summary: 'Seed string or keyPair object from keyPair() function',
+            type : 'string'
+        }
+    }
+
+    /**
+     * Generates API method argument(s) whole description
+     *
+     * @static
+     * @method compileText
+     *
+     * @param {Array} aliases
+     *
+     * @returns {string}
+     */
+    public static compileText(aliases: Array<string>): string {
+        var
+            last = aliases.length - 1,
+            module: any = WavesConsoleAPIHelp,
+            full: boolean = aliases.length == 1 ? true : false,
+            text: string = '';
+
+        // Compile text for each command
+        aliases.forEach((item: any, index: number) => {
+            text = this.compileTextSlice(item.alias, item.params, full, text);
+
+            // Add ; or .
+            if (!full) {
+                if (index == last) {
+                    text = `${text}.`;
+                } else {
+                    text = `${text};`;
+                }
+            }
+        });
+
+        // Add header for commands list
+        if (full === false) {
+            text = `${module.common.list.header}\n${text}`;
+        }
+
+        return text;
+    }
+
+    /**
+     * Generates API method arguments description
+     *
+     * @static
+     * @method compileTextArguments
+     *
+     * @param {Array} args
+     * @param {string} text
+     *
+     * @returns {string}
+     */
+    public static compileTextArguments(args: Array<string>, text: string): string {
+        var
+            last: number = args.length - 1,
+            type: string = '',
+            summary: string = '',
+            module: any = WavesConsoleAPIHelp;
+
+        // Add arguments list header
+        text = `${text}\n\n${module.common.args.header}`;
+
+        // Add each argument info
+        args.forEach((argument: string, index: number) => {
+            text = `${text}\n${index + 1}. ${argument}`;
+
+            if (module.types[argument]) {
+                summary = module.types[argument].summary;
+                type = module.types[argument].type;
+                type = type ? type : '';
+
+                // Add argument type
+                if (type) {
+                    text = `${text}: ${type}`
+                }
+
+                // Add argument summary
+                if (summary) {
+                    text = `${text} — ${summary}`;
+                }
+
+                // Add ; or .
+                if (index == last) {
+                    text = `${text}.`
+                } else {
+                    text = `${text};`
+                }
+            }
+        });
+
+        return text;
+    }
+
+    /**
+     * Generates API specified method description
+     *
+     * @static
+     * @method compileTextSlice
+     *
+     * @param {Array} args
+     * @param {string} text
+     *
+     * @returns {string}
+     */
+    public static compileTextSlice(alias: string, params: Array<string>, full: boolean, text: string): string {
+        var
+            module: any = WavesConsoleAPIHelp,
+            summary: string = '',
+            description: string = '',
+            type: string = '',
+            vals: undefined|Array<string>;
+
+        // Add common function info
+        if (full) {
+            text = `${alias}(${params.join(', ')})`;
+        } else {
+            text = `${text}\n${alias}(${params.join(', ')})`;
+        }
+
+        if (module.texts[alias]) {
+            // Add summary text
+            if (module.texts[alias].summary) {
+                summary = module.texts[alias].summary;
+                text = `${text} — ${summary}`;
+
+                if (full) {
+                    text = `${text}.`;
+                }
+            }
+
+            // Add arguments description
+            if (full && params.length) {
+                text = module.compileTextArguments(params, text);
+            }
+
+            // Add full description
+            if (full && module.texts[alias].description) {
+                description = module.texts[alias].description;
+                text = `${text}\n\n${description}`;
+            }
+        }
+
+        return text;
+    }
+
 }
