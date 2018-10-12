@@ -460,6 +460,8 @@ export class WavesConsoleAPIHelp {
             // Add summary text
             if (module.texts[alias].summary) {
                 summary = module.texts[alias].summary;
+                summary = summary.substring(0, 1).toLowerCase() +
+                          summary.substring(1);
                 text = `${text} — ${summary}`;
 
                 if (full) {
