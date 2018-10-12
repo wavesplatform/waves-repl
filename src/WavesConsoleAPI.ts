@@ -72,12 +72,13 @@ export class WavesConsoleAPI {
     public help = (func?: Function): string => {
         var
             al0: string = '',
+            type: string = typeof func,
             params: Array<any> = [],
             aliases: Array<string> = [];
 
         // Try to find function name
         for (al0 in this) {
-            if ((typeof func != 'function' || func == this[al0])) {
+            if ((type == 'undefined' || func == this[al0])) {
                 params = this[al0].toString().match(/^\(([^)]*)\)/g);
                 params = params instanceof Array && params.length ? params : [''];
                 params = params[0].replace(/[()]/g, '').split(/\s*,\s*/);
@@ -326,7 +327,7 @@ export class WavesConsoleAPIHelp {
             type: 'function'
         },
         params: {
-            summary: 'Object obtained from WavesTransactions library',
+            summary: 'Object with transactions properties',
             type: 'object'
         },
         tabName: {
