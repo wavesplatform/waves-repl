@@ -1,32 +1,13 @@
-const version = process.env.REACT_APP_VERSION;
-
 interface IResp {
     value: string,
     html: boolean
 }
 const welcome: () => IResp = () => ({
-    value: `Waves console 1.1
-Use <strong>:help</strong> to show commands`,
+    value: `Waves console 1.1. Docs can be found <a href="https://github.com/wavesplatform/waves-repl/blob/master/README.md">here</a>
+Use <strong>help()</strong> to show commands. `,
     html: true,
 });
 
-const help: () => IResp = () => ({
-    value: `
-:clear
-:history
-:about
-:version
-copy(<value>) and $_ for last value
-
-${about().value}`,
-    html: true,
-});
-
-const about: () => IResp = () => ({
-    value:
-        'Built using <a href="https://github.com/remy/console" target="_blank">jsconsole</a>',
-    html: true,
-});
 
 
 const history = async ({app, args: [n = null]}:any) => {
@@ -51,11 +32,8 @@ const clear = ({console}:any) => {
 
 const commands: any = {
     welcome,
-    help,
-    about,
     clear,
-    history,
-    version: () => version,
+    history
 };
 
 export default commands;
