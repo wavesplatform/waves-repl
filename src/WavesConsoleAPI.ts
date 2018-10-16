@@ -71,20 +71,51 @@ export class WavesConsoleAPI {
 
     public help = (func?: Function): string => {
         var
+            pos: number = -1,
             al0: string = '',
             type: string = typeof func,
             params: Array<any> = [],
-            aliases: Array<string> = [];
+            aliases: Array<any> = [];
 
         // Try to find function name
         for (al0 in this) {
             if ((type == 'undefined' || func == this[al0])) {
                 params = this[al0].toString().match(/^\(([^)]*)\)/g);
-                params = params instanceof Array && params.length ? params : [''];
-                params = params[0].replace(/[()]/g, '').split(/\s*,\s*/);
+
+                // Check if function has params
+                if (params[0].match(/\([^)]+\)/)) {
+                    params = params instanceof Array && params.length ? params : [];
+                    params = params[0] ? params : [];
+                    params = params[0].replace(/[()]/g, '').split(/\s*,\s*/);
+                } else {
+                    params = [];
+                }
 
                 aliases.push(<any>{alias: al0, params : params});
             }
+        }
+
+        // Sort functions list and move help help to the top
+        if (aliases.length > 1) {
+            aliases.sort((a, b) => {
+                if (a.alias > b.alias) {
+                    return 1;
+                } else if (a.alias < b.alias) {
+                    return -1;
+                }
+
+                return 0;
+            });
+
+            // Get position of help in list
+            aliases.forEach((item, index) => {
+                if (item.alias == 'help') {
+                    pos = index;
+                }
+            });
+
+            // Move help to the top of list
+            aliases.unshift(aliases.splice(pos, 1)[0]);
         }
 
         // Compile help text from pieces
@@ -155,13 +186,13 @@ export class WavesConsoleAPIHelp {
     public static texts: {[key:string]:WavesConsoleAPIHelpCommand} = {
         file: {
             summary: '' +
-                'Get contract text by tab name',
+                'Gets editor contents for tab',
             description: '' +
                 'Used inside web-ide or vscode plugin.'
         },
         data: {
             summary: '' +
-                'Creates and signs DataTransaction',
+                'Creates signed data transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -170,7 +201,7 @@ export class WavesConsoleAPIHelp {
         },
         issue: {
             summary: '' +
-                'Creates and signs IssueTransaction',
+                'Creates signed issue transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -179,43 +210,43 @@ export class WavesConsoleAPIHelp {
         },
         contract: {
             summary: '' +
-                'Get contract text from currently opened tab',
+                'Open editor tab content',
             description: '' +
                 ''
         },
         keyPair: {
             summary: '' +
-                'Get object with public and private keys from default seed',
+                'Generates keyPair from seed',
             description: '' +
                 ''
         },
         publicKey: {
             summary: '' +
-                'Get public key from the default seed',
+                'Generates publicKey from seed',
             description: '' +
                 ''
         },
         privateKey: {
             summary: '' +
-                'Get private key from the default seed',
+                'Generates privateKey from seed',
             description: '' +
                 ''
         },
         address: {
             summary: '' +
-                'Get address from the default seed',
+                'Generates address from KeyPair or Seed',
             description: '' +
                 ''
         },
         compile: {
             summary: '' +
-                'Compile contract. Accepts plain text of a contract as an argument.',
+                'Gets editor contents for tab',
             description: '' +
-                'Returns compiled contract in base64.'
+                ' Accepts plain text of a contract as an argument. Returns compiled contract in base64.'
         },
         broadcast: {
             summary: '' +
-                'Broadcast signed tx using node REST API',
+                'Sends transaction to the Waves network using REST API',
             description: '' +
                 'Returns Promise.'
         },
@@ -234,13 +265,13 @@ export class WavesConsoleAPIHelp {
         },
         transfer: {
             summary: '' +
-                'Send transfer transaction',
+                'Creates signed transfer transaction',
             description: '' +
                 ''
         },
         massTransfer: {
             summary: '' +
-                'Creates and signs MassTransferTransaction',
+                'Creates signed massTransfer transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -249,7 +280,7 @@ export class WavesConsoleAPIHelp {
         },
         reissue: {
             summary: '' +
-                'Creates and signs ReissueTransaction',
+                'Creates signed reissue transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -258,7 +289,7 @@ export class WavesConsoleAPIHelp {
         },
         burn: {
             summary: '' +
-                'Creates and signs BurnTransaction',
+                'Creates signed burn transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -267,7 +298,7 @@ export class WavesConsoleAPIHelp {
         },
         lease: {
             summary: '' +
-                'Creates and signs LeaseTransaction',
+                'Creates signed lease transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -276,7 +307,7 @@ export class WavesConsoleAPIHelp {
         },
         cancelLease: {
             summary: '' +
-                'Creates and signs CancelLeaseTransaction',
+                'Creates signed cancelLease transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -285,7 +316,7 @@ export class WavesConsoleAPIHelp {
         },
         alias: {
             summary: '' +
-                'Creates and signs AliasTransaction',
+                'Creates signed createAlias transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -294,7 +325,7 @@ export class WavesConsoleAPIHelp {
         },
         setScript: {
             summary: '' +
-                'Creates and signs SetScriptTransaction',
+                'Creates signed setScript transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
@@ -406,6 +437,7 @@ export class WavesConsoleAPIHelp {
 
             if (module.types[argument]) {
                 summary = module.types[argument].summary;
+                summary = summary.substring(0, 1).toLowerCase() + summary.substring(1);
                 type = module.types[argument].type;
                 type = type ? type : '';
 
