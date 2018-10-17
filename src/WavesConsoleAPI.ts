@@ -50,8 +50,8 @@ export class WavesConsoleAPI {
         return this.bufferToBase64(new Uint8Array(r.result));
     };
 
-    public broadcast = async (tx: any) => {
-        const url = new URL('transactions/broadcast', WavesConsoleAPI.env.API_BASE).href;
+    public broadcast = async (tx: any, apiBase?: string) => {
+        const url = new URL('transactions/broadcast', apiBase || WavesConsoleAPI.env.API_BASE).href;
         const resp = await Axios.post(url, tx);
         return resp.data
     };

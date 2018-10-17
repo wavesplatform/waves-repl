@@ -1,6 +1,6 @@
 {
   "name": "waves-repl",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Interactive console to interact with waves blockchain",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
