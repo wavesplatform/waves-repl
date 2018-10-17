@@ -7,8 +7,8 @@ import {updateIFrameEnv} from './lib/contextBinding';
 
 
 const save = (key: string, value:any, store = 'session') => {
-    const storage = store === 'session' ? window.sessionStorage : window.localStorage
     try {
+        const storage = store === 'session' ? window.sessionStorage : window.localStorage
         storage.setItem(
             `jsconsole.${key}`,
             JSON.stringify(value)
