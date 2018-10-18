@@ -15,7 +15,7 @@ export class WavesConsoleAPI {
     constructor() {
         Object.keys(wt).forEach(key => {
             this[key] = (params: any, seed: any) => (wt as any)[key](seed || WavesConsoleAPI.env.SEED,
-                {...params, chainId: WavesConsoleAPI.env.CHAIN_ID});
+                {chainId: WavesConsoleAPI.env.CHAIN_ID, ...params})
         })
     }
 
@@ -38,8 +38,8 @@ export class WavesConsoleAPI {
     public privateKey = (seed: string): string =>
         this.keyPair(seed).private;
 
-    public address = (keyPairOrSeed: KeyPair | string) => address(
-        keyPairOrSeed || WavesConsoleAPI.env.SEED,
+    public address = (seed: string) => address(
+        seed || WavesConsoleAPI.env.SEED,
         WavesConsoleAPI.env.CHAIN_ID
     );
 
@@ -50,12 +50,17 @@ export class WavesConsoleAPI {
         return this.bufferToBase64(new Uint8Array(r.result));
     };
 
-    public broadcast = async (tx: any) => {
-        const url = new URL('transactions/broadcast', WavesConsoleAPI.env.API_BASE).href;
-        const resp = await Axios.post(url, tx);
-        return resp.data
+    public broadcast = async (tx: any, apiBase?: string) => {
+        const url = new URL('transactions/broadcast', apiBase || WavesConsoleAPI.env.API_BASE).href;
+        try{
+            const resp = await Axios.post(url, tx);
+            return resp.data
+        }catch (e) {
+            if (e.response && e.response.status === 400){
+                throw new Error(e.response.data.message)
+            }else throw e
+        }
     };
-
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: string | string[]) => {
         let txParams = params || {};
         txParams.script = txParams.script === undefined ? this.compile(this.contract()) : txParams.script;
@@ -235,7 +240,7 @@ export class WavesConsoleAPIHelp {
         },
         address: {
             summary: '' +
-                'Generates address from KeyPair or Seed',
+                'Generates address from seed',
             description: '' +
                 ''
         },
@@ -370,6 +375,11 @@ export class WavesConsoleAPIHelp {
         keyPairOrSeed: {
             summary: 'Seed string or keyPair object from keyPair() function',
             type : 'string'
+        },
+        apiBase: {
+            optional: true,
+            summary: 'Url of the node. E.x. "https://nodes.wavesplatform.com". (optional, env.API_BASE by default)',
+            type: 'string'
         }
     }
 
@@ -487,7 +497,7 @@ export class WavesConsoleAPIHelp {
 
         // Check optional and obligatory function params
         args = params.map((arg) => {
-            return module.types[arg].optional ? `[${arg}]` : `${arg}`;
+            return module.types[arg].optional ? `${arg}?` : `${arg}`;
         });
 
         // Add common function info
