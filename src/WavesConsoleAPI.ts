@@ -15,7 +15,7 @@ export class WavesConsoleAPI {
     constructor() {
         Object.keys(wt).forEach(key => {
             this[key] = (params: any, seed: any) => (wt as any)[key](seed || WavesConsoleAPI.env.SEED,
-                {chainId: WavesConsoleAPI.env.CHAIN_ID, ...params})
+                {...params, chainId: WavesConsoleAPI.env.CHAIN_ID});
         })
     }
 
@@ -50,16 +50,10 @@ export class WavesConsoleAPI {
         return this.bufferToBase64(new Uint8Array(r.result));
     };
 
-    public broadcast = async (tx: any, apiBase?: string) => {
-        const url = new URL('transactions/broadcast', apiBase || WavesConsoleAPI.env.API_BASE).href;
-        try{
-            const resp = await Axios.post(url, tx);
-            return resp.data
-        }catch (e) {
-            if (e.response && e.response.status === 400){
-                throw new Error(e.response.data.message)
-            }else throw e
-        }
+    public broadcast = async (tx: any) => {
+        const url = new URL('transactions/broadcast', WavesConsoleAPI.env.API_BASE).href;
+        const resp = await Axios.post(url, tx);
+        return resp.data
     };
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: string | string[]) => {
@@ -146,6 +140,7 @@ interface WavesConsoleAPIHelpCommand {
  * @interface WavesConsoleAPIHelpVariable
  */
 interface WavesConsoleAPIHelpVariable {
+    readonly optional?: boolean,
     readonly type?: string,
     readonly summary?: string
 }
@@ -356,7 +351,8 @@ export class WavesConsoleAPIHelp {
             type: 'string'
         },
         seed: {
-            summary: 'Seed string obtained from node',
+            optional: true,
+            summary: 'Seed string obtained from node (optional, env.SEED by default)',
             type: 'string'
         },
         func: {
@@ -486,13 +482,19 @@ export class WavesConsoleAPIHelp {
             summary: string = '',
             description: string = '',
             type: string = '',
-            vals: undefined|Array<string>;
+            vals: undefined|Array<string>,
+            args: Array<string>;
+
+        // Check optional and obligatory function params
+        args = params.map((arg) => {
+            return module.types[arg].optional ? `[${arg}]` : `${arg}`;
+        });
 
         // Add common function info
         if (full) {
-            text = `${alias}(${params.join(', ')})`;
+            text = `${alias}(${args.join(', ')})`;
         } else {
-            text = `${text}\n${alias}(${params.join(', ')})`;
+            text = `${text}\n${alias}(${args.join(', ')})`;
         }
 
         if (module.texts[alias]) {
