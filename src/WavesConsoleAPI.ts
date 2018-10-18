@@ -30,17 +30,17 @@ export class WavesConsoleAPI {
         }
     };
 
-    public keyPair = (seed: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
+    public keyPair = (seed?: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
 
-    public publicKey = (seed: string): string =>
+    public publicKey = (seed?: string): string =>
         this.keyPair(seed).public;
 
     public privateKey = (seed: string): string =>
         this.keyPair(seed).private;
 
-    public address = (seed: string) => address(
+    public address = (seed?: string, chainId?: string) => address(
         seed || WavesConsoleAPI.env.SEED,
-        WavesConsoleAPI.env.CHAIN_ID
+       chainId || WavesConsoleAPI.env.CHAIN_ID
     );
 
     public compile = (code: string): string => {
