@@ -85,13 +85,16 @@ export class WavesConsoleAPI {
         // Try to find function name
         for (al0 in this) {
             if ((type == 'undefined' || func == this[al0])) {
-                params = this[al0].toString().match(/^(function\s+)?\(([^)]*)\)/g);
+                params = this[al0].toString().match(/^(function\s*)?\(([^)]*)\)/g);
 
                 // Check if function has params
                 if (params[0].match(/\([^)]+\)/)) {
                     params = params instanceof Array && params.length ? params : [];
                     params = params[0] ? params : [];
-                    params = params[0].replace(/[()]/g, '').split(/\s*,\s*/);
+                    params = params[0].
+                             replace(/function\s*/, '').
+                             replace(/[()]/g, '').
+                             split(/\s*,\s*/);
                 } else {
                     params = [];
                 }
