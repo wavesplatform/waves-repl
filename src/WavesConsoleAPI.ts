@@ -15,7 +15,7 @@ export class WavesConsoleAPI {
     constructor() {
         Object.keys(wt).forEach(key => {
             this[key] = (params: any, seed: any) => (wt as any)[key](seed || WavesConsoleAPI.env.SEED,
-                {...params, chainId: WavesConsoleAPI.env.CHAIN_ID});
+                {chainId: WavesConsoleAPI.env.CHAIN_ID, ...params})
         })
     }
 
@@ -50,10 +50,16 @@ export class WavesConsoleAPI {
         return this.bufferToBase64(new Uint8Array(r.result));
     };
 
-    public broadcast = async (tx: any) => {
-        const url = new URL('transactions/broadcast', WavesConsoleAPI.env.API_BASE).href;
-        const resp = await Axios.post(url, tx);
-        return resp.data
+    public broadcast = async (tx: any, apiBase?: string) => {
+        const url = new URL('transactions/broadcast', apiBase || WavesConsoleAPI.env.API_BASE).href;
+        try{
+            const resp = await Axios.post(url, tx);
+            return resp.data
+        }catch (e) {
+            if (e.response && e.response.status === 400){
+                throw new Error(e.response.data.message)
+            }else throw e
+        }
     };
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: string | string[]) => {

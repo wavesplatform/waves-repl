@@ -1,8 +1,6 @@
 import {getContainer} from './run';
 import {WavesConsoleAPI} from "../../WavesConsoleAPI";
 
-const consoleApi = new WavesConsoleAPI()
-
 export const updateIFrameEnv = (env:any) => {
     // add all waves functions to iframe global scope
     try {
@@ -15,7 +13,7 @@ export const updateIFrameEnv = (env:any) => {
     }
 }
 
-export const bindAPItoIFrame = () => {
+export const bindAPItoIFrame = (consoleApi: WavesConsoleAPI) => {
     try {
         const iframeWindow = getContainer().contentWindow;
         Object.keys(consoleApi).forEach(key => iframeWindow[key] = consoleApi[key]);
