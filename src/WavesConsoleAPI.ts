@@ -80,35 +80,21 @@ export class WavesConsoleAPI {
             al0: string = '',
             type: string = typeof func,
             params: Array<any> = [],
-            aliases: Array<any> = [];
+            aliases: Array<string> = [];
 
         // Try to find function name
         for (al0 in this) {
             if ((type == 'undefined' || func == this[al0])) {
-                params = this[al0].toString().match(/^(function\s*)?\(([^)]*)\)/g);
-
-                // Check if function has params
-                if (params[0].match(/\([^)]+\)/)) {
-                    params = params instanceof Array && params.length ? params : [];
-                    params = params[0] ? params : [];
-                    params = params[0].
-                             replace(/function\s*/, '').
-                             replace(/[()]/g, '').
-                             split(/\s*,\s*/);
-                } else {
-                    params = [];
-                }
-
-                aliases.push(<any>{alias: al0, params : params});
+                aliases.push(al0);
             }
         }
 
         // Sort functions list and move help help to the top
         if (aliases.length > 1) {
             aliases.sort((a, b) => {
-                if (a.alias > b.alias) {
+                if (a > b) {
                     return 1;
-                } else if (a.alias < b.alias) {
+                } else if (a < b) {
                     return -1;
                 }
 
@@ -116,11 +102,7 @@ export class WavesConsoleAPI {
             });
 
             // Get position of help in list
-            aliases.forEach((item, index) => {
-                if (item.alias == 'help') {
-                    pos = index;
-                }
-            });
+            pos = aliases.indexOf('help');
 
             // Move help to the top of list
             aliases.unshift(aliases.splice(pos, 1)[0]);
@@ -139,7 +121,8 @@ export class WavesConsoleAPI {
  */
 interface WavesConsoleAPIHelpCommand {
     readonly summary?: string,
-    readonly description?: string
+    readonly description?: string,
+    readonly params?: Array<string>
 }
 
 /**
@@ -197,7 +180,8 @@ export class WavesConsoleAPIHelp {
             summary: '' +
                 'Gets editor contents for tab',
             description: '' +
-                'Used inside web-ide or vscode plugin.'
+                'Used inside web-ide or vscode plugin.',
+            params: ['tabName']
         },
         data: {
             summary: '' +
@@ -206,7 +190,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed DataTransaction as a second agrument.'
+                'already signed DataTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         issue: {
             summary: '' +
@@ -215,7 +200,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed IssueTransaction as a second agrument.'
+                'already signed IssueTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         contract: {
             summary: '' +
@@ -227,56 +213,65 @@ export class WavesConsoleAPIHelp {
             summary: '' +
                 'Generates keyPair from seed',
             description: '' +
-                ''
+                '',
+            params: ['seed']
         },
         publicKey: {
             summary: '' +
                 'Generates publicKey from seed',
             description: '' +
-                ''
+                '',
+            params: ['seed']
         },
         privateKey: {
             summary: '' +
                 'Generates privateKey from seed',
             description: '' +
-                ''
+                '',
+            params: ['seed']
         },
         address: {
             summary: '' +
                 'Generates address from seed',
             description: '' +
-                ''
+                '',
+            params: ['seed']
         },
         compile: {
             summary: '' +
                 'Gets editor contents for tab',
             description: '' +
-                ' Accepts plain text of a contract as an argument. Returns compiled contract in base64.'
+                'Accepts plain text of a contract as an argument. Returns compiled contract in base64.',
+            params: ['code']
         },
         broadcast: {
             summary: '' +
                 'Sends transaction to the Waves network using REST API',
             description: '' +
-                'Returns Promise.'
+                'Returns Promise.',
+            params: ['tx', 'apiBase']
         },
         deploy: {
             summary: '' +
                 'Compile currently selected contract and deploy it to default account',
             description: '' +
-                ''
+                '',
+            params: ['params', 'seed']
         },
         help: {
             summary: '' +
                 'Help for the available API functions',
             description: '' +
                 'You can use help() to get list of available functions ' +
-                'or help(functionName) to get info for the specified function.'
+                'or help(functionName) to get info for the specified function.',
+            params: ['func']
         },
         transfer: {
             summary: '' +
                 'Creates signed transfer transaction',
             description: '' +
-                ''
+                '',
+            params: ['params', 'seed']
         },
         massTransfer: {
             summary: '' +
@@ -285,7 +280,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed MassTransferTransaction as a second agrument.'
+                'already signed MassTransferTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         reissue: {
             summary: '' +
@@ -294,7 +290,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use already ' +
-                'signed ReissueTransaction as a second agrument.'
+                'signed ReissueTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         burn: {
             summary: '' +
@@ -303,7 +300,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed BurnTransaction as a second agrument.'
+                'already signed BurnTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         lease: {
             summary: '' +
@@ -321,7 +319,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed CancelLeaseTransaction as a second agrument.'
+                'already signed CancelLeaseTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         alias: {
             summary: '' +
@@ -330,7 +329,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed AliasTransaction as a second agrument.'
+                'already signed AliasTransaction as a second agrument.',
+            params: ['params', 'seed']
         },
         setScript: {
             summary: '' +
@@ -339,7 +339,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed SetScriptTransaction as a second agrument.'
+                'already signed SetScriptTransaction as a second agrument.',
+            params: ['params', 'seed']
         }
     };
 
@@ -404,8 +405,8 @@ export class WavesConsoleAPIHelp {
             text: string = '';
 
         // Compile text for each command
-        aliases.forEach((item: any, index: number) => {
-            text = this.compileTextSlice(item.alias, item.params, full, text);
+        aliases.forEach((alias: any, index: number) => {
+            text = this.compileTextSlice(alias, full, text);
 
             // Add ; or .
             if (!full) {
@@ -484,24 +485,28 @@ export class WavesConsoleAPIHelp {
      * @static
      * @method compileTextSlice
      *
-     * @param {Array} args
+     * @param {string} alias
+     * @param {boolean} full
      * @param {string} text
      *
      * @returns {string}
      */
-    public static compileTextSlice(alias: string, params: Array<string>, full: boolean, text: string): string {
+    public static compileTextSlice(alias: string, full: boolean, text: string): string {
         var
             module: any = WavesConsoleAPIHelp,
             summary: string = '',
+            params:Array<string> = module.texts[alias].params || [],
             description: string = '',
             type: string = '',
             vals: undefined|Array<string>,
-            args: Array<string>;
+            args: Array<string> = params.slice();
 
         // Check optional and obligatory function params
-        args = params.map((arg) => {
-            return module.types[arg].optional ? `${arg}?` : `${arg}`;
-        });
+        if (args) {
+            args = args.map((arg) => {
+                return module.types[arg].optional ? `[${arg}]` : `${arg}`;
+            });
+        }
 
         // Add common function info
         if (full) {
@@ -524,7 +529,7 @@ export class WavesConsoleAPIHelp {
             }
 
             // Add arguments description
-            if (full && params.length) {
+            if (full && args.length) {
                 text = module.compileTextArguments(params, text);
             }
 
