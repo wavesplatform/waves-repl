@@ -495,7 +495,9 @@ export class WavesConsoleAPIHelp {
         var
             module: any = WavesConsoleAPIHelp,
             summary: string = '',
-            params:Array<string> = module.texts[alias].params || [],
+            params:Array<string> = module.texts[alias] && module.texts[alias].params ?
+                                   module.texts[alias].params :
+                                   [],
             description: string = '',
             type: string = '',
             vals: undefined|Array<string>,
