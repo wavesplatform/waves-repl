@@ -5,8 +5,8 @@ import {WavesConsoleAPIHelp} from '../../WavesConsoleAPI';
 import keycodes from '../lib/keycodes';
 
 /**
- * @class Input
- * @extends React.Component
+ * @class {Input}
+ * @extends {React.Component}
  */
 export class Input extends React.Component<any, any> {
 
@@ -18,13 +18,13 @@ export class Input extends React.Component<any, any> {
 
     /**
      * @static
-     * @member commandsVocabulary
+     * @member {object} commandsVocabulary
      */
     static vocabulary:any = WavesConsoleAPIHelp.texts;
 
     /**
      * @static
-     * @member commandsList
+     * @member {Array} commandsList
      */
     static commandsList:any = Object.keys(WavesConsoleAPIHelp.texts);
 
@@ -43,18 +43,21 @@ export class Input extends React.Component<any, any> {
             rows: 1,
             historyCursor: props.history.length,
         };
+
+        // Bind some methods to instance
         this.onChange = this.onChange.bind(this);
         this.onKeyPress = this.onKeyPress.bind(this);
     }
 
     /**
-     * @method onChange
+     * @method {onChange}
      */
     onChange() {
         if (!this.input) return;
 
         const { value } = this.input;
         const length = value.split('\n').length;
+
         this.setState({
             multiline: length > 1,
             rows: length < 20 ? length : 20,
@@ -64,7 +67,7 @@ export class Input extends React.Component<any, any> {
 
     /**
      * @async
-     * @method onKeyPress
+     * @method {onKeyPress}
      *
      * @param {React.KeyboardEvent} e
      *
@@ -154,7 +157,7 @@ export class Input extends React.Component<any, any> {
     /**
      * Get entry for search from full input.value string
      *
-     * @method getCurrentCommandPiece
+     * @method {getCurrentCommandPiece}
      *
      * @returns {string}
      */
@@ -175,12 +178,18 @@ export class Input extends React.Component<any, any> {
     /**
      * Set command into input using found autocomplition variants
      *
-     * @method setCommandIntoInput
+     * @method {setCommandIntoInput}
      */
     setCommandIntoInput() {
+        // No need to go further
+        if (!this.input) {
+            return;
+        }
+
         let input:any = this.input;
-        let beg:any = input ? input.selectionStart : 0;
-        let end:any = input ? input.selectionEnd : 0;
+        let beg:any = input.selectionStart || 0;
+        let end:any = input.selectionEnd || 0;
+        let pos:any = beg;
         let insert:any = this.getCurrentCommandPiece();
         let commands:any = this.getFilteredCommandsList();
 
@@ -198,8 +207,10 @@ export class Input extends React.Component<any, any> {
                       input.value.substring(end);
 
         // Set new caret position
-        input.selectionStart = beg + insert.length + 1;
-        input.selectionEnd = beg + insert.length + 1;
+        pos += insert.length + 1;
+
+        input.selectionStart = pos;
+        input.selectionEnd = pos;
 
         // Re-render to cleanup
         this.setState({value: input.value});
@@ -208,7 +219,7 @@ export class Input extends React.Component<any, any> {
     /**
      * Get list of commands filtered with needed command piece
      *
-     * @method getFilteredCommandsList
+     * @method {getFilteredCommandsList}
      *
      * @returns {Array}
      */
@@ -236,7 +247,7 @@ export class Input extends React.Component<any, any> {
     }
 
     /**
-     * @method render
+     * @method {render}
      *
      * @returns {React.Element}
      */
@@ -254,7 +265,7 @@ export class Input extends React.Component<any, any> {
     }
 
     /**
-     * @method createSuggest
+     * @method {createSuggest}
      *
      * @returns {React.Element}
      */
@@ -267,7 +278,7 @@ export class Input extends React.Component<any, any> {
     }
 
     /**
-     * @method createTextarea
+     * @method {createTextarea}
      *
      * @returns {React.Element}
      */
@@ -295,7 +306,7 @@ export class Input extends React.Component<any, any> {
 /**
  * <SuggestRoot />
  *
- * @function SuggestRoot
+ * @function {SuggestRoot}
  *
  * @param {object} props
  *
@@ -318,7 +329,7 @@ function SuggestRoot(props:any):any {
 /**
  * <SuggestList />
  *
- * @function SuggestList
+ * @function {SuggestList}
  *
  * @param {object} props
  *
@@ -343,7 +354,7 @@ function SuggestList(props:any):any {
 /**
  * <SuggestItem />
  *
- * @function SuggestItem
+ * @function {SuggestItem}
  *
  * @param {object} props
  *
