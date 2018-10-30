@@ -4,13 +4,35 @@ import {WavesConsoleAPIHelp} from '../../WavesConsoleAPI';
 // TODO import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
 
+/**
+ * @class Input
+ * @extends React.Component
+ */
 export class Input extends React.Component<any, any> {
+
+    /**
+     * @private
+     * @member {HTMLTextAreaElement?} input
+     */
     private input?: HTMLTextAreaElement | null;
 
+    /**
+     * @static
+     * @member commandsVocabulary
+     */
     static vocabulary:any = WavesConsoleAPIHelp.texts;
 
-    static commands:any = Object.keys(WavesConsoleAPIHelp.texts);
+    /**
+     * @static
+     * @member commandsList
+     */
+    static commandsList:any = Object.keys(WavesConsoleAPIHelp.texts);
 
+    /**
+     * @constructor
+     *
+     * @param {object} props
+     */
     constructor(props: any) {
         super(props);
 
@@ -25,6 +47,9 @@ export class Input extends React.Component<any, any> {
         this.onKeyPress = this.onKeyPress.bind(this);
     }
 
+    /**
+     * @method onChange
+     */
     onChange() {
         if (!this.input) return;
 
@@ -37,6 +62,14 @@ export class Input extends React.Component<any, any> {
         });
     }
 
+    /**
+     * @async
+     * @method onKeyPress
+     *
+     * @param {React.KeyboardEvent} e
+     *
+     * @returns {Promise}
+     */
     async onKeyPress(e: React.KeyboardEvent) {
         if (!this.input) return;
 
@@ -48,16 +81,19 @@ export class Input extends React.Component<any, any> {
         // FIXME in multiline, cursor up when we're at the top
         // const cursor = getCursor(this.input);
 
+        // Clear console
         if (e.ctrlKey && code === 'l') {
             this.props.onClear();
             return;
         }
 
+        // Insert value from suggested commands
         if (code == 'tab') {
             e.preventDefault();
             this.setCommandIntoInput();
         }
 
+        // Move in history if not in multiline mode
         if (!multiline) {
             if (code === 'up arrow') {
                 historyCursor--;
@@ -83,6 +119,16 @@ export class Input extends React.Component<any, any> {
             }
         }
 
+        // Remove suggestions block if needed
+        if (code === 'escape') {
+            e.preventDefault();
+            this.setState({hideSuggest: true});
+            return;
+        } else {
+            this.setState({hideSuggest: false});
+        }
+
+        // Add command to history and try to execute it
         const command = this.input.value;
 
         if (code === 'enter') {
@@ -105,11 +151,20 @@ export class Input extends React.Component<any, any> {
         }
     }
 
+    /**
+     * Get entry for search from full input.value string
+     *
+     * @method getCurrentCommandPiece
+     *
+     * @returns {string}
+     */
     getCurrentCommandPiece() {
         let input:any = this.input;
         let pos:any = input ? input.selectionStart : 0;
-        let commands:any = (input ? input.value.substring(0, pos) : '').split(/[\s+()]/);
+        let commands:any = (input ? input.value.substring(0, pos) : '').
+                           split(/[\s+()]/);
 
+        // Get last entry from string
         if (commands && commands.length) {
             return commands.pop();
         }
@@ -117,6 +172,11 @@ export class Input extends React.Component<any, any> {
         return '';
     }
 
+    /**
+     * Set command into input using found autocomplition variants
+     *
+     * @method setCommandIntoInput
+     */
     setCommandIntoInput() {
         let input:any = this.input;
         let beg:any = input ? input.selectionStart : 0;
@@ -124,33 +184,41 @@ export class Input extends React.Component<any, any> {
         let insert:any = this.getCurrentCommandPiece();
         let commands:any = this.getFilteredCommandsList();
 
+        // Autocomplete works only if one value in list
         if (commands.length != 1) {
             return;
         }
 
+        // Get missing part of command name
         insert = commands[0].substring(insert.length);
 
-/*
-        this.setState({value: input.value.substring(0, beg) +
-                      insert + '()' + 
-                      input.value.substring(end)});
-*/
+        // Set new value
         input.value = input.value.substring(0, beg) +
                       insert + '()' + 
                       input.value.substring(end);
 
+        // Set new caret position
         input.selectionStart = beg + insert.length + 1;
         input.selectionEnd = beg + insert.length + 1;
 
+        // Re-render to cleanup
         this.setState({value: input.value});
     }
 
+    /**
+     * Get list of commands filtered with needed command piece
+     *
+     * @method getFilteredCommandsList
+     *
+     * @returns {Array}
+     */
     getFilteredCommandsList() {
         let seek:any = this.getCurrentCommandPiece();
         let list:any = null;
 
         if (seek) {
-            list = Input.commands.filter((item:any) => {
+            // Get filtered list if possible
+            list = Input.commandsList.filter((item:any) => {
                 if (item.indexOf(seek) === 0) {
                     return true;
                 }
@@ -158,6 +226,7 @@ export class Input extends React.Component<any, any> {
                 return false;
             });
 
+            // Check for values inside
             if (list && list.length) {
                 return list;
             }
@@ -166,22 +235,43 @@ export class Input extends React.Component<any, any> {
         return [];
     }
 
+    /**
+     * @method render
+     *
+     * @returns {React.Element}
+     */
     render() {
-        const textarea = this.renderTextarea();
+        const suggest = !this.state.hideSuggest ? this.createSuggest() : null;
+        const textarea = this.createTextarea();
 
         return (
             <div className="Input">
-                <SuggestRoot
-                    position={this.state.position}
-                    commands={this.getFilteredCommandsList()}
-                />
+                {suggest}
                 {/*<Autocomplete value={this.state.value} />*/}
                 {textarea}
             </div>
         );
     }
 
-    renderTextarea() {
+    /**
+     * @method createSuggest
+     *
+     * @returns {React.Element}
+     */
+    createSuggest() {
+        return (<SuggestRoot
+            value={this.state.value}
+            position={this.state.position}
+            commands={this.getFilteredCommandsList()}
+        />);
+    }
+
+    /**
+     * @method createTextarea
+     *
+     * @returns {React.Element}
+     */
+    createTextarea() {
         const { autoFocus } = this.props;
 
         return (
@@ -202,9 +292,18 @@ export class Input extends React.Component<any, any> {
 
 }
 
-export function SuggestRoot(props:any):any {
+/**
+ * <SuggestRoot />
+ *
+ * @function SuggestRoot
+ *
+ * @param {object} props
+ *
+ * @returns {React.Element}
+ */
+function SuggestRoot(props:any):any {
     // No need to go further
-    if (!props.commands || !props.commands.length) {
+    if (!props.commands || !props.commands.length || !props.value) {
         return null;
     }
 
@@ -216,7 +315,16 @@ export function SuggestRoot(props:any):any {
     );
 }
 
-export function SuggestList(props:any):any {
+/**
+ * <SuggestList />
+ *
+ * @function SuggestList
+ *
+ * @param {object} props
+ *
+ * @returns {React.Element}
+ */
+function SuggestList(props:any):any {
     const commands = props.commands.map((item:any, index:any) => {
         return (<SuggestItem
                    key={'commands-suggest-item-' + index}
@@ -232,7 +340,16 @@ export function SuggestList(props:any):any {
     );
 }
 
-export function SuggestItem(props:any):any {
+/**
+ * <SuggestItem />
+ *
+ * @function SuggestItem
+ *
+ * @param {object} props
+ *
+ * @returns {React.Element}
+ */
+function SuggestItem(props:any):any {
     return (<li
         className = {'Suggest__item' + (props.selected ? ' Suggest__item_is_selected' : '')}
     >
