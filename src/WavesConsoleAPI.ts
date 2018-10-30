@@ -122,7 +122,7 @@ export class WavesConsoleAPI {
 interface WavesConsoleAPIHelpCommand {
     readonly summary?: string,
     readonly description?: string,
-    readonly params?: Array<string>
+    readonly params?: Array<string>|null
 }
 
 /**
@@ -217,7 +217,8 @@ export class WavesConsoleAPIHelp {
             summary: '' +
                 'Open editor tab content',
             description: '' +
-                ''
+                '',
+            params: null
         },
         keyPair: {
             summary: '' +
@@ -320,7 +321,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed LeaseTransaction as a second agrument.'
+                'already signed LeaseTransaction as a second agrument.',
+            params: null
         },
         cancelLease: {
             summary: '' +

@@ -20,13 +20,25 @@ export class Input extends React.Component<any, any> {
      * @static
      * @member {object} commandsVocabulary
      */
-    static vocabulary:any = WavesConsoleAPIHelp.texts;
+    static commandsVocabulary:any = WavesConsoleAPIHelp.texts;
 
     /**
      * @static
      * @member {Array} commandsList
      */
     static commandsList:any = Object.keys(WavesConsoleAPIHelp.texts);
+
+    /**
+     * @static
+     * @member {object} commasAndQuotes
+     */
+    static commasAndQuotes:any = {
+        '(': ')',
+        '{': '}',
+        '[': ']',
+        '"': '"',
+        "'": "'"
+    }
 
     /**
      * @constructor
@@ -94,6 +106,32 @@ export class Input extends React.Component<any, any> {
         if (code == 'tab') {
             e.preventDefault();
             this.setCommandIntoInput();
+        }
+
+        // Insert closing bracket if needed
+        switch (code) {
+            case '9':
+                if (e.shiftKey) {
+                    this.setClosingBracketOrQuoteIntoInput('(');
+                }
+                break;
+            case 'open bracket':
+                if (e.shiftKey) {
+                    this.setClosingBracketOrQuoteIntoInput('{');
+                } else {
+                    this.setClosingBracketOrQuoteIntoInput('[');
+                }
+                break;
+            case 'single quote / ø':
+                if (e.shiftKey) {
+                    this.setClosingBracketOrQuoteIntoInput('"');
+                } else {
+                    this.setClosingBracketOrQuoteIntoInput("'");
+                }
+                break;
+            case 'backspace / delete':
+                this.unsetClosingBracketOrQuoteIntoInput();
+                break;
         }
 
         // Move in history if not in multiline mode
@@ -176,6 +214,78 @@ export class Input extends React.Component<any, any> {
     }
 
     /**
+     * Set closing bracket of given type
+     *
+     * @method {setClosingBracketOrQuoteIntoInput}
+     *
+     * @param {string} open
+     */
+    setClosingBracketOrQuoteIntoInput(open:any = '(') {
+        // No need to go further
+        if (!this.input) {
+            return;
+        }
+
+        let brackets:any = Input.commasAndQuotes;
+        let input:any = this.input;
+        let pos:any = input.selectionStart || 0;
+        let close = brackets[open] ? brackets[open] : brackets['('];
+
+        // Set new value
+        input.value = input.value.substring(0, pos) +
+                      close +
+                      input.value.substring(pos);
+
+        // Set new caret position
+        input.selectionStart = pos;
+        input.selectionEnd = pos;
+
+        // Re-render to cleanup
+        this.setState({value: input.value});
+    }
+
+    /**
+     * Set closing bracket of given type
+     *
+     * @method {unsetClosingBracketOrQuoteIntoInput}
+     */
+    unsetClosingBracketOrQuoteIntoInput() {
+        // No need to go further
+        if (!this.input) {
+            return;
+        }
+
+        let input:any = this.input;
+        let pos:any = input.selectionStart || 0;
+        let open:any = this.input.value.substr(pos - 1, 1);
+        let close:any = Input.commasAndQuotes[open];
+
+        // No need to go further
+        if (!close) {
+            return;
+        }
+
+        // Check if the closing symbol is similar to needed
+        close = this.input.value.substr(pos, 1) === close ? close : '';
+
+        // No need to go further
+        if (!close) {
+            return;
+        }
+
+        // Set new value
+        input.value = input.value.substring(0, pos) +
+                      input.value.substring(pos + 1);
+
+        // Set new caret position
+        input.selectionStart = pos;
+        input.selectionEnd = pos;
+
+        // Re-render to cleanup
+        this.setState({value: input.value});
+    }
+
+    /**
      * Set command into input using found autocomplition variants
      *
      * @method {setCommandIntoInput}
@@ -190,7 +300,10 @@ export class Input extends React.Component<any, any> {
         let beg:any = input.selectionStart || 0;
         let end:any = input.selectionEnd || 0;
         let pos:any = beg;
+        let isFunc:any = false;
         let insert:any = this.getCurrentCommandPiece();
+        let vocabulary:any = Input.commandsVocabulary;
+        let command:any = '';
         let commands:any = this.getFilteredCommandsList();
 
         // Autocomplete works only if one value in list
@@ -198,16 +311,30 @@ export class Input extends React.Component<any, any> {
             return;
         }
 
+        // Get full command
+        command = commands[0];
+
+        // No need to go further
+        if (!command) {
+            return;
+        }
+
+        // Check if it's method or member
+        isFunc = vocabulary[command] && vocabulary[command].params !== undefined ?
+                 true :
+                 false;
+
         // Get missing part of command name
-        insert = commands[0].substring(insert.length);
+        insert = command.substring(insert.length);
 
         // Set new value
         input.value = input.value.substring(0, beg) +
-                      insert + '()' + 
+                      insert + (isFunc ? '()' : '') + 
                       input.value.substring(end);
 
         // Set new caret position
-        pos += insert.length + 1;
+        pos += insert.length;
+        pos += isFunc ? 1 : 0;
 
         input.selectionStart = pos;
         input.selectionEnd = pos;
