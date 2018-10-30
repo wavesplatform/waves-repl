@@ -203,6 +203,16 @@ export class WavesConsoleAPIHelp {
                 'already signed IssueTransaction as a second agrument.',
             params: ['params', 'seed']
         },
+        order: {
+            summary: '' +
+                'Creates and signs Order for exchange transactions',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign order accordingly and will ' +
+                'add one proof per seed. Also you can use already signed ' +
+                'Order as a second agrument.',
+            params: ['params', 'seed']
+        },
         contract: {
             summary: '' +
                 'Open editor tab content',
