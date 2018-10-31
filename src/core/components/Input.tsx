@@ -1,14 +1,32 @@
 import * as React from 'react';
-import {WavesConsoleAPIHelp} from '../../WavesConsoleAPI';
+import {WavesConsoleAPIHelp, IWavesConsoleAPIHelpCommand} from '../../WavesConsoleAPI';
 
 // TODO import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
+
+export interface IInputProps {
+    inputRef:any,
+    onRun:any,
+    autoFocus:any,
+    onClear:any,
+    theme:string,
+    history:Array<string>,
+    addHistory:any,
+    value?:string
+}
+
+export interface IInputState {
+    value:string,
+    multiline:boolean,
+    rows:number,
+    historyCursor:number
+}
 
 /**
  * @class {Input}
  * @extends {React.Component}
  */
-export class Input extends React.Component<any, any> {
+export class Input extends React.Component<IInputProps, any> {
 
     /**
      * @private
@@ -20,19 +38,19 @@ export class Input extends React.Component<any, any> {
      * @static
      * @member {object} commandsVocabulary
      */
-    static commandsVocabulary:any = WavesConsoleAPIHelp.texts;
+    static commandsVocabulary = WavesConsoleAPIHelp.texts;
 
     /**
      * @static
      * @member {Array} commandsList
      */
-    static commandsList:any = Object.keys(WavesConsoleAPIHelp.texts);
+    static commandsList:Array<string> = Object.keys(WavesConsoleAPIHelp.texts);
 
     /**
      * @static
      * @member {object} commasAndQuotes
      */
-    static commasAndQuotes:any = {
+    static commasAndQuotes:{[key:string]:string} = {
         '(': ')',
         '{': '}',
         '[': ']',
@@ -43,9 +61,9 @@ export class Input extends React.Component<any, any> {
     /**
      * @constructor
      *
-     * @param {object} props
+     * @param {IInputProps} props
      */
-    constructor(props: any) {
+    constructor(props: IInputProps) {
         super(props);
 
         // history is set in the componentDidMount
@@ -63,9 +81,13 @@ export class Input extends React.Component<any, any> {
 
     /**
      * @method {onChange}
+     *
+     * @returns {undefined}
      */
     onChange() {
-        if (!this.input) return;
+        if (!this.input) {
+            return;
+        }
 
         const {value} = this.input;
         const length = value.split('\n').length;
@@ -81,103 +103,188 @@ export class Input extends React.Component<any, any> {
      * @async
      * @method {onKeyPress}
      *
-     * @param {React.KeyboardEvent} e
+     * @param {React.KeyboardEvent} event
      *
      * @returns {Promise}
      */
-    async onKeyPress(e: React.KeyboardEvent) {
-        if (!this.input) return;
+    async onKeyPress(event: React.KeyboardEvent) {
+        if (!this.input) {
+            return;
+        }
 
-        const code = keycodes[e.keyCode];
+        const code = keycodes[event.keyCode];
         const {multiline} = this.state;
         const {history} = this.props;
-        let {historyCursor} = this.state;
-
-        // FIXME in multiline, cursor up when we're at the top
-        // const cursor = getCursor(this.input);
+        const command = this.input.value;
 
         // Clear console
-        if (e.ctrlKey && code === 'l') {
-            this.props.onClear();
+        if (this.checkClearAction(event, code)) {
             return;
         }
 
         // Insert value from suggested commands
-        if (code == 'tab') {
-            e.preventDefault();
-            this.setCommandIntoInput();
+        if (this.checkShowSuggestAction(event, code)) {
+            return;
         }
 
         // Insert closing bracket if needed
-        switch (e.key) {
+        this.checkAutoclosingAction(event);
+
+        // Move in history if not in multiline mode
+        if (!multiline && this.checkNotMultilineActions(event, code)) {
+            return;
+        }
+
+        // Remove suggestions block if needed
+        if (this.checkHideSuggestAction(event, code)) {
+            return;
+        }
+
+        // Add command to history and try to execute it
+        if (code === 'enter') {
+            if (event.shiftKey) {
+                return;
+            }
+
+            if (!command) {
+                event.preventDefault();
+                return;
+            }
+
+            this.props.addHistory(command);
+
+            this.setState({historyCursor: history.length + 1, value: ''});
+
+            event.preventDefault();
+
+            await this.props.onRun(command);
+
+            // Don't use `this.input.scrollIntoView();` as it messes with iframes
+            //window.scrollTo(0, document.body.scrollHeight);
+            return;
+        }
+    }
+
+    /**
+     * @method {checkClearAction}
+     *
+     * @param {React.KeyboardEvent} event
+     * @param {string} code
+     *
+     * @returns {boolean}
+     */
+    checkClearAction(event:React.KeyboardEvent, code:string):boolean {
+        // Clear console
+        if (event.ctrlKey && code === 'l') {
+            this.props.onClear();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @method {checkShowSuggestAction}
+     *
+     * @param {React.KeyboardEvent} event
+     * @param {string} code
+     */
+    checkShowSuggestAction(event:React.KeyboardEvent, code:string) {
+        if (code == 'tab') {
+            event.preventDefault();
+            this.setCommandIntoInput();
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @method {checkHideSuggestAction}
+     *
+     * @param {React.KeyboardEvent} event
+     * @param {string} code
+     *
+     * @returns {boolean}
+     */
+    checkHideSuggestAction(event:React.KeyboardEvent, code:string):boolean {
+        if (code === 'escape') {
+            event.preventDefault();
+            this.setState({hideSuggest: true});
+            return true;
+        } else {
+            this.setState({hideSuggest: false});
+        }
+
+        return false;
+    }
+
+    /**
+     * @method {checkAutoclosingAction}
+     *
+     * @param {React.KeyboardEvent} event
+     */
+    checkAutoclosingAction(event:React.KeyboardEvent) {
+        switch (event.key) {
             case '{':
             case '[':
             case '(':
             case '"':
             case "'":
-                this.setClosingBracketOrQuoteIntoInput(e.key);
+                this.setClosingBracketOrQuoteIntoInput(event.key);
                 break;
             case 'Backspace':
                 this.unsetClosingBracketOrQuoteIntoInput();
                 break;
         }
+    }
 
-        // Move in history if not in multiline mode
-        if (!multiline) {
-            if (code === 'up arrow') {
-                historyCursor--;
-                if (historyCursor < 0) {
-                    this.setState({historyCursor: 0});
-                    return;
-                }
-                this.setState({historyCursor, value: history[historyCursor]});
-                // this.onChange();
-                e.preventDefault();
-                return;
+    /**
+     * @method {checkNotMultilineActions}
+     *
+     * @param {React.KeyboardEvent} event
+     * @param {string} code
+     *
+     * @returns {boolean}
+     */
+    checkNotMultilineActions(event:React.KeyboardEvent, code:string):boolean {
+        const {history} = this.props;
+        let {historyCursor} = this.state;
+
+        // Show back
+        if (code === 'up arrow') {
+            historyCursor--;
+
+            if (historyCursor < 0) {
+                this.setState({historyCursor: 0});
+
+                return true;
             }
 
-            if (code === 'down arrow') {
-                historyCursor++;
-                if (historyCursor >= history.length) {
-                    this.setState({historyCursor: history.length, value: ''});
-                    return;
-                }
-                this.setState({historyCursor, value: history[historyCursor]});
-                e.preventDefault();
-                return;
-            }
+            this.setState({historyCursor, value: history[historyCursor]});
+
+            event.preventDefault();
+
+            return true;
         }
 
-        // Remove suggestions block if needed
-        if (code === 'escape') {
-            e.preventDefault();
-            this.setState({hideSuggest: true});
-            return;
-        } else {
-            this.setState({hideSuggest: false});
-        }
+        // Move forward
+        if (code === 'down arrow') {
+            historyCursor++;
 
-        // Add command to history and try to execute it
-        const command = this.input.value;
+            if (historyCursor >= history.length) {
+                this.setState({historyCursor: history.length, value: ''});
 
-        if (code === 'enter') {
-            if (e.shiftKey) {
-                return;
+                return true;
             }
 
-            if (!command) {
-                e.preventDefault();
-                return;
-            }
+            this.setState({historyCursor, value: history[historyCursor]});
+            event.preventDefault();
 
-            this.props.addHistory(command);
-            this.setState({historyCursor: history.length + 1, value: ''});
-            e.preventDefault();
-            await this.props.onRun(command);
-            // Don't use `this.input.scrollIntoView();` as it messes with iframes
-            //window.scrollTo(0, document.body.scrollHeight);
-            return;
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -187,11 +294,11 @@ export class Input extends React.Component<any, any> {
      *
      * @returns {string}
      */
-    getCurrentCommandPiece() {
-        let input:any = this.input;
-        let pos:any = input ? input.selectionStart : 0;
-        let commands:any = (input ? input.value.substring(0, pos) : '').
-                           split(/[\s+()]/);
+    getCurrentCommandPiece():string|undefined {
+        let {input} = this;
+        let pos:number = input ? input.selectionStart : 0;
+        let commands:Array<string> = (input ? input.value.substring(0, pos) : '').
+                                     split(/[\s+()]/);
 
         // Get last entry from string
         if (commands && commands.length) {
@@ -208,16 +315,16 @@ export class Input extends React.Component<any, any> {
      *
      * @param {string} open
      */
-    setClosingBracketOrQuoteIntoInput(open:any = '(') {
+    setClosingBracketOrQuoteIntoInput(open:string = '(') {
         // No need to go further
         if (!this.input) {
             return;
         }
 
-        let brackets:any = Input.commasAndQuotes;
-        let input:any = this.input;
-        let pos:any = input.selectionStart || 0;
-        let close = brackets[open] ? brackets[open] : brackets['('];
+        let brackets = Input.commasAndQuotes;
+        let {input} = this;
+        let pos:number = input.selectionStart || 0;
+        let close:string = brackets[open] ? brackets[open] : brackets['('];
 
         // Set new value
         input.value = input.value.substring(0, pos) +
@@ -243,10 +350,10 @@ export class Input extends React.Component<any, any> {
             return;
         }
 
-        let input:any = this.input;
-        let pos:any = input.selectionStart || 0;
-        let open:any = this.input.value.substr(pos - 1, 1);
-        let close:any = Input.commasAndQuotes[open];
+        let {input} = this;
+        let pos:number = input.selectionStart || 0;
+        let open:string = this.input.value.substr(pos - 1, 1);
+        let close:string = Input.commasAndQuotes[open];
 
         // No need to go further
         if (!close) {
@@ -284,15 +391,16 @@ export class Input extends React.Component<any, any> {
             return;
         }
 
-        let input:any = this.input;
-        let beg:any = input.selectionStart || 0;
-        let end:any = input.selectionEnd || 0;
-        let pos:any = beg;
-        let isFunc:any = false;
-        let insert:any = this.getCurrentCommandPiece();
-        let vocabulary:any = Input.commandsVocabulary;
-        let command:any = '';
-        let commands:any = this.getFilteredCommandsList();
+        let {input} = this;
+        let beg:number = input.selectionStart || 0;
+        let end:number = input.selectionEnd || 0;
+        let pos:number = beg;
+        let isFunc:boolean = false;
+        let insert = this.getCurrentCommandPiece();
+        let insert2:string|undefined = '';
+        let vocabulary = Input.commandsVocabulary;
+        let command:string|undefined = '';
+        let commands:Array<string> = this.getFilteredCommandsList();
 
         // Autocomplete works only if one value in list
         if (commands.length != 1) {
@@ -303,25 +411,23 @@ export class Input extends React.Component<any, any> {
         command = commands[0];
 
         // No need to go further
-        if (!command) {
+        if (command === undefined) {
             return;
         }
 
         // Check if it's method or member
-        isFunc = vocabulary[command] && vocabulary[command].params !== undefined ?
-                 true :
-                 false;
+        isFunc = vocabulary[command] && vocabulary[command].params !== undefined;
 
         // Get missing part of command name
-        insert = command.substring(insert.length);
+        insert2 = command.substring(insert.length);
 
         // Set new value
         input.value = input.value.substring(0, beg) +
-                      insert + (isFunc ? '()' : '') + 
+                      insert2 + (isFunc ? '()' : '') + 
                       input.value.substring(end);
 
         // Set new caret position
-        pos += insert.length;
+        pos += insert2.length;
         pos += isFunc ? 1 : 0;
 
         input.selectionStart = pos;
@@ -338,18 +444,14 @@ export class Input extends React.Component<any, any> {
      *
      * @returns {Array}
      */
-    getFilteredCommandsList() {
+    getFilteredCommandsList():Array<string> {
         let seek:any = this.getCurrentCommandPiece();
         let list:any = null;
 
         if (seek) {
             // Get filtered list if possible
             list = Input.commandsList.filter((item:any) => {
-                if (item.indexOf(seek) === 0) {
-                    return true;
-                }
-
-                return false;
+                return item.indexOf(seek) === 0;
             });
 
             // Check for values inside

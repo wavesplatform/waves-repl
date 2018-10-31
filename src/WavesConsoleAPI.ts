@@ -117,9 +117,9 @@ export class WavesConsoleAPI {
 /**
  * Item for commands list
  *
- * @interface WavesConsoleAPIHelpCommand
+ * @interface IWavesConsoleAPIHelpCommand
  */
-interface WavesConsoleAPIHelpCommand {
+export interface IWavesConsoleAPIHelpCommand {
     readonly summary?: string,
     readonly description?: string,
     readonly params?: Array<string>|null
@@ -128,9 +128,9 @@ interface WavesConsoleAPIHelpCommand {
 /**
  * Item for variables types list
  *
- * @interface WavesConsoleAPIHelpVariable
+ * @interface IWavesConsoleAPIHelpVariable
  */
-interface WavesConsoleAPIHelpVariable {
+export interface IWavesConsoleAPIHelpVariable {
     readonly optional?: boolean,
     readonly type?: string,
     readonly summary?: string
@@ -139,9 +139,9 @@ interface WavesConsoleAPIHelpVariable {
 /**
  * Item for common texts pieces (headers, etc)
  *
- * @interface WavesConsoleApiHelpCommon
+ * @interface IWavesConsoleApiHelpCommon
  */
-interface WavesConsoleApiHelpCommon {
+export interface IWavesConsoleApiHelpCommon {
     readonly header?: string,
     readonly summary?: string
 }
@@ -160,7 +160,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} common
      */
-    public static common: {[key:string]:WavesConsoleApiHelpCommon} = {
+    public static common: {[key:string]:IWavesConsoleApiHelpCommon} = {
         list: {
             header: 'Available functions:'
         },
@@ -175,7 +175,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} texts
      */
-    public static texts: {[key:string]:WavesConsoleAPIHelpCommand} = {
+    public static texts: {[key:string]:IWavesConsoleAPIHelpCommand} = {
         file: {
             summary: '' +
                 'Gets editor contents for tab',
@@ -362,7 +362,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} types
      */
-    public static types: {[key:string]:WavesConsoleAPIHelpVariable} = {
+    public static types: {[key:string]:IWavesConsoleAPIHelpVariable} = {
         tx: {
             summary: 'Transaction object obtained from WavesTransactions library',
             type: 'object'
