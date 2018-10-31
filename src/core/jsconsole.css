@@ -162,11 +162,81 @@ body, html, #root {
   padding: 0.6rem;
   padding-left: 1.4rem;
   display: block;
+  position: relative;
+  z-index: 2;
   width: 100%;
   outline: none;
   font-size: inherit;
   line-height: inherit;
 }
+
+
+
+
+
+.Suggest
+{
+  font-size: inherit;
+  font-family: "Menlo", consolas, monospace;
+
+  line-height: inherit;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 1;
+}
+
+.Suggest__list
+{
+  display: block;
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+
+  padding: 0.7rem  0.7rem  0.7rem 1.4rem;
+  margin: 0 0 2px 0;
+
+  background-color: #282C34;
+  border-top: solid 1px;
+}
+
+.Suggest__list_drop_down
+{
+    top: 100%;
+    bottom: auto;
+}
+
+.Suggest__item
+{
+  font-size: 0.9em;
+
+  display: inline-block;
+
+  margin: 0 1rem 0 0;
+}
+
+.Suggest__item_is_selected
+{
+    color: yellow;
+}
+
+.Suggest__help
+{
+  white-space: pre;
+
+  opacity: 0.3;
+
+  padding: 0.6rem  0.6rem  0.6rem 1.4rem;
+}
+
+
+
+
+
+
 .Line {
   line-height: 1.4rem;
   /* padding: 0.6rem;*/

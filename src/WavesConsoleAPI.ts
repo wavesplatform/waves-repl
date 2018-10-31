@@ -117,20 +117,20 @@ export class WavesConsoleAPI {
 /**
  * Item for commands list
  *
- * @interface WavesConsoleAPIHelpCommand
+ * @interface IWavesConsoleAPIHelpCommand
  */
-interface WavesConsoleAPIHelpCommand {
+export interface IWavesConsoleAPIHelpCommand {
     readonly summary?: string,
     readonly description?: string,
-    readonly params?: Array<string>
+    readonly params?: Array<string>|null
 }
 
 /**
  * Item for variables types list
  *
- * @interface WavesConsoleAPIHelpVariable
+ * @interface IWavesConsoleAPIHelpVariable
  */
-interface WavesConsoleAPIHelpVariable {
+export interface IWavesConsoleAPIHelpVariable {
     readonly optional?: boolean,
     readonly type?: string,
     readonly summary?: string
@@ -139,9 +139,9 @@ interface WavesConsoleAPIHelpVariable {
 /**
  * Item for common texts pieces (headers, etc)
  *
- * @interface WavesConsoleApiHelpCommon
+ * @interface IWavesConsoleApiHelpCommon
  */
-interface WavesConsoleApiHelpCommon {
+export interface IWavesConsoleApiHelpCommon {
     readonly header?: string,
     readonly summary?: string
 }
@@ -160,7 +160,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} common
      */
-    public static common: {[key:string]:WavesConsoleApiHelpCommon} = {
+    public static common: {[key:string]:IWavesConsoleApiHelpCommon} = {
         list: {
             header: 'Available functions:'
         },
@@ -175,7 +175,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} texts
      */
-    public static texts: {[key:string]:WavesConsoleAPIHelpCommand} = {
+    public static texts: {[key:string]:IWavesConsoleAPIHelpCommand} = {
         file: {
             summary: '' +
                 'Gets editor contents for tab',
@@ -203,11 +203,22 @@ export class WavesConsoleAPIHelp {
                 'already signed IssueTransaction as a second agrument.',
             params: ['params', 'seed']
         },
+        order: {
+            summary: '' +
+                'Creates and signs Order for exchange transactions',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign order accordingly and will ' +
+                'add one proof per seed. Also you can use already signed ' +
+                'Order as a second agrument.',
+            params: ['params', 'seed']
+        },
         contract: {
             summary: '' +
                 'Open editor tab content',
             description: '' +
-                ''
+                '',
+            params: null
         },
         keyPair: {
             summary: '' +
@@ -310,7 +321,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed LeaseTransaction as a second agrument.'
+                'already signed LeaseTransaction as a second agrument.',
+            params: null
         },
         cancelLease: {
             summary: '' +
@@ -350,7 +362,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} types
      */
-    public static types: {[key:string]:WavesConsoleAPIHelpVariable} = {
+    public static types: {[key:string]:IWavesConsoleAPIHelpVariable} = {
         tx: {
             summary: 'Transaction object obtained from WavesTransactions library',
             type: 'object'
@@ -495,7 +507,9 @@ export class WavesConsoleAPIHelp {
         var
             module: any = WavesConsoleAPIHelp,
             summary: string = '',
-            params:Array<string> = module.texts[alias].params || [],
+            params:Array<string> = module.texts[alias] && module.texts[alias].params ?
+                                   module.texts[alias].params :
+                                   [],
             description: string = '',
             type: string = '',
             vals: undefined|Array<string>,
