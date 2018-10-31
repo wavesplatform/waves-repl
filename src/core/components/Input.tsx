@@ -139,10 +139,10 @@ export class Input extends React.Component<any, any> {
             if (code === 'up arrow') {
                 historyCursor--;
                 if (historyCursor < 0) {
-                    this.setState({ historyCursor: 0 });
+                    this.setState({historyCursor: 0});
                     return;
                 }
-                this.setState({ historyCursor, value: history[historyCursor] });
+                this.setState({historyCursor, value: history[historyCursor]});
                 // this.onChange();
                 e.preventDefault();
                 return;
@@ -151,10 +151,10 @@ export class Input extends React.Component<any, any> {
             if (code === 'down arrow') {
                 historyCursor++;
                 if (historyCursor >= history.length) {
-                    this.setState({ historyCursor: history.length, value: '' });
+                    this.setState({historyCursor: history.length, value: ''});
                     return;
                 }
-                this.setState({ historyCursor, value: history[historyCursor] });
+                this.setState({historyCursor, value: history[historyCursor]});
                 e.preventDefault();
                 return;
             }
@@ -183,7 +183,7 @@ export class Input extends React.Component<any, any> {
             }
 
             this.props.addHistory(command);
-            this.setState({ historyCursor: history.length + 1, value: '' });
+            this.setState({historyCursor: history.length + 1, value: ''});
             e.preventDefault();
             await this.props.onRun(command);
             // Don't use `this.input.scrollIntoView();` as it messes with iframes
