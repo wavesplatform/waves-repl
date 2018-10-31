@@ -67,7 +67,7 @@ export class Input extends React.Component<any, any> {
     onChange() {
         if (!this.input) return;
 
-        const { value } = this.input;
+        const {value} = this.input;
         const length = value.split('\n').length;
 
         this.setState({
@@ -89,9 +89,9 @@ export class Input extends React.Component<any, any> {
         if (!this.input) return;
 
         const code = keycodes[e.keyCode];
-        const { multiline } = this.state;
-        const { history } = this.props;
-        let { historyCursor } = this.state;
+        const {multiline} = this.state;
+        const {history} = this.props;
+        let {historyCursor} = this.state;
 
         // FIXME in multiline, cursor up when we're at the top
         // const cursor = getCursor(this.input);
@@ -109,27 +109,15 @@ export class Input extends React.Component<any, any> {
         }
 
         // Insert closing bracket if needed
-        switch (code) {
-            case '9':
-                if (e.shiftKey) {
-                    this.setClosingBracketOrQuoteIntoInput('(');
-                }
+        switch (e.key) {
+            case '{':
+            case '[':
+            case '(':
+            case '"':
+            case "'":
+                this.setClosingBracketOrQuoteIntoInput(e.key);
                 break;
-            case 'open bracket':
-                if (e.shiftKey) {
-                    this.setClosingBracketOrQuoteIntoInput('{');
-                } else {
-                    this.setClosingBracketOrQuoteIntoInput('[');
-                }
-                break;
-            case 'single quote / ø':
-                if (e.shiftKey) {
-                    this.setClosingBracketOrQuoteIntoInput('"');
-                } else {
-                    this.setClosingBracketOrQuoteIntoInput("'");
-                }
-                break;
-            case 'backspace / delete':
+            case 'Backspace':
                 this.unsetClosingBracketOrQuoteIntoInput();
                 break;
         }
@@ -410,7 +398,7 @@ export class Input extends React.Component<any, any> {
      * @returns {React.Element}
      */
     createTextarea() {
-        const { autoFocus } = this.props;
+        const {autoFocus} = this.props;
 
         return (
             <textarea
