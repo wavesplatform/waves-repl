@@ -26,8 +26,24 @@ export interface IInputState {
     multiline:boolean,
     rows:number,
     historyCursor:number,
-    hideSuggest:boolean,
-    position?:string
+    hideSuggest:boolean
+}
+
+/**
+ * @interface {ISuggestRootProps}
+ */
+export interface ISuggestRootProps {
+    value?:string,
+    commands?:string[],
+    dropdown?:boolean
+}
+
+/**
+ * @interface {ISuggestItemProps}
+ */
+export interface ISuggestItemProps {
+    title:string,
+    selected?:boolean
 }
 
 /**
@@ -497,7 +513,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
     createSuggest() {
         return (<SuggestRoot
             value={this.state.value}
-            position={this.state.position}
             commands={this.getFilteredCommandsList()}
         />);
     }
@@ -533,11 +548,11 @@ export class Input extends React.Component<IInputProps, IInputState> {
  *
  * @function {SuggestRoot}
  *
- * @param {object} props
+ * @param {ISuggestRootProps} props
  *
  * @returns {React.Element}
  */
-function SuggestRoot(props:any) {
+function SuggestRoot(props:ISuggestRootProps) {
     // No need to go further
     if (!props.commands || !props.commands.length || !props.value) {
         return null;
@@ -545,7 +560,7 @@ function SuggestRoot(props:any) {
 
     return (
         <div className="Suggest">
-            <SuggestList {... props} />
+            <SuggestList {...props} />
             &nbsp;
         </div>
     );
@@ -556,16 +571,20 @@ function SuggestRoot(props:any) {
  *
  * @function {SuggestList}
  *
- * @param {object} props
+ * @param {ISuggestRootProps} props
  *
  * @returns {React.Element}
  */
-function SuggestList(props:any) {
+function SuggestList(props:ISuggestRootProps) {
+    // No need to go further
+    if (!props.commands || !props.commands.length) {
+        return null;
+    }
+
     const commands = props.commands.map((item:string, index:number) => {
         return (<SuggestItem
                    key={'commands-suggest-item-' + index}
                    title={item}
-                   selected={index === props.position}
                />);
     });
 
@@ -585,7 +604,7 @@ function SuggestList(props:any) {
  *
  * @returns {React.Element}
  */
-function SuggestItem(props:any) {
+function SuggestItem(props:ISuggestItemProps) {
     return (<li
         className = {'Suggest__item' + (props.selected ? ' Suggest__item_is_selected' : '')}
     >
