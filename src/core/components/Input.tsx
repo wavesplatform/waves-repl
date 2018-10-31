@@ -4,6 +4,9 @@ import {WavesConsoleAPIHelp, IWavesConsoleAPIHelpCommand} from '../../WavesConso
 // TODO import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
 
+/**
+ * @interface {IInputProps}
+ */
 export interface IInputProps {
     inputRef:any,
     onRun:any,
@@ -15,6 +18,9 @@ export interface IInputProps {
     value?:string
 }
 
+/**
+ * @interface {IInputState}
+ */
 export interface IInputState {
     value:string,
     multiline:boolean,
@@ -397,7 +403,7 @@ export class Input extends React.Component<IInputProps, any> {
         let pos:number = beg;
         let isFunc:boolean = false;
         let insert = this.getCurrentCommandPiece();
-        let insert2:string|undefined = '';
+        let missing:string|undefined = '';
         let vocabulary = Input.commandsVocabulary;
         let command:string|undefined = '';
         let commands:Array<string> = this.getFilteredCommandsList();
@@ -411,7 +417,7 @@ export class Input extends React.Component<IInputProps, any> {
         command = commands[0];
 
         // No need to go further
-        if (command === undefined) {
+        if (command === undefined || insert === undefined) {
             return;
         }
 
@@ -419,15 +425,15 @@ export class Input extends React.Component<IInputProps, any> {
         isFunc = vocabulary[command] && vocabulary[command].params !== undefined;
 
         // Get missing part of command name
-        insert2 = command.substring(insert.length);
+        missing = command.substring(insert.length);
 
         // Set new value
         input.value = input.value.substring(0, beg) +
-                      insert2 + (isFunc ? '()' : '') + 
+                      missing + (isFunc ? '()' : '') + 
                       input.value.substring(end);
 
         // Set new caret position
-        pos += insert2.length;
+        pos += missing.length;
         pos += isFunc ? 1 : 0;
 
         input.selectionStart = pos;
@@ -475,7 +481,6 @@ export class Input extends React.Component<IInputProps, any> {
         return (
             <div className="Input">
                 {suggest}
-                {/*<Autocomplete value={this.state.value} />*/}
                 {textarea}
             </div>
         );
