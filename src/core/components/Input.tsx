@@ -459,7 +459,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         if (seek) {
             // Get filtered list if possible
-            list = Input.commandsList.filter((item:any) => {
+            list = Input.commandsList.filter((item:string) => {
                 return item.indexOf(seek) === 0;
             });
 
@@ -561,7 +561,7 @@ function SuggestRoot(props:any) {
  * @returns {React.Element}
  */
 function SuggestList(props:any) {
-    const commands = props.commands.map((item:any, index:any) => {
+    const commands = props.commands.map((item:string, index:number) => {
         return (<SuggestItem
                    key={'commands-suggest-item-' + index}
                    title={item}
