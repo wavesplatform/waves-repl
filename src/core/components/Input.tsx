@@ -455,7 +455,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
      */
     getFilteredCommandsList():Array<string> {
         let seek:any = this.getCurrentCommandPiece();
-        let list:any = null;
+        let list:Array<string> = [];
 
         if (seek) {
             // Get filtered list if possible
@@ -464,7 +464,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
             });
 
             // Check for values inside
-            if (list && list.length) {
+            if (list.length) {
                 return list;
             }
         }
