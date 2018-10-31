@@ -25,14 +25,16 @@ export interface IInputState {
     value:string,
     multiline:boolean,
     rows:number,
-    historyCursor:number
+    historyCursor:number,
+    hideSuggest:boolean,
+    position?:string
 }
 
 /**
  * @class {Input}
  * @extends {React.Component}
  */
-export class Input extends React.Component<IInputProps, any> {
+export class Input extends React.Component<IInputProps, IInputState> {
 
     /**
      * @private
@@ -78,6 +80,7 @@ export class Input extends React.Component<IInputProps, any> {
             multiline: false,
             rows: 1,
             historyCursor: props.history.length,
+            hideSuggest: false
         };
 
         // Bind some methods to instance
@@ -534,7 +537,7 @@ export class Input extends React.Component<IInputProps, any> {
  *
  * @returns {React.Element}
  */
-function SuggestRoot(props:any):any {
+function SuggestRoot(props:any) {
     // No need to go further
     if (!props.commands || !props.commands.length || !props.value) {
         return null;
@@ -557,7 +560,7 @@ function SuggestRoot(props:any):any {
  *
  * @returns {React.Element}
  */
-function SuggestList(props:any):any {
+function SuggestList(props:any) {
     const commands = props.commands.map((item:any, index:any) => {
         return (<SuggestItem
                    key={'commands-suggest-item-' + index}
@@ -582,7 +585,7 @@ function SuggestList(props:any):any {
  *
  * @returns {React.Element}
  */
-function SuggestItem(props:any):any {
+function SuggestItem(props:any) {
     return (<li
         className = {'Suggest__item' + (props.selected ? ' Suggest__item_is_selected' : '')}
     >
