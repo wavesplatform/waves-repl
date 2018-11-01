@@ -494,7 +494,9 @@ export class Input extends React.Component<IInputProps, IInputState> {
      * @returns {React.Element}
      */
     render() {
-        const suggest = !this.state.hideSuggest ? this.createSuggest() : null;
+        const rect = this.input ? this.input.getBoundingClientRect() : null;
+        const dropdown = rect && rect.top < 50 ? true : false;
+        const suggest = !this.state.hideSuggest ? this.createSuggest(dropdown) : null;
         const textarea = this.createTextarea();
 
         return (
@@ -510,10 +512,13 @@ export class Input extends React.Component<IInputProps, IInputState> {
      *
      * @returns {React.Element}
      */
-    createSuggest() {
+    createSuggest(dropdown:boolean) {
+        const {value} = this.state;
+
         return (<SuggestRoot
-            value={this.state.value}
+            value={value}
             commands={this.getFilteredCommandsList()}
+            dropdown={dropdown}
         />);
     }
 
@@ -524,17 +529,18 @@ export class Input extends React.Component<IInputProps, IInputState> {
      */
     createTextarea() {
         const {autoFocus} = this.props;
+        const {rows, value} = this.state;
 
         return (
             <textarea
                 className="cli"
-                rows={this.state.rows}
+                rows={rows}
                 autoFocus={autoFocus}
                 ref={e => {
                     this.input = e;
                     this.props.inputRef(e);
                 }}
-                value={this.state.value}
+                value={value}
                 onChange={this.onChange}
                 onKeyDown={this.onKeyPress}
             />
