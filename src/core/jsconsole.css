@@ -199,7 +199,6 @@ body, html, #root {
   padding: 0.7rem  0.7rem  0.7rem 1.4rem;
   margin: 0 0 2px 0;
 
-  background-color: #282C34;
   border-top: solid 1px;
 }
 
@@ -207,6 +206,16 @@ body, html, #root {
 {
     top: 200%;
     bottom: auto;
+}
+
+.Suggest_theme_dark .Suggest__list
+{
+  background-color: #282C34;
+}
+
+.Suggest_theme_light .Suggest__list
+{
+  background-color: #FFF;
 }
 
 .Suggest__item
