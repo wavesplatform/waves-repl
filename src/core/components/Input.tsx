@@ -35,7 +35,8 @@ export interface IInputState {
 export interface ISuggestRootProps {
     value?:string,
     commands?:string[],
-    dropdown?:boolean
+    dropdown?:boolean,
+    theme?:string
 }
 
 /**
@@ -514,11 +515,14 @@ export class Input extends React.Component<IInputProps, IInputState> {
      */
     createSuggest(dropdown:boolean) {
         const {value} = this.state;
+        const {theme} = this.props;
+        const commands = this.getFilteredCommandsList();
 
         return (<SuggestRoot
             value={value}
-            commands={this.getFilteredCommandsList()}
+            commands={commands}
             dropdown={dropdown}
+            theme={theme}
         />);
     }
 
@@ -559,13 +563,15 @@ export class Input extends React.Component<IInputProps, IInputState> {
  * @returns {React.Element}
  */
 function SuggestRoot(props:ISuggestRootProps) {
+    const {value, theme, commands} = props;
+
     // No need to go further
-    if (!props.commands || !props.commands.length || !props.value) {
+    if (!commands || !commands.length || !value) {
         return null;
     }
 
     return (
-        <div className="Suggest">
+        <div className={'Suggest' + (theme ? ' Suggest_theme_' + theme : '')}>
             <SuggestList {...props} />
             &nbsp;
         </div>
