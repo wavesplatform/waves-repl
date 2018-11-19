@@ -5,20 +5,40 @@ It is built on top of [jsconsole](https://github.com/remy/jsconsole) and have pr
 ## Builtin functions
 #### JS lib
 Console uses [waves-transactions](https://ebceu4.github.io/waves-transactions/index.html) library. Top level library functions are bound to console global scope.
-The difference is that in console, seed argument comes second and is optional.
+The difference is that in console, seed argument is equal to env.SEED by default. You need to pass null explicitly if you only want to create transaction and not to sign it
 E.x.:
 ##### Console
 ```javascript
-const signedTx = transfer({amount: 100, recipient: 'some recipient'})
-```
-##### Library
-```javascript
-const signedTx = transfer('some seed phraze', {amount: 100, recipient: 'some recipient'})
+const signedTx = transfer({amount: 100, recipient: '3MyAGEBuZGDKZDzYn6sbh2noqk9uYHy4kjw', senderPublicKey: '8ViwGfvyyN1teUKV4Uvk2orK6XiYB4S4VuM2DqJ9Mj5b'}, null)
+
+//returns tx with no proofs
+{
+  "type": 4,
+  "version": 2,
+  "fee": 100000,
+  "senderPublicKey": "8ViwGfvyyN1teUKV4Uvk2orK6XiYB4S4VuM2DqJ9Mj5b",
+  "timestamp": 1542640481876,
+  "proofs": [],
+  "id": "CveeKH16XQcshV5GZP2RXppg3snxcKqRsM4wE5gxcuzc",
+  "chainId": "T",
+  "amount": 100,
+  "recipient": "3MyAGEBuZGDKZDzYn6sbh2noqk9uYHy4kjw"
+}
+
 ```
 #### Additional functions
 Broadcast signed tx using node from global variable 
 ```javascript
-const resp = broadcast(signedTx)
+const resp = await broadcast(signedTx)
+```
+Deploy current open contract using node from global variable 
+```javascript
+const resp = deploy()
+```
+Sign arbitrary transaction
+```javascript
+const tx = transfer({amount: 100, recipient: '3MyAGEBuZGDKZDzYn6sbh2noqk9uYHy4kjw', senderPublicKey: '8ViwGfvyyN1teUKV4Uvk2orK6XiYB4S4VuM2DqJ9Mj5b'}, null)
+const signedTx = signTx(tx)
 ```
 Compile contract. Returns base64
 ```javascript
@@ -69,7 +89,7 @@ render(<App />, document.getElementById("root"));
 
 //Set default params
 Repl.updateEnv({
-    SEED: 'SEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEED',
+    SEED: 'example seed',
     CHAIN_ID: 'T',
     API_BASE: 'https://testnodes.wavesnodes.com/'
 })
