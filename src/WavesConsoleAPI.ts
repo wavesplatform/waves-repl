@@ -1,7 +1,9 @@
 import * as wt from 'waves-transactions'
+import {broadcast} from "waves-transactions/general";
 import {keyPair, KeyPair, address} from 'waves-crypto'
-import Axios from 'axios'
 import {compile as cmpl} from "@waves/ride-js"
+import {Tx} from "waves-transactions/transactions";
+import {SeedTypes} from "waves-transactions/types";
 
 export class WavesConsoleAPI {
     static env: any;
@@ -14,13 +16,13 @@ export class WavesConsoleAPI {
 
     constructor() {
         Object.keys(wt).forEach(key => {
-            this[key] = (params: any, seed: any) => (wt as any)[key](seed || WavesConsoleAPI.env.SEED,
-                {chainId: WavesConsoleAPI.env.CHAIN_ID, ...params})
-        })
+            this[key] = (params: any, seed: SeedTypes) => (wt as any)[key]({chainId: WavesConsoleAPI.env.CHAIN_ID, ...params}, seed === null ? null : seed || WavesConsoleAPI.env.SEED)
+        });
+        this['broadcast'] = (tx: Tx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
     }
 
     public file = (tabName: string): string =>
-        (WavesConsoleAPI.env.editors.filter((e: any) => e.label == tabName)[0] || {code: ''}).code
+        (WavesConsoleAPI.env.editors.filter((e: any) => e.label == tabName)[0] || {code: ''}).code;
 
     public contract = (): string => {
         try {
@@ -30,7 +32,7 @@ export class WavesConsoleAPI {
         }
     };
 
-    public keyPair = (seed?: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED)
+    public keyPair = (seed?: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED);
 
     public publicKey = (seed?: string): string =>
         this.keyPair(seed).public;
@@ -50,23 +52,12 @@ export class WavesConsoleAPI {
         return this.bufferToBase64(new Uint8Array(r.result));
     };
 
-    public broadcast = async (tx: any, apiBase?: string) => {
-        const url = new URL('transactions/broadcast', apiBase || WavesConsoleAPI.env.API_BASE).href;
-        try{
-            const resp = await Axios.post(url, tx);
-            return resp.data
-        }catch (e) {
-            if (e.response && e.response.status === 400){
-                throw new Error(e.response.data.message)
-            }else throw e
-        }
-    };
-    public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: string | string[]) => {
+    public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: SeedTypes) => {
         let txParams = params || {};
         txParams.script = txParams.script === undefined ? this.compile(this.contract()) : txParams.script;
 
         const setScriptTx = this['setScript'](txParams, seed);
-        return this.broadcast(setScriptTx);
+        return this['broadcast'](setScriptTx);
     };
 
     private bufferToBase64(buf: Uint8Array) {
@@ -75,7 +66,7 @@ export class WavesConsoleAPI {
     }
 
     public help = (func?: Function): string => {
-        var
+        let
             pos: number = -1,
             al0: string = '',
             type: string = typeof func,
@@ -167,7 +158,7 @@ export class WavesConsoleAPIHelp {
         args: {
             header: 'Arguments:'
         }
-    }
+    };
 
     /**
      * Commands descriptions vocabulary
@@ -397,7 +388,7 @@ export class WavesConsoleAPIHelp {
             summary: 'Url of the node. E.x. "https://nodes.wavesplatform.com". (optional, env.API_BASE by default)',
             type: 'string'
         }
-    }
+    };
 
     /**
      * Generates API method argument(s) whole description
@@ -410,10 +401,10 @@ export class WavesConsoleAPIHelp {
      * @returns {string}
      */
     public static compileText(aliases: Array<string>): string {
-        var
+        let
             last = aliases.length - 1,
             module: any = WavesConsoleAPIHelp,
-            full: boolean = aliases.length == 1 ? true : false,
+            full: boolean = aliases.length === 1,
             text: string = '';
 
         // Compile text for each command
@@ -450,7 +441,7 @@ export class WavesConsoleAPIHelp {
      * @returns {string}
      */
     public static compileTextArguments(args: Array<string>, text: string): string {
-        var
+        let
             last: number = args.length - 1,
             type: string = '',
             summary: string = '',
@@ -504,15 +495,13 @@ export class WavesConsoleAPIHelp {
      * @returns {string}
      */
     public static compileTextSlice(alias: string, full: boolean, text: string): string {
-        var
+        let
             module: any = WavesConsoleAPIHelp,
             summary: string = '',
             params:Array<string> = module.texts[alias] && module.texts[alias].params ?
                                    module.texts[alias].params :
                                    [],
             description: string = '',
-            type: string = '',
-            vals: undefined|Array<string>,
             args: Array<string> = params.slice();
 
         // Check optional and obligatory function params
