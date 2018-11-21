@@ -181,7 +181,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed DataTransaction as a second agrument.',
+                'already signed DataTransaction as a second argument.',
             params: ['params', 'seed']
         },
         issue: {
@@ -191,7 +191,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed IssueTransaction as a second agrument.',
+                'already signed IssueTransaction as a second argument.',
             params: ['params', 'seed']
         },
         order: {
@@ -201,7 +201,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign order accordingly and will ' +
                 'add one proof per seed. Also you can use already signed ' +
-                'Order as a second agrument.',
+                'Order as a second argument.',
             params: ['params', 'seed']
         },
         contract: {
@@ -282,7 +282,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed MassTransferTransaction as a second agrument.',
+                'already signed MassTransferTransaction as a second argument.',
             params: ['params', 'seed']
         },
         reissue: {
@@ -292,7 +292,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use already ' +
-                'signed ReissueTransaction as a second agrument.',
+                'signed ReissueTransaction as a second argument.',
             params: ['params', 'seed']
         },
         burn: {
@@ -302,7 +302,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed BurnTransaction as a second agrument.',
+                'already signed BurnTransaction as a second argument.',
             params: ['params', 'seed']
         },
         lease: {
@@ -312,8 +312,8 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed LeaseTransaction as a second agrument.',
-            params: null
+                'already signed LeaseTransaction as a second argument.',
+            params: ['params', 'seed']
         },
         cancelLease: {
             summary: '' +
@@ -322,7 +322,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed CancelLeaseTransaction as a second agrument.',
+                'already signed CancelLeaseTransaction as a second argument.',
             params: ['params', 'seed']
         },
         alias: {
@@ -332,7 +332,7 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed AliasTransaction as a second agrument.',
+                'already signed AliasTransaction as a second argument.',
             params: ['params', 'seed']
         },
         setScript: {
@@ -342,8 +342,27 @@ export class WavesConsoleAPIHelp {
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
-                'already signed SetScriptTransaction as a second agrument.',
+                'already signed SetScriptTransaction as a second argument.',
             params: ['params', 'seed']
+        },
+        setAssetScript: {
+            summary: '' +
+                'Creates signed setAssetScript transaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed SetAssetScriptTransaction as a second argument.',
+            params: ['params', 'seed']
+        },
+        signTx: {
+            summary: '' +
+                'Signs previously created transaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed',
+            params: ['tx', 'seed']
         }
     };
 
