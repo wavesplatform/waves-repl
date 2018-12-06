@@ -179,14 +179,14 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
             this.props.addHistory(command);
 
-            this.setState({historyCursor: history.length + 1, value: ''});
+            this.setState({historyCursor: history.length + 1, value: '', multiline: false});
 
             event.preventDefault();
 
             await this.props.onRun(command);
 
             // Don't use `this.input.scrollIntoView();` as it messes with iframes
-            //window.scrollTo(0, document.body.scrollHeight);
+            window.scrollTo(0, document.body.scrollHeight);
             return;
         }
     }

@@ -1,9 +1,11 @@
 import * as wt from 'waves-transactions'
 import {broadcast} from "waves-transactions/general";
-import {keyPair, KeyPair, address} from 'waves-crypto'
+import {keyPair, KeyPair, address, publicKey} from 'waves-crypto'
 import {compile as cmpl} from "@waves/ride-js"
-import {Tx} from "waves-transactions/transactions";
+import {TTxParams, TTx} from "waves-transactions/transactions";
 import {SeedTypes} from "waves-transactions/types";
+import {pullSeedAndIndex} from "waves-transactions/generic";
+import {validatorByTransactionType} from "waves-transactions/schemas";
 
 export class WavesConsoleAPI {
     static env: any;
@@ -16,9 +18,23 @@ export class WavesConsoleAPI {
 
     constructor() {
         Object.keys(wt).forEach(key => {
-            this[key] = (params: any, seed: SeedTypes) => (wt as any)[key]({chainId: WavesConsoleAPI.env.CHAIN_ID, ...params}, seed === null ? null : seed || WavesConsoleAPI.env.SEED)
+            this[key] = (params: TTxParams | TTx, seedFromConsole?: SeedTypes) => {
+                const seed = seedFromConsole === null ? null : seedFromConsole || WavesConsoleAPI.env.SEED;
+
+                //Right now validation is disabled in the library. To validate tx we need to create it, but not sign, since it can fail on sign.
+                //Because of that we pull senderPublicKey first, create tx, then validate and only then sign
+                const firstSeed = pullSeedAndIndex(seed).seed;
+                const txCreator =  (wt as any)[key];
+                const tx: TTx = txCreator({
+                    chainId: WavesConsoleAPI.env.CHAIN_ID,
+                    senderPublicKey: firstSeed ? publicKey(firstSeed) : undefined,
+                    ...params
+                });
+                validatorByTransactionType[tx.type](tx);
+                return txCreator(tx, seed)
+            }
         });
-        this['broadcast'] = (tx: Tx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
+        this['broadcast'] = (tx: TTx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
     }
 
     public file = (tabName: string): string =>
