@@ -1,4 +1,4 @@
-# Waves REPL
+# REPL
 ## About
 This repository contains javascript console for waves blockchain.
 It is built on top of [jsconsole](https://github.com/remy/jsconsole) and have predefined functions to work with waves
@@ -77,7 +77,7 @@ Starts dev server
 ```typescript jsx
 import * as React from 'react';
 import {render} from 'react-dom';
-import {Repl} from 'waves-repl';
+import {Repl} from '@waves/repl';
 
 const App: React.StatelessComponent = () => (
     <Repl theme="dark"/>
