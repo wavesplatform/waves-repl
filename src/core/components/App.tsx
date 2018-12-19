@@ -108,7 +108,10 @@ export class App extends React.Component<{api:WavesConsoleAPI, commands:any, lay
 
     scrollToBottom() {
         if (!this.messagesEnd) return
-        this.messagesEnd.scrollIntoView({behavior: "smooth"});
+        // hack: chrome fails to scroll correctly sometimes. Need to do it on next tick
+        setTimeout(() => {
+            this.messagesEnd!.scrollIntoView({ behavior: "smooth" });
+        }, 0);
     }
 
     render() {
