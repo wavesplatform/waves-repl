@@ -5,7 +5,7 @@ import {compile as cmpl} from "@waves/ride-js"
 import {TTxParams, TTx} from "@waves/waves-transactions/transactions";
 import {TSeedTypes} from "@waves/waves-transactions/types";
 import {convertToPairs} from "@waves/waves-transactions/generic";
-import {validatorByTransactionType} from "@waves/waves-transactions/schemas";
+import {schemaTypeMap} from "@waves/waves-transactions/schemas";
 
 export class WavesConsoleAPI {
     static env: any;
@@ -31,7 +31,7 @@ export class WavesConsoleAPI {
                     senderPublicKey: firstSeed ? publicKey(firstSeed) : undefined,
                     ...params
                 });
-                validatorByTransactionType[tx.type](tx);
+                schemaTypeMap[tx.type].validator(tx);
                 return txCreator(tx, seed)
             }
         });
