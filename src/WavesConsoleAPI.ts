@@ -1,11 +1,9 @@
 import * as wt from '@waves/waves-transactions'
 import {broadcast} from "@waves/waves-transactions/general";
-import {keyPair, KeyPair, address, publicKey} from 'waves-crypto'
+import {keyPair, KeyPair, address} from 'waves-crypto'
 import {compile as cmpl} from "@waves/ride-js"
 import {TTxParams, TTx} from "@waves/waves-transactions/transactions";
 import {TSeedTypes} from "@waves/waves-transactions/types";
-import {convertToPairs} from "@waves/waves-transactions/generic";
-import {schemaTypeMap} from "@waves/waves-transactions/schemas";
 
 export class WavesConsoleAPI {
     static env: any;
@@ -20,19 +18,7 @@ export class WavesConsoleAPI {
         Object.keys(wt).forEach(key => {
             this[key] = (params: TTxParams | TTx, seedFromConsole?: TSeedTypes) => {
                 const seed = seedFromConsole === null ? null : seedFromConsole || WavesConsoleAPI.env.SEED;
-
-                //Right now validation is disabled in the library. To validate tx we need to create it, but not sign, since it can fail on sign.
-                //Because of that we pull senderPublicKey first, create tx, then validate and only then sign
-                const firstSeedAndIndex = convertToPairs(seed)[0]
-                const firstSeed = firstSeedAndIndex && firstSeedAndIndex[0];
-                const txCreator =  (wt as any)[key];
-                const tx: TTx = txCreator({
-                    chainId: WavesConsoleAPI.env.CHAIN_ID,
-                    senderPublicKey: firstSeed ? publicKey(firstSeed) : undefined,
-                    ...params
-                });
-                schemaTypeMap[tx.type].validator(tx);
-                return txCreator(tx, seed)
+                return (wt as any)[key](params, seed)
             }
         });
         this['broadcast'] = (tx: TTx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
@@ -370,6 +356,16 @@ export class WavesConsoleAPIHelp {
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
                 'already signed SetAssetScriptTransaction as a second argument.',
+            params: ['params', 'seed']
+        },
+        contractInvocation: {
+            summary: '' +
+                'Creates signed contractInvocation transaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed CancelLeaseTransaction as a second argument.',
             params: ['params', 'seed']
         },
         signTx: {
