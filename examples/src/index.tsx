@@ -14,5 +14,6 @@ render(<App />, document.getElementById("root"));
 (global as any)['updateEnv']({
     SEED: 'abracadabra',
     API_BASE: 'https://testnodes.wavesnodes.com',
-    CHAIN_ID:'T'
+    CHAIN_ID:'T',
+    file: () => 'Placeholder file content'
 })

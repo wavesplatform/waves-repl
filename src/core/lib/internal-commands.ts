@@ -3,7 +3,7 @@ interface IResp {
     html: boolean
 }
 const welcome: () => IResp = () => ({
-    value: `Waves console 1.3. Docs can be found <a target="_blank" href="https://github.com/wavesplatform/waves-repl/blob/master/README.md">here</a>
+    value: `Waves console 1.4. Docs can be found <a target="_blank" href="https://github.com/wavesplatform/waves-repl/blob/master/README.md">here</a>
 Use <strong>help()</strong> to show commands. `,
     html: true,
 });

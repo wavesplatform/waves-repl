@@ -24,16 +24,14 @@ export class WavesConsoleAPI {
         this['broadcast'] = (tx: TTx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
     }
 
-    public file = (tabName: string): string =>
-        (WavesConsoleAPI.env.editors.filter((e: any) => e.label == tabName)[0] || {code: ''}).code;
-
-    public contract = (): string => {
-        try {
-            return WavesConsoleAPI.env.editors[WavesConsoleAPI.env.selectedEditor].code
-        } catch (e) {
-            throw new Error('No active contract tab found')
+    public file = (tabName?: string): string => {
+        if (typeof WavesConsoleAPI.env.file !== 'function'){
+            throw new Error('File content API is not available. Please provide it to the console')
         }
+        return WavesConsoleAPI.env.file(tabName)
     };
+
+    public contract = (): string => this.file();
 
     public keyPair = (seed?: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED);
 
