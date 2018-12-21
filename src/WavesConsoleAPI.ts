@@ -16,10 +16,7 @@ export class WavesConsoleAPI {
 
     constructor() {
         Object.keys(wt).forEach(key => {
-            this[key] = (params: TTxParams | TTx, seedFromConsole?: TSeedTypes) => {
-                const seed = seedFromConsole === null ? null : seedFromConsole || WavesConsoleAPI.env.SEED;
-                return (wt as any)[key](params, seed)
-            }
+            this[key] = (params: TTxParams, seed: any) => (wt as any)[key]({chainId: WavesConsoleAPI.env.CHAIN_ID, ...params}, seed === null ? null : seed || WavesConsoleAPI.env.SEED)
         });
         this['broadcast'] = (tx: TTx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
     }
