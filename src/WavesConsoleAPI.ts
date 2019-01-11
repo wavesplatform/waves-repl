@@ -51,7 +51,7 @@ export class WavesConsoleAPI {
     };
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: TSeedTypes) => {
-        let txParams = { fee: 500000, script: this.compile(this.contract()), ...params};
+        let txParams = { additionalFee: 400000, script: this.compile(this.contract()), ...params};
 
         const setScriptTx = this['setScript'](txParams, seed);
         return this['broadcast'](setScriptTx);
