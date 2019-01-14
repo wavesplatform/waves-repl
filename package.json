@@ -1,6 +1,6 @@
 {
   "name": "waves-repl",
-  "version": "1.4.11",
+  "version": "1.4.12",
   "description": "Javascript console to interact with waves blockchain. React component",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -20,7 +20,7 @@
     "@waves/ride-js": "^0.15.3"
   },
   "dependencies": {
-    "@waves/waves-transactions": "^3.0.11",
+    "@waves/waves-transactions": "^3.0.17",
     "axios": "^0.18.0",
     "babylon": "^6.18.0",
     "babylon-walk": "^1.0.2",
@@ -57,6 +57,6 @@
     "typescript": "^3.1.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.9"
+    "webpack-dev-server": "^3.1.14"
   }
 }

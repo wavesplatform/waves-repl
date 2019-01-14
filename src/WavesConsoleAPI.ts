@@ -1,9 +1,7 @@
 import * as wt from '@waves/waves-transactions'
-import {broadcast} from "@waves/waves-transactions/general";
-import {keyPair, KeyPair, address} from 'waves-crypto'
+import {broadcast, libs, TTx, TTxParams, TSeedTypes} from "@waves/waves-transactions/";
+const  {keyPair, address} = libs.crypto
 import {compile as cmpl} from "@waves/ride-js"
-import {TTxParams, TTx} from "@waves/waves-transactions/transactions";
-import {TSeedTypes} from "@waves/waves-transactions/types";
 
 export class WavesConsoleAPI {
     static env: any;
@@ -30,7 +28,7 @@ export class WavesConsoleAPI {
 
     public contract = (): string => this.file();
 
-    public keyPair = (seed?: string): KeyPair => keyPair(seed || WavesConsoleAPI.env.SEED);
+    public keyPair = (seed?: string) => keyPair(seed || WavesConsoleAPI.env.SEED);
 
     public publicKey = (seed?: string): string =>
         this.keyPair(seed).public;
