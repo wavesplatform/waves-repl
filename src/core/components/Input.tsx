@@ -1,5 +1,6 @@
 import * as React from 'react';
-import {WavesConsoleAPIHelp, IWavesConsoleAPIHelpCommand} from '../../WavesConsoleAPI';
+import {WavesConsoleAPIHelp} from '../../WavesConsoleAPI';
+import {strsCommonPrefix} from '../utils'
 
 // TODO import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
@@ -265,11 +266,10 @@ export class Input extends React.Component<IInputProps, IInputState> {
                       input.value.substring(pos);
 
         // Set new caret position
-        input.selectionStart = pos;
-        input.selectionEnd = pos;
+        this.setInputCaretPosition(pos);
 
         // Re-render to cleanup
-        this.setState({value: input.value});
+        this.setInputValue(input.value);
     }
 
     setCaretAfterClosingBracket(event:React.KeyboardEvent) {
@@ -374,64 +374,102 @@ export class Input extends React.Component<IInputProps, IInputState> {
                       input.value.substring(pos + 1);
 
         // Set new caret position
-        input.selectionStart = pos;
-        input.selectionEnd = pos;
+        this.setInputCaretPosition(pos);
 
         // Re-render to cleanup
-        this.setState({value: input.value});
+        this.setInputValue(input.value);
     }
 
     setCommandIntoInput() {
         // No need to go further
         if (!this.input) {
             return;
-        }
+        };
 
         let {input} = this;
         let beg:number = input.selectionStart || 0;
         let end:number = input.selectionEnd || 0;
         let pos:number = beg;
-        let isFunc:boolean = false;
         let insert = this.getCurrentCommandPiece();
         let missing:string|undefined = '';
-        let vocabulary = Input.commandsVocabulary;
-        let command:string|undefined = '';
+        
         let commands:Array<string> = this.getFilteredCommandsList();
 
-        // Autocomplete works only if one value in list
-        if (commands.length != 1) {
+        if (insert === undefined) {
             return;
-        }
+        };
 
-        // Get full command
-        command = commands[0];
+    
+        // If only one command
+        if (commands.length === 1) {
+            let isFunc:boolean = false;
+            let command:string|undefined = '';
+            let vocabulary = Input.commandsVocabulary;
+            
+            // Get command
+            command = commands[0];
 
-        // No need to go further
-        if (command === undefined || insert === undefined) {
+            // No need to go further
+            if (command === undefined) {
+                return;
+            }
+
+            // Check if it's method or member
+            isFunc = vocabulary[command] && vocabulary[command].params !== undefined;
+
+            // Get missing part of command name
+            missing = command.substring(insert.length);
+
+            // Set new value
+            input.value = input.value.substring(0, beg) +
+                          missing + (isFunc ? '()' : '') + 
+                          input.value.substring(end);
+
+            // Set new caret position
+            pos += missing.length;
+            pos += isFunc ? 1 : 0;
+
+            this.setInputCaretPosition(pos);
+
+            // Re-render to cleanup
+            this.setInputValue(input.value);
+        } else {
+            // If several commands
+
+            // Get missing part of command name
+            let commandsCommonPrefix = strsCommonPrefix(commands);
+
+            missing = commandsCommonPrefix.substring(insert.length);
+
+             // Set new value
+            input.value = input.value.substring(0, beg) +
+            missing +
+            input.value.substring(end);
+
+            // Set new caret position
+            pos += missing.length;
+
+            this.setInputCaretPosition(pos);
+
+            // Re-render to cleanup
+            this.setInputValue(input.value);
+        };
+    };
+
+    setInputCaretPosition(position: number): void {
+        if (!this.input) {
             return;
-        }
+        };
 
-        // Check if it's method or member
-        isFunc = vocabulary[command] && vocabulary[command].params !== undefined;
+        let {input} = this;
 
-        // Get missing part of command name
-        missing = command.substring(insert.length);
+        input.selectionStart = position;
+        input.selectionEnd = position;
+    };
 
-        // Set new value
-        input.value = input.value.substring(0, beg) +
-                      missing + (isFunc ? '()' : '') + 
-                      input.value.substring(end);
-
-        // Set new caret position
-        pos += missing.length;
-        pos += isFunc ? 1 : 0;
-
-        input.selectionStart = pos;
-        input.selectionEnd = pos;
-
-        // Re-render to cleanup
-        this.setState({value: input.value});
-    }
+    setInputValue(value: string): void {
+        this.setState({ value });
+    };
 
     getFilteredCommandsList():Array<string> {
         let seek:any = this.getCurrentCommandPiece();
