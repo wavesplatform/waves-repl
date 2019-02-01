@@ -85,7 +85,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
     async onKeyPress(event: React.KeyboardEvent) {
         if (!this.input) {
             return;
-        }
+        };
 
         const code = keycodes[event.keyCode];
         const {multiline} = this.state;
@@ -104,6 +104,9 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         // Insert closing bracket if needed
         this.checkAutoclosingAction(event);
+
+        // Set carot after closing bracket or quote if needed
+        this.checkClosingBracketOrQuoteAction(event);
 
         // Move in history if not in multiline mode
         if (!multiline && this.checkNotMultilineActions(event, code)) {
@@ -183,6 +186,23 @@ export class Input extends React.Component<IInputProps, IInputState> {
                 break;
             case 'Backspace':
                 this.unsetClosingBracketOrQuoteIntoInput();
+                break;
+        }
+    }
+    /**
+     * @method {checkClosingBracketOrQuoteAction}
+     *
+     * @param {React.KeyboardEvent} event
+     */
+    checkClosingBracketOrQuoteAction (event:React.KeyboardEvent) {
+        switch (event.key) {
+            case '}':
+            case ']':
+            case ')':
+            case '"':
+            case "'":
+                event.preventDefault();
+                this.setInputCaretAfterAutoclosingAction();
                 break;
         }
     }
@@ -298,6 +318,39 @@ export class Input extends React.Component<IInputProps, IInputState> {
         input.selectionEnd = pos;
 
         // Re-render to cleanup
+        this.setState({value: input.value});
+    }
+
+    setInputCaretAfterAutoclosingAction() {
+        let {input} = this;
+
+        // No need to go further
+        if (!input) {
+            return;
+        };
+
+        let pos:number = input.selectionStart || 0;
+        let open:string = input.value.substr(pos - 1, 1);
+        let close:string = Input.commasAndQuotes[open];
+
+        // No need to go further
+        if (!close) {
+            return;
+        };
+
+        // Check if the closing symbol is similar to needed
+        close = input.value.substr(pos, 1) === close ? close : '';
+
+        // No need to go further
+        if (!close) {
+            return;
+        };
+        
+        // Set new caret position
+        input.selectionStart = pos + 1;
+        input.selectionEnd = pos + 1;
+
+        // // Re-render to cleanup
         this.setState({value: input.value});
     }
 
