@@ -179,14 +179,14 @@ export class Input extends React.Component<IInputProps, IInputState> {
             case '(':
                 this.setClosingBracketIntoInput(event.key);
                 break;
-            case '"':
-            case "'":
-                this.setClosingQuoteOrSetCaretAfterClosingQuateIntoInput(event);
-                break
             case '}':
             case ']':
             case ')':
                 this.setCaretAfterClosingBracket(event);
+                break
+            case '"':
+            case "'":
+                this.setClosingQuoteOrSetCaretAfterClosingQuateIntoInput(event);
                 break
             case 'Backspace':
                 this.unsetClosingBracketOrQuoteIntoInput();
@@ -281,12 +281,12 @@ export class Input extends React.Component<IInputProps, IInputState> {
         };
 
         let pos:number = input.selectionStart || 0;
-        let prev:string = input.value.substr(pos - 1, 1);
-        let next:string = input.value.substr(pos, 1);
+        let open:string = input.value.substr(pos - 1, 1);
+        let close:string = input.value.substr(pos, 1);
 
         let key = event.key;
 
-        if (prev === key && next === key) {
+        if (open === key && close === key) {
             event.preventDefault();
             
             input.selectionStart = pos + 1;
@@ -295,19 +295,18 @@ export class Input extends React.Component<IInputProps, IInputState> {
             // Re-render to cleanup
             this.setState({value: input.value});
 
-            return;
+        } else {
+            input.value = input.value.substring(0, pos) +
+            key +
+            input.value.substring(pos);
+
+            // Set new caret position
+            input.selectionStart = pos;
+            input.selectionEnd = pos;
+
+            // // Re-render to cleanup
+            this.setState({value: input.value});
         }
-
-        input.value = input.value.substring(0, pos) +
-        key +
-        input.value.substring(pos);
-
-        // Set new caret position
-        input.selectionStart = pos;
-        input.selectionEnd = pos;
-
-        // // Re-render to cleanup
-        this.setState({value: input.value});
     }
 
     unsetClosingBracketOrQuoteIntoInput() {
