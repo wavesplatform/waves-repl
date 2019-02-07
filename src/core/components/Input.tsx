@@ -85,7 +85,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
     async onKeyPress(event: React.KeyboardEvent) {
         if (!this.input) {
             return;
-        }
+        };
 
         const code = keycodes[event.keyCode];
         const {multiline} = this.state;
@@ -177,10 +177,17 @@ export class Input extends React.Component<IInputProps, IInputState> {
             case '{':
             case '[':
             case '(':
+                this.setClosingBracketIntoInput(event.key);
+                break;
+            case '}':
+            case ']':
+            case ')':
+                this.setCaretAfterClosingBracket(event);
+                break
             case '"':
             case "'":
-                this.setClosingBracketOrQuoteIntoInput(event.key);
-                break;
+                this.setClosingQuoteOrSetCaretAfterClosingQuateIntoInput(event);
+                break
             case 'Backspace':
                 this.unsetClosingBracketOrQuoteIntoInput();
                 break;
@@ -241,7 +248,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return '';
     }
 
-    setClosingBracketOrQuoteIntoInput(open:string = '(') {
+    setClosingBracketIntoInput(open:string = '(') {
         // No need to go further
         if (!this.input) {
             return;
@@ -265,6 +272,73 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.setState({value: input.value});
     }
 
+    setCaretAfterClosingBracket(event:React.KeyboardEvent) {
+        let {input} = this;
+
+        // No need to go further
+        if (!input) {
+            return;
+        };
+
+        let pos:number = input.selectionStart || 0;
+        let open:string = input.value.substr(pos - 1, 1);
+        let close:string = Input.commasAndQuotes[open];
+
+        // Check if the closing symbol is similar to needed
+        close = input.value.substr(pos, 1) === close ? close : '';
+
+        // No need to go further
+        if (!close) {
+            return;
+        };
+
+        event.preventDefault();
+
+        // Set new caret position
+        input.selectionStart = pos + 1;
+        input.selectionEnd = pos + 1;
+
+        // // Re-render to cleanup
+        this.setState({value: input.value});
+    }
+
+    setClosingQuoteOrSetCaretAfterClosingQuateIntoInput(event:React.KeyboardEvent) {
+        let {input} = this;
+
+        // No need to go further
+        if (!input) {
+            return;
+        };
+
+        let pos:number = input.selectionStart || 0;
+        let open:string = input.value.substr(pos - 1, 1);
+        let close:string = input.value.substr(pos, 1);
+
+        let key = event.key;
+
+        if (open === key && close === key) {
+            event.preventDefault();
+            
+            input.selectionStart = pos + 1;
+            input.selectionEnd = pos + 1;
+
+            // Re-render to cleanup
+            this.setState({value: input.value});
+
+        } else {
+            input.value = input.value.substring(0, pos) +
+            key +
+            input.value.substring(pos);
+
+            // Set new caret position
+            input.selectionStart = pos;
+            input.selectionEnd = pos;
+
+            // // Re-render to cleanup
+            this.setState({value: input.value});
+        }
+    }
+
     unsetClosingBracketOrQuoteIntoInput() {
         // No need to go further
         if (!this.input) {
@@ -273,6 +347,12 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         let {input} = this;
         let pos:number = input.selectionStart || 0;
+
+        // No need to go further
+        if (pos === 0) {
+            return;
+        }
+
         let open:string = this.input.value.substr(pos - 1, 1);
         let close:string = Input.commasAndQuotes[open];
 
