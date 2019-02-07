@@ -295,11 +295,10 @@ export class Input extends React.Component<IInputProps, IInputState> {
         event.preventDefault();
 
         // Set new caret position
-        input.selectionStart = pos + 1;
-        input.selectionEnd = pos + 1;
+        this.setInputCaretPosition(pos + 1);
 
         // // Re-render to cleanup
-        this.setState({value: input.value});
+        this.setInputValue(input.value);
     }
 
     setClosingQuoteOrSetCaretAfterClosingQuateIntoInput(event:React.KeyboardEvent) {
@@ -319,11 +318,10 @@ export class Input extends React.Component<IInputProps, IInputState> {
         if (open === key && close === key) {
             event.preventDefault();
             
-            input.selectionStart = pos + 1;
-            input.selectionEnd = pos + 1;
+            this.setInputCaretPosition(pos + 1);
 
             // Re-render to cleanup
-            this.setState({value: input.value});
+            this.setInputValue(input.value);
 
         } else {
             input.value = input.value.substring(0, pos) +
@@ -331,11 +329,10 @@ export class Input extends React.Component<IInputProps, IInputState> {
             input.value.substring(pos);
 
             // Set new caret position
-            input.selectionStart = pos;
-            input.selectionEnd = pos;
+            this.setInputCaretPosition(pos);
 
             // // Re-render to cleanup
-            this.setState({value: input.value});
+            this.setInputValue(input.value);
         }
     }
 
