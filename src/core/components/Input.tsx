@@ -4,9 +4,6 @@ import {WavesConsoleAPIHelp, IWavesConsoleAPIHelpCommand} from '../../WavesConso
 // TODO import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
 
-/**
- * @interface {IInputProps}
- */
 export interface IInputProps {
     inputRef:any,
     onRun:any,
@@ -18,9 +15,6 @@ export interface IInputProps {
     value?:string
 }
 
-/**
- * @interface {IInputState}
- */
 export interface IInputState {
     value:string,
     multiline:boolean,
@@ -29,9 +23,6 @@ export interface IInputState {
     hideSuggest:boolean
 }
 
-/**
- * @interface {ISuggestRootProps}
- */
 export interface ISuggestRootProps {
     value?:string,
     commands?:string[],
@@ -39,42 +30,18 @@ export interface ISuggestRootProps {
     theme?:string
 }
 
-/**
- * @interface {ISuggestItemProps}
- */
 export interface ISuggestItemProps {
     title:string,
     selected?:boolean
 }
 
-/**
- * @class {Input}
- * @extends {React.Component}
- */
 export class Input extends React.Component<IInputProps, IInputState> {
-
-    /**
-     * @private
-     * @member {HTMLTextAreaElement?} input
-     */
     private input?: HTMLTextAreaElement | null;
 
-    /**
-     * @static
-     * @member {object} commandsVocabulary
-     */
     static commandsVocabulary = WavesConsoleAPIHelp.texts;
 
-    /**
-     * @static
-     * @member {Array} commandsList
-     */
     static commandsList:Array<string> = Object.keys(WavesConsoleAPIHelp.texts);
 
-    /**
-     * @static
-     * @member {object} commasAndQuotes
-     */
     static commasAndQuotes:{[key:string]:string} = {
         '(': ')',
         '{': '}',
@@ -83,11 +50,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         "'": "'"
     }
 
-    /**
-     * @constructor
-     *
-     * @param {IInputProps} props
-     */
     constructor(props: IInputProps) {
         super(props);
 
@@ -105,11 +67,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.onKeyPress = this.onKeyPress.bind(this);
     }
 
-    /**
-     * @method {onChange}
-     *
-     * @returns {undefined}
-     */
     onChange() {
         if (!this.input) {
             return;
@@ -125,14 +82,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         });
     }
 
-    /**
-     * @async
-     * @method {onKeyPress}
-     *
-     * @param {React.KeyboardEvent} event
-     *
-     * @returns {Promise}
-     */
     async onKeyPress(event: React.KeyboardEvent) {
         if (!this.input) {
             return;
@@ -191,14 +140,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         }
     }
 
-    /**
-     * @method {checkClearAction}
-     *
-     * @param {React.KeyboardEvent} event
-     * @param {string} code
-     *
-     * @returns {boolean}
-     */
     checkClearAction(event:React.KeyboardEvent, code:string):boolean {
         // Clear console
         if (event.ctrlKey && code === 'l') {
@@ -209,12 +150,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return false;
     }
 
-    /**
-     * @method {checkShowSuggestAction}
-     *
-     * @param {React.KeyboardEvent} event
-     * @param {string} code
-     */
     checkShowSuggestAction(event:React.KeyboardEvent, code:string) {
         if (code == 'tab') {
             event.preventDefault();
@@ -225,14 +160,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return false;
     }
 
-    /**
-     * @method {checkHideSuggestAction}
-     *
-     * @param {React.KeyboardEvent} event
-     * @param {string} code
-     *
-     * @returns {boolean}
-     */
     checkHideSuggestAction(event:React.KeyboardEvent, code:string):boolean {
         if (code === 'escape') {
             event.preventDefault();
@@ -245,11 +172,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return false;
     }
 
-    /**
-     * @method {checkAutoclosingAction}
-     *
-     * @param {React.KeyboardEvent} event
-     */
     checkAutoclosingAction(event:React.KeyboardEvent) {
         switch (event.key) {
             case '{':
@@ -265,14 +187,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         }
     }
 
-    /**
-     * @method {checkNotMultilineActions}
-     *
-     * @param {React.KeyboardEvent} event
-     * @param {string} code
-     *
-     * @returns {boolean}
-     */
     checkNotMultilineActions(event:React.KeyboardEvent, code:string):boolean {
         const {history} = this.props;
         let {historyCursor} = this.state;
@@ -313,13 +227,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return false;
     }
 
-    /**
-     * Get entry for search from full input.value string
-     *
-     * @method {getCurrentCommandPiece}
-     *
-     * @returns {string}
-     */
     getCurrentCommandPiece():string|undefined {
         let {input} = this;
         let pos:number = input ? input.selectionStart : 0;
@@ -334,13 +241,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return '';
     }
 
-    /**
-     * Set closing bracket of given type
-     *
-     * @method {setClosingBracketOrQuoteIntoInput}
-     *
-     * @param {string} open
-     */
     setClosingBracketOrQuoteIntoInput(open:string = '(') {
         // No need to go further
         if (!this.input) {
@@ -365,11 +265,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.setState({value: input.value});
     }
 
-    /**
-     * Set closing bracket of given type
-     *
-     * @method {unsetClosingBracketOrQuoteIntoInput}
-     */
     unsetClosingBracketOrQuoteIntoInput() {
         // No need to go further
         if (!this.input) {
@@ -406,11 +301,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.setState({value: input.value});
     }
 
-    /**
-     * Set command into input using found autocomplition variants
-     *
-     * @method {setCommandIntoInput}
-     */
     setCommandIntoInput() {
         // No need to go further
         if (!this.input) {
@@ -463,13 +353,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.setState({value: input.value});
     }
 
-    /**
-     * Get list of commands filtered with needed command piece
-     *
-     * @method {getFilteredCommandsList}
-     *
-     * @returns {Array}
-     */
     getFilteredCommandsList():Array<string> {
         let seek:any = this.getCurrentCommandPiece();
         let list:Array<string> = [];
@@ -489,11 +372,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         return [];
     }
 
-    /**
-     * @method {render}
-     *
-     * @returns {React.Element}
-     */
     render() {
         const rect = this.input ? this.input.getBoundingClientRect() : null;
         const dropdown = rect && rect.top < 50 ? true : false;
@@ -508,11 +386,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         );
     }
 
-    /**
-     * @method {createSuggest}
-     *
-     * @returns {React.Element}
-     */
     createSuggest(dropdown:boolean) {
         const {value} = this.state;
         const {theme} = this.props;
@@ -526,11 +399,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         />);
     }
 
-    /**
-     * @method {createTextarea}
-     *
-     * @returns {React.Element}
-     */
     createTextarea() {
         const {autoFocus} = this.props;
         const {rows, value} = this.state;
@@ -553,15 +421,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
 }
 
-/**
- * <SuggestRoot />
- *
- * @function {SuggestRoot}
- *
- * @param {ISuggestRootProps} props
- *
- * @returns {React.Element}
- */
 function SuggestRoot(props:ISuggestRootProps) {
     const {value, theme, commands} = props;
 
@@ -578,15 +437,6 @@ function SuggestRoot(props:ISuggestRootProps) {
     );
 }
 
-/**
- * <SuggestList />
- *
- * @function {SuggestList}
- *
- * @param {ISuggestRootProps} props
- *
- * @returns {React.Element}
- */
 function SuggestList(props:ISuggestRootProps) {
     // No need to go further
     if (!props.commands || !props.commands.length) {
@@ -607,15 +457,6 @@ function SuggestList(props:ISuggestRootProps) {
     );
 }
 
-/**
- * <SuggestItem />
- *
- * @function {SuggestItem}
- *
- * @param {object} props
- *
- * @returns {React.Element}
- */
 function SuggestItem(props:ISuggestItemProps) {
     return (<li
         className = {'Suggest__item' + (props.selected ? ' Suggest__item_is_selected' : '')}
