@@ -272,6 +272,36 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.setState({value: input.value});
     }
 
+    setCaretAfterClosingBracket(event:React.KeyboardEvent) {
+        let {input} = this;
+
+        // No need to go further
+        if (!input) {
+            return;
+        };
+
+        let pos:number = input.selectionStart || 0;
+        let open:string = input.value.substr(pos - 1, 1);
+        let close:string = Input.commasAndQuotes[open];
+
+        // Check if the closing symbol is similar to needed
+        close = input.value.substr(pos, 1) === close ? close : '';
+
+        // No need to go further
+        if (!close) {
+            return;
+        };
+
+        event.preventDefault();
+
+        // Set new caret position
+        input.selectionStart = pos + 1;
+        input.selectionEnd = pos + 1;
+
+        // // Re-render to cleanup
+        this.setState({value: input.value});
+    }
+
     setClosingQuoteOrSetCaretAfterClosingQuateIntoInput(event:React.KeyboardEvent) {
         let {input} = this;
 
@@ -348,36 +378,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         input.selectionEnd = pos;
 
         // Re-render to cleanup
-        this.setState({value: input.value});
-    }
-
-    setCaretAfterClosingBracket(event:React.KeyboardEvent) {
-        let {input} = this;
-
-        // No need to go further
-        if (!input) {
-            return;
-        };
-
-        let pos:number = input.selectionStart || 0;
-        let open:string = input.value.substr(pos - 1, 1);
-        let close:string = Input.commasAndQuotes[open];
-
-        // Check if the closing symbol is similar to needed
-        close = input.value.substr(pos, 1) === close ? close : '';
-
-        // No need to go further
-        if (!close) {
-            return;
-        };
-
-        event.preventDefault();
-        
-        // Set new caret position
-        input.selectionStart = pos + 1;
-        input.selectionEnd = pos + 1;
-
-        // // Re-render to cleanup
         this.setState({value: input.value});
     }
 
