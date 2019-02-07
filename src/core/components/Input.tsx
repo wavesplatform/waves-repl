@@ -105,9 +105,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         // Insert closing bracket if needed
         this.checkAutoclosingAction(event);
 
-        // Set carot after closing bracket or quote if needed
-        this.checkClosingBracketOrQuoteAction(event);
-
         // Move in history if not in multiline mode
         if (!multiline && this.checkNotMultilineActions(event, code)) {
             return;
@@ -184,25 +181,14 @@ export class Input extends React.Component<IInputProps, IInputState> {
             case "'":
                 this.setClosingBracketOrQuoteIntoInput(event.key);
                 break;
-            case 'Backspace':
-                this.unsetClosingBracketOrQuoteIntoInput();
-                break;
-        }
-    }
-    /**
-     * @method {checkClosingBracketOrQuoteAction}
-     *
-     * @param {React.KeyboardEvent} event
-     */
-    checkClosingBracketOrQuoteAction (event:React.KeyboardEvent) {
-        switch (event.key) {
             case '}':
             case ']':
             case ')':
             case '"':
             case "'":
-                event.preventDefault();
-                this.setInputCaretAfterAutoclosingAction();
+                this.setCaretAfterClosingBracketOrQuote(event);
+            case 'Backspace':
+                this.unsetClosingBracketOrQuoteIntoInput();
                 break;
         }
     }
@@ -321,7 +307,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.setState({value: input.value});
     }
 
-    setInputCaretAfterAutoclosingAction() {
+    setCaretAfterClosingBracketOrQuote(event:React.KeyboardEvent) {
         let {input} = this;
 
         // No need to go further
@@ -333,11 +319,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         let open:string = input.value.substr(pos - 1, 1);
         let close:string = Input.commasAndQuotes[open];
 
-        // No need to go further
-        if (!close) {
-            return;
-        };
-
         // Check if the closing symbol is similar to needed
         close = input.value.substr(pos, 1) === close ? close : '';
 
@@ -345,6 +326,8 @@ export class Input extends React.Component<IInputProps, IInputState> {
         if (!close) {
             return;
         };
+
+        event.preventDefault();
         
         // Set new caret position
         input.selectionStart = pos + 1;
