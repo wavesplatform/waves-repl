@@ -107,7 +107,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.checkAutoclosingAction(event);
 
         // Move in history if not in multiline mode
-        console.log(code)
         if (!multiline && this.checkNotMultilineActions(event, code,this.input)) {//
             return;
         }
@@ -196,10 +195,10 @@ export class Input extends React.Component<IInputProps, IInputState> {
         }
     }
 
-    checkNotMultilineActions(event:React.KeyboardEvent, code:string):boolean {
+    checkNotMultilineActions(event:React.KeyboardEvent, code:string, input:HTMLTextAreaElement ):boolean {
         const {history} = this.props;
         let {historyCursor} = this.state;
-        // console.log(history[historyCursor]?history[historyCursor].split('\n'):"")
+
         // Show back
         if (code === 'up arrow') {
 
