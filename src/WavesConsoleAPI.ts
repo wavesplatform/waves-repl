@@ -1,26 +1,58 @@
 import * as wt from '@waves/waves-transactions'
-import {broadcast, libs, TTx, TTxParams, TSeedTypes} from "@waves/waves-transactions/";
-const  {keyPair, address} = libs.crypto
+import { libs, TTx, TTxParams, TSeedTypes} from "@waves/waves-transactions/";
+const {keyPair, address} = libs.crypto
 import {compile as cmpl} from "@waves/ride-js"
+
 
 export class WavesConsoleAPI {
     static env: any;
 
     [key: string]: any;
 
+    private static injectEnv = <T extends (pp: any, ...args: any)=>any>(f:T) => (po: TTxParams, seed?: TSeedTypes | null): ReturnType<typeof f> =>
+        f({chainId: WavesConsoleAPI.env.CHAIN_ID, ...po }, seed === null ? null : seed || WavesConsoleAPI.env.SEED);
+
     public static setEnv(env: any) {
         WavesConsoleAPI.env = env;
     }
 
-    constructor() {
-        Object.keys(wt).forEach(key => {
-            this[key] = (params: TTxParams, seed: any) => (wt as any)[key]({chainId: WavesConsoleAPI.env.CHAIN_ID, ...params}, seed === null ? null : seed || WavesConsoleAPI.env.SEED)
-        });
-        this['broadcast'] = (tx: TTx, apiBase?:string) => broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE)
+    private bufferToBase64(buf: Uint8Array) {
+        const binstr = Array.prototype.map.call(buf, (ch: number) => String.fromCharCode(ch)).join('');
+        return btoa(binstr)
     }
 
+    public alias = WavesConsoleAPI.injectEnv(wt.alias);
+
+    public burn = WavesConsoleAPI.injectEnv(wt.burn);
+
+    public cancelLease = WavesConsoleAPI.injectEnv(wt.cancelLease);
+
+    public cancelOrder = WavesConsoleAPI.injectEnv(wt.cancelOrder);
+
+    public data = WavesConsoleAPI.injectEnv(wt.data);
+
+    public issue = WavesConsoleAPI.injectEnv(wt.issue);
+
+    public reissue = WavesConsoleAPI.injectEnv(wt.reissue);
+
+    public lease = WavesConsoleAPI.injectEnv(wt.lease);
+
+    public massTransfer = WavesConsoleAPI.injectEnv(wt.massTransfer);
+
+    public order = WavesConsoleAPI.injectEnv(wt.order);
+
+    public transfer = WavesConsoleAPI.injectEnv(wt.transfer);
+
+    public setScript = WavesConsoleAPI.injectEnv(wt.setScript);
+
+    public setAssetScript = WavesConsoleAPI.injectEnv(wt.setAssetScript);
+
+    public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
+
+    public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
+
     public file = (tabName?: string): string => {
-        if (typeof WavesConsoleAPI.env.file !== 'function'){
+        if (typeof WavesConsoleAPI.env.file !== 'function') {
             throw new Error('File content API is not available. Please provide it to the console')
         }
         return WavesConsoleAPI.env.file(tabName)
@@ -38,7 +70,7 @@ export class WavesConsoleAPI {
 
     public address = (seed?: string, chainId?: string) => address(
         seed || WavesConsoleAPI.env.SEED,
-       chainId || WavesConsoleAPI.env.CHAIN_ID
+        chainId || WavesConsoleAPI.env.CHAIN_ID
     );
 
     public compile = (code: string): string => {
@@ -49,16 +81,11 @@ export class WavesConsoleAPI {
     };
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: TSeedTypes) => {
-        let txParams = { additionalFee: 400000, script: this.compile(this.contract()), ...params};
+        let txParams = {additionalFee: 400000, script: this.compile(this.contract()), ...params};
 
         const setScriptTx = this['setScript'](txParams, seed);
         return this['broadcast'](setScriptTx);
     };
-
-    private bufferToBase64(buf: Uint8Array) {
-        const binstr = Array.prototype.map.call(buf, (ch: number) => String.fromCharCode(ch)).join('');
-        return btoa(binstr)
-    }
 
     public help = (func?: Function): string => {
         let
@@ -108,7 +135,7 @@ export class WavesConsoleAPI {
 export interface IWavesConsoleAPIHelpCommand {
     readonly summary?: string,
     readonly description?: string,
-    readonly params?: Array<string>|null
+    readonly params?: Array<string> | null
 }
 
 /**
@@ -146,7 +173,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} common
      */
-    public static common: {[key:string]:IWavesConsoleApiHelpCommon} = {
+    public static common: { [key: string]: IWavesConsoleApiHelpCommon } = {
         list: {
             header: 'Available functions:'
         },
@@ -161,7 +188,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} texts
      */
-    public static texts: {[key:string]:IWavesConsoleAPIHelpCommand} = {
+    public static texts: { [key: string]: IWavesConsoleAPIHelpCommand } = {
         file: {
             summary: '' +
                 'Gets editor contents for tab',
@@ -320,6 +347,13 @@ export class WavesConsoleAPIHelp {
                 'already signed CancelLeaseTransaction as a second argument.',
             params: ['params', 'seed']
         },
+        cancelOrder: {
+            summary: '' +
+                'Creates signed cancelOrder request',
+            description: '' +
+                '',
+            params: ['params', 'seed']
+        },
         alias: {
             summary: '' +
                 'Creates signed createAlias transaction',
@@ -377,7 +411,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} types
      */
-    public static types: {[key:string]:IWavesConsoleAPIHelpVariable} = {
+    public static types: { [key: string]: IWavesConsoleAPIHelpVariable } = {
         tx: {
             summary: 'Transaction object obtained from WavesTransactions library',
             type: 'object'
@@ -405,7 +439,7 @@ export class WavesConsoleAPIHelp {
         },
         keyPairOrSeed: {
             summary: 'Seed string or keyPair object from keyPair() function',
-            type : 'string'
+            type: 'string'
         },
         apiBase: {
             optional: true,
@@ -522,9 +556,9 @@ export class WavesConsoleAPIHelp {
         let
             module: any = WavesConsoleAPIHelp,
             summary: string = '',
-            params:Array<string> = module.texts[alias] && module.texts[alias].params ?
-                                   module.texts[alias].params :
-                                   [],
+            params: Array<string> = module.texts[alias] && module.texts[alias].params ?
+                module.texts[alias].params :
+                [],
             description: string = '',
             args: Array<string> = params.slice();
 
@@ -547,7 +581,7 @@ export class WavesConsoleAPIHelp {
             if (module.texts[alias].summary) {
                 summary = module.texts[alias].summary;
                 summary = summary.substring(0, 1).toLowerCase() +
-                          summary.substring(1);
+                    summary.substring(1);
                 text = `${text} — ${summary}`;
 
                 if (full) {
