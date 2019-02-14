@@ -162,6 +162,13 @@ export class WavesConsoleAPIHelp {
      * @member {object} texts
      */
     public static texts: {[key:string]:IWavesConsoleAPIHelpCommand} = {
+        clear: {
+            summary: '' +
+                'clear console;',
+            description: '' +
+                '',
+            params: null
+        },
         file: {
             summary: '' +
                 'Gets editor contents for tab',

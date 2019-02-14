@@ -157,7 +157,8 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.checkAutoclosingAction(event);
 
         // Move in history if not in multiline mode
-        if (!multiline && this.checkNotMultilineActions(event, code)) {
+        console.log(code)
+        if (!multiline && this.checkNotMultilineActions(event, code,this.input)) {//
             return;
         }
 
@@ -273,21 +274,28 @@ export class Input extends React.Component<IInputProps, IInputState> {
      *
      * @returns {boolean}
      */
-    checkNotMultilineActions(event:React.KeyboardEvent, code:string):boolean {
+    checkNotMultilineActions(event:React.KeyboardEvent, code:string, input: HTMLTextAreaElement):boolean {
         const {history} = this.props;
         let {historyCursor} = this.state;
-
+        // console.log(history[historyCursor]?history[historyCursor].split('\n'):"")
         // Show back
         if (code === 'up arrow') {
+
             historyCursor--;
+
+            let firstRowlen = history[historyCursor]?history[historyCursor].split('\n')[0].length:0;
 
             if (historyCursor < 0) {
                 this.setState({historyCursor: 0});
-
                 return true;
             }
 
-            this.setState({historyCursor, value: history[historyCursor]});
+            if(input.selectionStart <= firstRowlen && input.selectionEnd <= firstRowlen) {
+                this.setState(
+                    {historyCursor, value: history[historyCursor]},
+                    ()=>{input.setSelectionRange(firstRowlen, firstRowlen)}
+                    )
+            }else return false;
 
             event.preventDefault();
 
@@ -296,15 +304,24 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         // Move forward
         if (code === 'down arrow') {
+
+            let len = history[historyCursor]?history[historyCursor].length : 0;
+
             historyCursor++;
 
-            if (historyCursor >= history.length) {
+            if (historyCursor >= history.length && input.selectionStart === len && input.selectionEnd === len) {
                 this.setState({historyCursor: history.length, value: ''});
-
                 return true;
             }
 
-            this.setState({historyCursor, value: history[historyCursor]});
+            if(input.selectionStart === len && input.selectionEnd === len){
+                let len = history[historyCursor]?history[historyCursor].length : 0;
+                this.setState(
+                    {historyCursor, value: history[historyCursor]},
+                    () => {input.setSelectionRange(len, len)}
+                    )
+            }else return false;
+
             event.preventDefault();
 
             return true;
@@ -449,7 +466,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         // Set new value
         input.value = input.value.substring(0, beg) +
-                      missing + (isFunc ? '()' : '') + 
+                      missing + (isFunc ? '()' : '') +
                       input.value.substring(end);
 
         // Set new caret position
