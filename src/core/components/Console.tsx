@@ -170,7 +170,7 @@ export class Console extends React.Component<any,any> {
         if (this.props.reverse) {
             keys.reverse();
         }
-
+        
         return (
             <div
                 className="react-console-container"

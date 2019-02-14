@@ -3,7 +3,6 @@ import { libs, TTx, TTxParams, TSeedTypes} from "@waves/waves-transactions/";
 const {keyPair, address} = libs.crypto
 import {compile as cmpl} from "@waves/ride-js"
 
-
 export class WavesConsoleAPI {
     static env: any;
 
