@@ -107,7 +107,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.checkAutoclosingAction(event);
 
         // Move in history if not in multiline mode
-        if (!multiline && this.checkNotMultilineActions(event, code,this.input)) {//
+        if (!multiline && this.checkNotMultilineActions(event, code, this.input)) {
             return;
         }
 
@@ -204,7 +204,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
             historyCursor--;
 
-            let firstRowlen = history[historyCursor]?history[historyCursor].split('\n')[0].length:0;
+            let firstRowlen = history[historyCursor] ? history[historyCursor].split('\n')[0].length : 0;
 
             if (historyCursor < 0) {
                 this.setState({historyCursor: 0});
@@ -213,10 +213,13 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
             if(input.selectionStart <= firstRowlen && input.selectionEnd <= firstRowlen) {
                 this.setState(
-                    {historyCursor, value: history[historyCursor]},
-                    ()=>{input.setSelectionRange(firstRowlen, firstRowlen)}
-                    )
-            }else return false;
+                    {
+                        historyCursor,
+                        value: history[historyCursor]
+                    },
+                    () => { input.setSelectionRange(firstRowlen, firstRowlen) }
+                )
+            } else return false;
 
             event.preventDefault();
 
@@ -238,10 +241,13 @@ export class Input extends React.Component<IInputProps, IInputState> {
             if(input.selectionStart === len && input.selectionEnd === len){
                 let len = history[historyCursor]?history[historyCursor].length : 0;
                 this.setState(
-                    {historyCursor, value: history[historyCursor]},
+                    {
+                        historyCursor,
+                        value: history[historyCursor]
+                    },
                     () => {input.setSelectionRange(len, len)}
                     )
-            }else return false;
+            } else return false;
 
             event.preventDefault();
 

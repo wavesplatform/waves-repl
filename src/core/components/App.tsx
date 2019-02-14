@@ -31,7 +31,7 @@ export class App extends React.Component<{api:WavesConsoleAPI, commands:any, lay
 
     async onRun(command: string) {
         const console = this.console;
-        command =  (command === "clear()")?":clear":command;
+        command =  (command === "clear()") ? ":clear" : command; //TODO do without hack
         if (command[0] !== ':') {
             console.push({
                 type: 'command',
