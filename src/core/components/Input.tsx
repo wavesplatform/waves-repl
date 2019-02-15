@@ -107,7 +107,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
         this.checkAutoclosingAction(event);
 
         // Move in history if not in multiline mode
-        if (!multiline && this.checkNotMultilineActions(event, code)) {
+        if (!multiline && this.checkNotMultilineActions(event, code, this.input)) {
             return;
         }
 
@@ -195,7 +195,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
         }
     }
 
-    checkNotMultilineActions(event:React.KeyboardEvent, code:string):boolean {
+    checkNotMultilineActions(event:React.KeyboardEvent, code:string, input:HTMLTextAreaElement ):boolean {
         const {history} = this.props;
         let {historyCursor} = this.state;
 
@@ -203,13 +203,24 @@ export class Input extends React.Component<IInputProps, IInputState> {
         if (code === 'up arrow') {
             historyCursor--;
 
+            let rows = history[historyCursor] ? history[historyCursor].split('\n') : [""];
+
             if (historyCursor < 0) {
                 this.setState({historyCursor: 0});
-
                 return true;
             }
 
-            this.setState({historyCursor, value: history[historyCursor]});
+            if (rows.length === 1 || (input.selectionStart <= rows[0].length && input.selectionEnd <= rows[0].length)) {
+                this.setState(
+                    {
+                        historyCursor,
+                        value: history[historyCursor]
+                    },
+                    () => {
+                        input.setSelectionRange(rows[0].length, rows[0].length)
+                    }
+                );
+            } else return false;
 
             event.preventDefault();
 
@@ -218,15 +229,28 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         // Move forward
         if (code === 'down arrow') {
+            let len = history[historyCursor] ? history[historyCursor].length : 0;
+
             historyCursor++;
 
-            if (historyCursor >= history.length) {
+            if (historyCursor >= history.length && input.selectionStart === len && input.selectionEnd === len) {
                 this.setState({historyCursor: history.length, value: ''});
-
+                
                 return true;
             }
 
-            this.setState({historyCursor, value: history[historyCursor]});
+            if(input.selectionStart === len && input.selectionEnd === len) {
+                let len = history[historyCursor] ? history[historyCursor].length : 0;
+
+                this.setState(
+                    {
+                        historyCursor,
+                        value: history[historyCursor]
+                    },
+                    () => {input.setSelectionRange(len, len)}
+                );
+            } else return false;
+
             event.preventDefault();
 
             return true;
@@ -317,7 +341,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         if (open === key && close === key) {
             event.preventDefault();
-            
+
             this.setInputCaretPosition(pos + 1);
 
             // Re-render to cleanup
@@ -389,20 +413,20 @@ export class Input extends React.Component<IInputProps, IInputState> {
         let pos:number = beg;
         let insert = this.getCurrentCommandPiece();
         let missing:string|undefined = '';
-        
+
         let commands:Array<string> = this.getFilteredCommandsList();
 
         if (insert === undefined) {
             return;
         };
 
-    
+
         // If only one command
         if (commands.length === 1) {
             let isFunc:boolean = false;
             let command:string|undefined = '';
             let vocabulary = Input.commandsVocabulary;
-            
+
             // Get command
             command = commands[0];
 
@@ -419,7 +443,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
             // Set new value
             input.value = input.value.substring(0, beg) +
-                          missing + (isFunc ? '()' : '') + 
+                          missing + (isFunc ? '()' : '') +
                           input.value.substring(end);
 
             // Set new caret position
