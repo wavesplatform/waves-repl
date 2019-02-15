@@ -201,8 +201,8 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         // Show back
         if (code === 'up arrow') {
-
             historyCursor--;
+
             let rows = history[historyCursor] ? history[historyCursor].split('\n') : [""];
 
             if (historyCursor < 0) {
@@ -219,7 +219,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
                     () => {
                         input.setSelectionRange(rows[0].length, rows[0].length)
                     }
-                )
+                );
             } else return false;
 
             event.preventDefault();
@@ -229,25 +229,26 @@ export class Input extends React.Component<IInputProps, IInputState> {
 
         // Move forward
         if (code === 'down arrow') {
-
-            let len = history[historyCursor]?history[historyCursor].length : 0;
+            let len = history[historyCursor] ? history[historyCursor].length : 0;
 
             historyCursor++;
 
             if (historyCursor >= history.length && input.selectionStart === len && input.selectionEnd === len) {
                 this.setState({historyCursor: history.length, value: ''});
+                
                 return true;
             }
 
-            if(input.selectionStart === len && input.selectionEnd === len){
-                let len = history[historyCursor]?history[historyCursor].length : 0;
+            if(input.selectionStart === len && input.selectionEnd === len) {
+                let len = history[historyCursor] ? history[historyCursor].length : 0;
+
                 this.setState(
                     {
                         historyCursor,
                         value: history[historyCursor]
                     },
                     () => {input.setSelectionRange(len, len)}
-                    )
+                );
             } else return false;
 
             event.preventDefault();
