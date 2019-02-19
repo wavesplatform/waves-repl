@@ -40,7 +40,9 @@ export class App extends React.Component<{api:WavesConsoleAPI, commands:any, lay
                 command,
                 value: command,
             });
+            
             const res = await run(command);
+            
             console.push({
                 command,
                 type: 'response',
@@ -87,7 +89,7 @@ export class App extends React.Component<{api:WavesConsoleAPI, commands:any, lay
     componentDidMount() {
         createContainer();
         bindConsole(this.console);
-        bindAPItoIFrame(this.props.api);
+        bindAPItoIFrame(this.props.api, this.console);
 
         const query = decodeURIComponent(window.location.search.substr(1));
         if (query) {
