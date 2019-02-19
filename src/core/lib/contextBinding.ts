@@ -1,12 +1,12 @@
 import {getContainer} from './run';
 import {WavesConsoleAPI} from "../../WavesConsoleAPI";
-import { TTx, libs } from "@waves/waves-transactions/";
+import {TTx, libs} from "@waves/waves-transactions/";
 import axios from 'axios';
 
 import {Console} from '../components/Console';
-import { byteToAddressOrAlias } from '@waves/marshall/dist/parsePrimitives';
+import {byteToAddressOrAlias} from '@waves/marshall/dist/parsePrimitives';
 
-export const updateIFrameEnv = (env:any) => {
+export const updateIFrameEnv = (env: any) => {
     try {
         WavesConsoleAPI.setEnv(env);
 
@@ -36,7 +36,7 @@ export const bindAPItoIFrame = (consoleApi: WavesConsoleAPI, console: Console) =
 }
 
 interface IApiMethodWrappers {
-    [key:string]: any
+    [key: string]: any
 };
 
 const getNetworkByte = (apiBase: string) => {
@@ -45,15 +45,17 @@ const getNetworkByte = (apiBase: string) => {
             const address = res.data[0];
 
             const byte = libs.marshall.serializePrimitives.BASE58_STRING(address)[1];
-            
+
             return String.fromCharCode(byte);
         });
 };
 
-const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console):  IApiMethodWrappers => {
+const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console): IApiMethodWrappers => {
     return {
-        broadcast: async (tx: TTx, apiBase: string = WavesConsoleAPI.env.API_BASE) => {
-            const nodes = ['https://nodes.wavesplatform.com', 'https://testnodes.wavesnodes.com'];
+        broadcast: async (tx: TTx, apiBaseParam?: string) => {
+            const apiBase = new URL(apiBaseParam || WavesConsoleAPI.env.API_BASE).href;
+
+            const nodes = ['https://nodes.wavesplatform.com/', 'https://testnodes.wavesnodes.com/'];
 
             const pushExplorerLinkToConsole = (href: string) => {
                 const htmlString = `<a href="${href}" target="_blank">Link to transaction in wavesexplorer</a>`;
@@ -65,39 +67,41 @@ const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console):  I
                 });
             };
 
-            const genereteExplorerLinkToTx = (networkByte: string, txId: number) => {
+            const generateExplorerLinkToTx = (networkByte: string, txId: number) => {
                 return (networkByte === 'W')
                     ? `https://wavesexplorer.com/tx/${txId}`
                     : `https://wavesexplorer.com/testnet/tx/${txId}`;
             };
 
-            try {
-                const res = await consoleApi.broadcast(tx, apiBase);
 
-                if (nodes.includes(apiBase)) {
-                    const networkByte = apiBase === 'https://nodes.wavesplatform.com' 
-                        ? 'W'
-                        : 'T';
+            const res = await consoleApi.broadcast(tx, apiBase);
 
-                    const href = genereteExplorerLinkToTx(networkByte, res.id);
+            if (nodes.includes(apiBase)) {
+                const networkByte = apiBase === 'https://nodes.wavesplatform.com/'
+                    ? 'W'
+                    : 'T';
 
-                    pushExplorerLinkToConsole(href);
-                } else {
+                const href = generateExplorerLinkToTx(networkByte, res.id);
+
+                pushExplorerLinkToConsole(href);
+            } else {
+                try {
                     let networkByte = await getNetworkByte(apiBase);
 
                     const isWavesNetwork = networkByte === 'W' || networkByte === 'T';
 
                     if (isWavesNetwork) {
-                        const href = genereteExplorerLinkToTx(networkByte, res.id);
+                        const href = generateExplorerLinkToTx(networkByte, res.id);
 
                         pushExplorerLinkToConsole(href);
-                    };
-                };
+                    }
+                } catch (e) {
+                    console.log(`Error occured during network byte check`)
+                }
+            }
 
-                return res;
-            } catch (error) {
-                return error;
-            };
+            return res;
+
         }
     };
 };
