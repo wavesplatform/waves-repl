@@ -13,7 +13,15 @@ import {WavesConsoleAPI} from "../../WavesConsoleAPI";
 // this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
 
-export class App extends React.Component<{api:WavesConsoleAPI, commands:any, layout:any, theme:string}, any> {
+export interface IAppProps {
+    api: WavesConsoleAPI
+    commands: any
+    layout: string
+    theme: 'light' | 'dark'
+    className?: string
+    style?: Record<string, number>
+}
+export class App extends React.Component<IAppProps, any> {
     private console: any;
     private messagesEnd?: HTMLDivElement | null;
     private app: any;
@@ -33,16 +41,16 @@ export class App extends React.Component<{api:WavesConsoleAPI, commands:any, lay
         const console = this.console;
 
         command =  (command === "clear()") ? ":clear" : command; //TODO do without hack
-        
+
         if (command[0] !== ':') {
             console.push({
                 type: 'command',
                 command,
                 value: command,
             });
-            
+
             const res = await run(command);
-            
+
             console.push({
                 command,
                 type: 'response',
@@ -119,12 +127,13 @@ export class App extends React.Component<{api:WavesConsoleAPI, commands:any, lay
     }
 
     render() {
-        const {commands = [], theme, layout} = this.props;
+        const {commands = [], theme, layout, className: classNameProp, style} = this.props;
 
-        const className = classnames(['App', `theme-${theme}`, layout]);
+        const className = classnames(['App', `theme-${theme}`, layout, classNameProp]);
 
         return (
             <div
+                style={style}
                 tabIndex={-1}
                 onKeyDown={this.triggerFocus}
                 ref={e => (this.app = e)}
