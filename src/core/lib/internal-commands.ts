@@ -8,8 +8,6 @@ Use <strong>help()</strong> to show commands. `,
     html: true,
 });
 
-
-
 const history = async ({app, args: [n = null]}:any) => {
     const history = app.context.store.getState().history;
     if (n === null) {
