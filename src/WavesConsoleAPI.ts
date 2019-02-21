@@ -48,6 +48,12 @@ export class WavesConsoleAPI {
 
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
+    public waitForTx = (txId: string, timeout: number, apiBase?: string) => wt.waitForTx(txId, timeout, apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public getAddressBalance = (address: string, apiBase?: string) => wt.getAddressBalance(address, apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public getAddressDataByKey = (address: string, key: string, apiBase?: string) => wt.getAddressDataByKey(address, key, apiBase || WavesConsoleAPI.env.API_BASE);
+    
     public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
 
     public file = (tabName?: string): string => {
