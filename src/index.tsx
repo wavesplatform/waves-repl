@@ -6,8 +6,8 @@ import { setTheme } from './core/actions/Settings';
 import { App } from './core/containers/App';
 import './css/index.css';
 import './core/jsconsole.css';
-import {WavesConsoleAPI} from "./WavesConsoleAPI";
-import {WavesConsoleCommands} from "./WavesConsoleCommands";
+import { WavesConsoleAPI } from './WavesConsoleAPI';
+import { WavesConsoleCommands } from './WavesConsoleCommands';
 
 interface IReplProps {
     theme: string
