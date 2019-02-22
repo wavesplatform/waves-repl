@@ -48,6 +48,10 @@ export class WavesConsoleAPI {
 
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
+    public addressBalance = (address: string, apiBase?: string) => wt.addressBalance(address, apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public addressDataByKey = (address: string, key: string, apiBase?: string) => wt.addressDataByKey(address, key, apiBase || WavesConsoleAPI.env.API_BASE);
+    
     public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
 
     public file = (tabName?: string): string => {
@@ -188,6 +192,20 @@ export class WavesConsoleAPIHelp {
      * @member {object} texts
      */
     public static texts: {[key:string]:IWavesConsoleAPIHelpCommand} = {
+        addressBalance: {
+            summary: '' +
+                'Retrieve information about waves account balance',
+            description: '' +
+                'Returns Promise<number>.',
+            params: ['address', 'nodeUrl']
+        },
+        addressDataByKey: {
+            summary: '' +
+                'Get data from account dictionary by key',
+            description: '' +
+                'Returns Promise<number | Uint8Array | string | null>.',
+            params: ['address', 'key', 'nodeUrl']
+        },
         clear: {
             summary: '' +
                 'clear console;',
@@ -450,6 +468,19 @@ export class WavesConsoleAPIHelp {
         apiBase: {
             optional: true,
             summary: 'Url of the node. E.x. "https://nodes.wavesplatform.com". (optional, env.API_BASE by default)',
+            type: 'string'
+        },
+        nodeUrl: {
+            optional: true,
+            summary: 'Url of the node. E.x. "https://nodes.wavesplatform.com". (optional, env.API_BASE by default)',
+            type: 'string'
+        },
+        address: {
+            summary: 'Waves address as base58 string',
+            type: 'string'
+        },
+        key: {
+            summary: 'Account data dictionary key',
             type: 'string'
         }
     };

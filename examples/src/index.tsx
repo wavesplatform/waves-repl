@@ -10,6 +10,7 @@ render(<App />, document.getElementById("root"));
 
 (global as any)['updateEnv'] = Repl.updateEnv;
 (global as any)['API'] = Repl.API;
+(global as any)['Commands'] = Repl.Commands;
 
 (global as any)['updateEnv']({
     SEED: 'abracadabra',

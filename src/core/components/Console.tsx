@@ -74,28 +74,27 @@ export class Console extends React.Component<any,any> {
 
     constructor(props:any) {
         super(props);
+
         this.state = (props.commands || []).reduce((acc:any, curr:any) => {
             acc.commands[getNext()] = curr;
             return acc;
         }, {commands: {}});
-        this.log = this.log.bind(this);
-        this.clear = this.clear.bind(this);
-        this.push = this.push.bind(this);
+
         this.scrollToBottom = props.scrollToBottom;
-        (window as any).riderepl = this
     }
 
-    push(command: any) {
+    public push = (command: any) => {
         const next = getNext();
         this.setState({commands: Object.assign({}, this.state.commands, {[next]: command})});
     }
 
-    clear() {
+    public clear = () => {
         this.setState({commands: {}});
     }
 
-    error(...rest: any[]) {
+    public error = (...rest: any[]) => {
         const {html, args} = interpolate(...rest);
+
         this.push({
             error: true,
             html,
@@ -104,11 +103,7 @@ export class Console extends React.Component<any,any> {
         });
     };
 
-    componentDidUpdate() {
-        this.scrollToBottom();
-    }
-
-    assert(test:any, ...rest:any[]) {
+    public assert = (test:any, ...rest:any[]) => {
         // intentional loose assertion test - matches devtools
         if (!test) {
             let msg = rest.shift();
@@ -124,7 +119,7 @@ export class Console extends React.Component<any,any> {
         }
     }
 
-    dir(...rest:any[]) {
+    public dir = (...rest:any[]) => {
         const {html, args} = interpolate(...rest);
 
         this.push({
@@ -135,7 +130,7 @@ export class Console extends React.Component<any,any> {
         });
     };
 
-    warn(...rest:any[]) {
+    public warn = (...rest:any[]) => {
         const {html, args} = interpolate(...rest);
         this.push({
             error: true,
@@ -146,15 +141,15 @@ export class Console extends React.Component<any,any> {
         });
     }
 
-    debug(...args:any[]) {
+    public debug = (...args:any[]) => {
         return this.log(...args);
     };
 
-    info(...args:any[]) {
+    public info = (...args:any[]) => {
         return this.log(...args);
     };
 
-    log(...rest:any[]) {
+    public log = (...rest:any[]) => {
         const {html, args} = interpolate(...rest);
 
         this.push({
@@ -162,6 +157,10 @@ export class Console extends React.Component<any,any> {
             html,
             type: 'log',
         });
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
     }
 
     render() {
