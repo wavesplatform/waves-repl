@@ -1,10 +1,9 @@
-import {getContainer} from './run';
-import {WavesConsoleAPI} from "../../WavesConsoleAPI";
-import {TTx, libs} from "@waves/waves-transactions/";
+import { getContainer } from './run';
+import { WavesConsoleAPI } from '../../WavesConsoleAPI';
+import { TTx, libs } from '@waves/waves-transactions/';
 import axios from 'axios';
 
-import {Console} from '../components/Console';
-import {byteToAddressOrAlias} from '@waves/marshall/dist/parsePrimitives';
+import { Console } from '..';
 
 export const updateIFrameEnv = (env: any) => {
     try {
@@ -28,16 +27,16 @@ export const bindAPItoIFrame = (consoleApi: WavesConsoleAPI, console: Console) =
             .forEach(key => {
                 key in apiMethodWrappers
                     ? iframeWindow[key] = apiMethodWrappers[key]
-                    : iframeWindow[key] = consoleApi[key]
+                    : iframeWindow[key] = consoleApi[key];
             });
     } catch (e) {
-        console.error(e)
+        console.error(e);
     }
-}
+};
 
 interface IApiMethodWrappers {
     [key: string]: any
-};
+}
 
 const getNetworkByte = (apiBase: string) => {
     return axios.get(`${apiBase}/addresses`)
@@ -96,7 +95,7 @@ const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console): IA
                         pushExplorerLinkToConsole(href);
                     }
                 } catch (e) {
-                    console.log(`Error occured during network byte check`)
+                    console.log('Error occured during network byte check');
                 }
             }
 

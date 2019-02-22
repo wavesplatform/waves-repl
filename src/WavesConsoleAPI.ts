@@ -1,15 +1,17 @@
-import * as wt from '@waves/waves-transactions'
-import { libs, TTx, TTxParams, TSeedTypes} from "@waves/waves-transactions/";
-const {keyPair, address} = libs.crypto
-import {compile as cmpl} from "@waves/ride-js"
+import * as wt from '@waves/waves-transactions';
+import { libs, TTx, TTxParams, TSeedTypes } from '@waves/waves-transactions/';
+import { compile as cmpl } from '@waves/ride-js';
+
+const {keyPair, address} = libs.crypto;
+
 
 export class WavesConsoleAPI {
     static env: any;
 
     [key: string]: any;
 
-    private static injectEnv = <T extends (pp: any, ...args: any)=>any>(f:T) => (po: TTxParams, seed?: TSeedTypes | null): ReturnType<typeof f> =>
-        f({chainId: WavesConsoleAPI.env.CHAIN_ID, ...po }, seed === null ? null : seed || WavesConsoleAPI.env.SEED);
+    private static injectEnv = <T extends (pp: any, ...args: any) => any>(f: T) => (po: TTxParams, seed?: TSeedTypes | null): ReturnType<typeof f> =>
+        f({chainId: WavesConsoleAPI.env.CHAIN_ID, ...po}, seed === null ? null : seed || WavesConsoleAPI.env.SEED);
 
     public static setEnv(env: any) {
         WavesConsoleAPI.env = env;
@@ -17,7 +19,7 @@ export class WavesConsoleAPI {
 
     private bufferToBase64(buf: Uint8Array) {
         const binstr = Array.prototype.map.call(buf, (ch: number) => String.fromCharCode(ch)).join('');
-        return btoa(binstr)
+        return btoa(binstr);
     }
 
     public alias = WavesConsoleAPI.injectEnv(wt.alias);
@@ -51,14 +53,14 @@ export class WavesConsoleAPI {
     public addressBalance = (address: string, apiBase?: string) => wt.addressBalance(address, apiBase || WavesConsoleAPI.env.API_BASE);
 
     public addressDataByKey = (address: string, key: string, apiBase?: string) => wt.addressDataByKey(address, key, apiBase || WavesConsoleAPI.env.API_BASE);
-    
+
     public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
 
     public file = (tabName?: string): string => {
         if (typeof WavesConsoleAPI.env.file !== 'function') {
-            throw new Error('File content API is not available. Please provide it to the console')
+            throw new Error('File content API is not available. Please provide it to the console');
         }
-        return WavesConsoleAPI.env.file(tabName)
+        return WavesConsoleAPI.env.file(tabName);
     };
 
     public contract = (): string => this.file();
@@ -77,10 +79,10 @@ export class WavesConsoleAPI {
     );
 
     public compile = (code: string): string => {
-        const r = cmpl(code);
-        if (r.error)
-            throw new Error(r.error);
-        return this.bufferToBase64(new Uint8Array(r.result));
+        const resultOrError = cmpl(code);
+        if ('error' in resultOrError) throw new Error(resultOrError.error);
+
+        return resultOrError.result.base64;
     };
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: TSeedTypes) => {
@@ -126,7 +128,7 @@ export class WavesConsoleAPI {
 
         // Compile help text from pieces
         return WavesConsoleAPIHelp.compileText(aliases);
-    }
+    };
 
 }
 
@@ -191,7 +193,7 @@ export class WavesConsoleAPIHelp {
      * @static
      * @member {object} texts
      */
-    public static texts: {[key:string]:IWavesConsoleAPIHelpCommand} = {
+    public static texts: { [key: string]: IWavesConsoleAPIHelpCommand } = {
         addressBalance: {
             summary: '' +
                 'Retrieve information about waves account balance',
@@ -557,7 +559,7 @@ export class WavesConsoleAPIHelp {
 
                 // Add argument type
                 if (type) {
-                    text = `${text}: ${type}`
+                    text = `${text}: ${type}`;
                 }
 
                 // Add argument summary
@@ -567,9 +569,9 @@ export class WavesConsoleAPIHelp {
 
                 // Add ; or .
                 if (index == last) {
-                    text = `${text}.`
+                    text = `${text}.`;
                 } else {
-                    text = `${text};`
+                    text = `${text};`;
                 }
             }
         });
