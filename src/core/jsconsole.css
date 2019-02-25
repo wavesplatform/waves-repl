@@ -478,6 +478,11 @@ body, html, #root {
   margin-left: 0.75rem;
 }
 
+.type.object.closed{
+  overflow-x: hidden;
+  white-space: nowrap;
+}
+
 .type.object.closed .header,
 .type.object.closed .group,
 .type.object.closed .group > div {
