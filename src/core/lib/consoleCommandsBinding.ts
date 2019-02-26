@@ -5,6 +5,11 @@ export const bindConsoleCommandsToCommands = (consoleCommands: WavesConsoleComma
     const methods = [
         'log',
         'error',
+        'dir',
+        'info',
+        'warn',
+        'assert',
+        'debug',
         'clear'
     ];
 
