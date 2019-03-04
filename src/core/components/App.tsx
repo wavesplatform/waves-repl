@@ -8,24 +8,22 @@ import { Input } from '../containers/Input';
 import run, { bindConsole, createContainer, getContainer } from '../lib/run';
 import internalCommands from '../lib/internal-commands';
 import { bindAPItoIFrame } from '../lib/contextBinding';
-import { bindConsoleCommandsToCommands } from '../lib/consoleCommandsBinding';
 import { WavesConsoleAPI } from '../../WavesConsoleAPI';
-import { WavesConsoleCommands } from "../../WavesConsoleCommands";
 
 // this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
 
 export interface IAppProps {
     api: WavesConsoleAPI
-    consoleCommands: WavesConsoleCommands
-    commands: any
+    commands: any,
     layout: string
     theme: 'light' | 'dark'
     className?: string
-    style?: Record<string, number>
+    style?: Record<string, number>,
+    consoleRef: any
 }
 export class App extends React.Component<IAppProps, any> {
-    private console: any;
+    private consoleRef: any;
     private messagesEnd?: HTMLDivElement | null;
     private app: any;
     private input: any;
@@ -41,7 +39,7 @@ export class App extends React.Component<IAppProps, any> {
     }
 
     async onRun(command: string) {
-        const console = this.console;
+        const console = this.consoleRef;
 
         command =  (command === "clear()") ? ":clear" : command; //TODO do without hack
 
@@ -99,9 +97,8 @@ export class App extends React.Component<IAppProps, any> {
 
     componentDidMount() {
         createContainer();
-        bindConsole(this.console);
-        bindAPItoIFrame(this.props.api, this.console);
-        bindConsoleCommandsToCommands(this.props.consoleCommands, this.console);
+        bindConsole(this.consoleRef);
+        bindAPItoIFrame(this.props.api, this.consoleRef);
 
         const query = decodeURIComponent(window.location.search.substr(1));
         if (query) {
@@ -112,7 +109,6 @@ export class App extends React.Component<IAppProps, any> {
 
         this.scrollToBottom();
     }
-
 
     triggerFocus(e: any) {
         if (e.target.nodeName === 'INPUT') return;
@@ -130,6 +126,11 @@ export class App extends React.Component<IAppProps, any> {
         }, 0);
     }
 
+    setConsoleRef = (el: Console) => {
+        this.consoleRef = el;
+        this.props.consoleRef(el);
+    }
+
     render() {
         const {commands = [], theme, layout, className: classNameProp, style} = this.props;
 
@@ -144,7 +145,7 @@ export class App extends React.Component<IAppProps, any> {
                 className={className}
             >
                 <Console
-                    ref={e => (this.console = e)}
+                    ref={this.setConsoleRef}
                     commands={commands}
                     reverse={layout === 'top'}
                     scrollToBottom={() => this.scrollToBottom()}
@@ -154,7 +155,7 @@ export class App extends React.Component<IAppProps, any> {
                     onRun={this.onRun}
                     autoFocus={window.top === window}
                     onClear={() => {
-                        this.console.clear();
+                        this.consoleRef.clear();
                     }}
                     theme={this.props.theme}
                 />
