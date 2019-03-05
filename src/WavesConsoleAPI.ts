@@ -48,6 +48,8 @@ export class WavesConsoleAPI {
 
     public setAssetScript = WavesConsoleAPI.injectEnv(wt.setAssetScript);
 
+    public contractInvocation = WavesConsoleAPI.injectEnv(wt.contractInvocation);
+
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
     public addressBalance = (address: string, apiBase?: string) => wt.addressBalance(address, apiBase || WavesConsoleAPI.env.API_BASE);

@@ -79,20 +79,31 @@ import * as React from 'react';
 import {render} from 'react-dom';
 import {Repl} from 'waves-repl';
 
-const App: React.StatelessComponent = () => (
-    <Repl theme="dark"/>
-);
+class App extends React.Component {
+    public consoleRef = React.createRef<Repl>();
 
-render(<App />, document.getElementById("root"));
+    componentDidMount(){
+        // Get console instance
+        const console = this.consoleRef.current!;
+        
+        // Access to console api
+        (global as any)['updateEnv'] = console.updateEnv;
+        (global as any)['API'] = console.API;
+        (global as any)['methods'] = console.methods;
 
-(window as any)['updateEnv'] = Repl.updateEnv
+        (global as any)['updateEnv']({
+            SEED: 'abracadabra',
+            API_BASE: 'https://testnodes.wavesnodes.com',
+            CHAIN_ID: 'T',
+            file: () => 'Placeholder file content'
+        });
 
-//Set default params
-Repl.updateEnv({
-    SEED: 'example seed',
-    CHAIN_ID: 'T',
-    API_BASE: 'https://testnodes.wavesnodes.com/'
-})
+    }
+    render(){
+        return <Repl theme="dark" ref={this.consoleRef}/>
+    }
+}
+render(<App/>, document.getElementById('root'));
 ```
 
 

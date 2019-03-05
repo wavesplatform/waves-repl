@@ -18,10 +18,11 @@ interface IReplProps {
 }
 
 export class Repl extends React.Component<IReplProps> {
-    private store: any;
-    public API: any;
-    public Methods: any;
+    private readonly store: any;
     private consoleRef: any;
+    public API: WavesConsoleAPI;
+    public methods: any;
+
 
     constructor(props: IReplProps){
         super(props);
@@ -40,7 +41,7 @@ export class Repl extends React.Component<IReplProps> {
     }
 
     componentDidMount() {
-        this.Methods = new WavesConsoleMethods(this.consoleRef);
+        this.methods = new WavesConsoleMethods(this.consoleRef);
     }
 
     render() {
@@ -50,7 +51,7 @@ export class Repl extends React.Component<IReplProps> {
                 <App
                     consoleRef={(el: Console) => this.consoleRef = el}
                     api={this.API}
-                    methods={this.Methods}
+                    methods={this.methods}
                 />
             </Provider>
         );

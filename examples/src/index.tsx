@@ -2,19 +2,27 @@ import * as React from 'react';
 import { render } from 'react-dom';
 import { Repl } from '../../src';
 
-const App: React.StatelessComponent = () => (
-    <Repl theme="dark"/>
-);
+class App extends React.Component {
+    public consoleRef = React.createRef<Repl>();
 
+    componentDidMount(){
+        // FixMe: using ! to remove undefined/null from type
+        const console = this.consoleRef.current!;
+
+        (global as any)['updateEnv'] =console.updateEnv;
+        (global as any)['API'] = console.API;
+        (global as any)['methods'] = console.methods;
+
+        (global as any)['updateEnv']({
+            SEED: 'abracadabra',
+            API_BASE: 'https://testnodes.wavesnodes.com',
+            CHAIN_ID: 'T',
+            file: () => 'Placeholder file content'
+        });
+
+    }
+    render(){
+        return <Repl theme="dark" ref={this.consoleRef}/>
+    }
+}
 render(<App/>, document.getElementById('root'));
-
-// (global as any)['updateEnv'] = Repl.updateEnv;
-// (global as any)['API'] = Repl.API;
-// (global as any)['Commands'] = Repl.Commands;
-
-// (global as any)['updateEnv']({
-//     SEED: 'abracadabra',
-//     API_BASE: 'https://testnodes.wavesnodes.com',
-//     CHAIN_ID: 'T',
-//     file: () => 'Placeholder file content'
-// });
