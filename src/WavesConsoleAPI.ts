@@ -48,7 +48,7 @@ export class WavesConsoleAPI {
 
     public setAssetScript = WavesConsoleAPI.injectEnv(wt.setAssetScript);
 
-    public contractInvocation = WavesConsoleAPI.injectEnv(wt.contractInvocation);
+    public invokeScript = WavesConsoleAPI.injectEnv(wt.invokeScript);
 
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
@@ -412,9 +412,9 @@ export class WavesConsoleAPIHelp {
                 'already signed SetAssetScriptTransaction as a second argument.',
             params: ['params', 'seed']
         },
-        contractInvocation: {
+        invokeScript: {
             summary: '' +
-                'Creates signed contractInvocation transaction',
+                'Creates signed invokeScript transaction',
             description: '' +
                 'You can use this function with multiple seeds. ' +
                 'In this case it will sign transaction accordingly ' +
