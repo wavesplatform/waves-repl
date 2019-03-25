@@ -17,7 +17,8 @@ export interface IAppProps {
     api: WavesConsoleAPI
     commands: any,
     layout: string
-    theme: 'light' | 'dark'
+    theme: 'light' | 'dark',
+    readOnly: boolean,
     className?: string
     style?: Record<string, number>,
     consoleRef: any
@@ -132,7 +133,7 @@ export class App extends React.Component<IAppProps, any> {
     }
 
     render() {
-        const {commands = [], theme, layout, className: classNameProp, style} = this.props;
+        const {commands = [], theme, readOnly, layout, className: classNameProp, style} = this.props;
 
         const className = classnames(['App', `theme-${theme}`, layout, classNameProp]);
 
@@ -157,6 +158,7 @@ export class App extends React.Component<IAppProps, any> {
                     onClear={() => {
                         this.consoleRef.clear();
                     }}
+                    readOnly={readOnly}
                     theme={this.props.theme}
                 />
                 <div ref={el => {

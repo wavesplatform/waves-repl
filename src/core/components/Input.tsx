@@ -9,6 +9,7 @@ export interface IInputProps {
     inputRef:any,
     onRun:any,
     autoFocus:any,
+    readOnly: boolean,
     onClear:any,
     theme:string,
     history:Array<string>,
@@ -539,11 +540,12 @@ export class Input extends React.Component<IInputProps, IInputState> {
     }
 
     createTextarea() {
-        const {autoFocus} = this.props;
+        const {autoFocus, readOnly} = this.props;
         const {rows, value} = this.state;
 
         return (
             <textarea
+                readOnly={readOnly}
                 className="cli"
                 rows={rows}
                 autoFocus={autoFocus}

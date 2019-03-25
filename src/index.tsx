@@ -11,7 +11,8 @@ import { WavesConsoleAPI } from './WavesConsoleAPI';
 import WavesConsoleMethods from './WavesConsoleMethods';
 
 interface IReplProps {
-    theme: string
+    theme: string,
+    readOnly: boolean,
     className?: string
     style?: Record<string, React.CSSProperties>
     env?: object
@@ -23,6 +24,10 @@ export class Repl extends React.Component<IReplProps> {
     public API: WavesConsoleAPI;
     public methods: any;
 
+    static defaultProps: IReplProps = {
+        theme: 'light',
+        readOnly: false
+    };
 
     constructor(props: IReplProps){
         super(props);
@@ -45,10 +50,11 @@ export class Repl extends React.Component<IReplProps> {
     }
 
     render() {
-        const {theme, ...rest} = this.props;
+        const {theme, readOnly, ...rest} = this.props;
         return (
             <Provider store={this.store}>
                 <App
+                    readOnly={readOnly}
                     consoleRef={(el: Console) => this.consoleRef = el}
                     api={this.API}
                     methods={this.methods}

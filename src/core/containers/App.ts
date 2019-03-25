@@ -3,8 +3,9 @@ import { App as AppComponent } from '../components/App';
 import { setTheme, setLayout } from '../actions/Settings';
 import { setEnv } from '../actions/Env';
 
-const mapStateToProps = ({ settings }: any, props:any) => ({
+const mapStateToProps = ({ settings }: any, props: any) => ({
     theme: settings.theme,
+    readOnly: props.readOnly,
     layout: settings.layout,
     consoleRef: props.consoleRef
 });
