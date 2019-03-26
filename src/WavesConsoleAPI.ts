@@ -50,6 +50,8 @@ export class WavesConsoleAPI {
 
     public invokeScript = WavesConsoleAPI.injectEnv(wt.invokeScript);
 
+    public sponsorship = WavesConsoleAPI.injectEnv(wt.sponsorship);
+
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
     public addressBalance = (address: string, apiBase?: string) => wt.addressBalance(address, apiBase || WavesConsoleAPI.env.API_BASE);
@@ -400,6 +402,16 @@ export class WavesConsoleAPIHelp {
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
                 'already signed SetScriptTransaction as a second argument.',
+            params: ['params', 'seed']
+        },
+        sponsorship: {
+            summary: '' +
+                'Creates signed setSponsorship transaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed SetAssetScriptTransaction as a second argument.',
             params: ['params', 'seed']
         },
         setAssetScript: {
