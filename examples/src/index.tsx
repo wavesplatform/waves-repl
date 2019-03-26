@@ -9,7 +9,7 @@ class App extends React.Component {
         // FixMe: using ! to remove undefined/null from type
         const console = this.consoleRef.current!;
 
-        (global as any)['updateEnv'] =console.updateEnv;
+        (global as any)['updateEnv'] = console.updateEnv;
         (global as any)['API'] = console.API;
         (global as any)['methods'] = console.methods;
 
