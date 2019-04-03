@@ -298,7 +298,7 @@ body, html, #root {
 }
 
 .Line .output.log:before {
-  background-image: none;
+  /* background-image: none; */
 }
 
 .Line .error.output:before {
