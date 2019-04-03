@@ -70,7 +70,7 @@ function interpolate(...args:any[]) {
 }
 
 export class Console extends React.Component<any,any> {
-    private readonly scrollToBottom: any
+    private linesEndRef?: HTMLDivElement | null;
 
     constructor(props:any) {
         super(props);
@@ -79,8 +79,15 @@ export class Console extends React.Component<any,any> {
             acc.commands[getNext()] = curr;
             return acc;
         }, {commands: {}});
+    }
 
-        this.scrollToBottom = props.scrollToBottom;
+    public scrollToBottom() {
+        if (!this.linesEndRef) return;
+
+        // hack: chrome fails to scroll correctly sometimes. Need to do it on next tick
+        requestAnimationFrame(() => {
+            this.linesEndRef!.scrollIntoView({ behavior: "smooth" });
+        });
     }
 
     public push = (command: any) => {
@@ -178,6 +185,10 @@ export class Console extends React.Component<any,any> {
                 }}
             >
                 {keys.map(_ => <Line key={`line-${_}`} {...commands[_]} />)}
+
+                <div ref={el => {
+                    this.linesEndRef = el;
+                }}/>
             </div>
         );
     }

@@ -25,7 +25,6 @@ export interface IAppProps {
 }
 export class App extends React.Component<IAppProps, any> {
     private consoleRef: any;
-    private messagesEnd?: HTMLDivElement | null;
     private app: any;
     private input: any;
 
@@ -36,7 +35,6 @@ export class App extends React.Component<IAppProps, any> {
 
         this.onRun = this.onRun.bind(this);
         this.triggerFocus = this.triggerFocus.bind(this);
-        (window as any).sccc = this.scrollToBottom.bind(this)
     }
 
     async onRun(command: string) {
@@ -108,7 +106,7 @@ export class App extends React.Component<IAppProps, any> {
             this.onRun(':welcome');
         }
 
-        this.scrollToBottom();
+        this.consoleRef.scrollToBottom();
     }
 
     triggerFocus(e: any) {
@@ -118,15 +116,7 @@ export class App extends React.Component<IAppProps, any> {
 
         //this.input.focus();
     }
-
-    scrollToBottom() {
-        if (!this.messagesEnd) return
-        // hack: chrome fails to scroll correctly sometimes. Need to do it on next tick
-        setTimeout(() => {
-            this.messagesEnd!.scrollIntoView({ behavior: "smooth" });
-        }, 0);
-    }
-
+    
     setConsoleRef = (el: Console) => {
         this.consoleRef = el;
         this.props.consoleRef(el);
@@ -149,7 +139,6 @@ export class App extends React.Component<IAppProps, any> {
                     ref={this.setConsoleRef}
                     commands={commands}
                     reverse={layout === 'top'}
-                    scrollToBottom={() => this.scrollToBottom()}
                 />
                 <Input
                     inputRef={(e:any) => (this.input = e)}
@@ -161,9 +150,6 @@ export class App extends React.Component<IAppProps, any> {
                     readOnly={readOnly}
                     theme={this.props.theme}
                 />
-                <div ref={el => {
-                    this.messagesEnd = el;
-                }}/>
             </div>
         );
     }

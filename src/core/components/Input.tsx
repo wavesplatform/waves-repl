@@ -137,7 +137,7 @@ export class Input extends React.Component<IInputProps, IInputState> {
             await this.props.onRun(command);
 
             // Don't use `this.input.scrollIntoView();` as it messes with iframes
-            window.scrollTo(0, document.body.scrollHeight);
+            // window.scrollTo(0, document.body.scrollHeight);
             return;
         }
     }
