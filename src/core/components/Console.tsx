@@ -1,8 +1,6 @@
 import * as React from 'react';
-import {Line} from './Line';
 
-let guid = 0;
-const getNext = () => guid++;
+import { Line } from './Line';
 
 // function AssertError(message) {
 //     this.name = 'Assertion fail';
@@ -71,12 +69,15 @@ function interpolate(...args:any[]) {
 
 export class Console extends React.Component<any,any> {
     private linesEndRef?: HTMLDivElement | null;
+    private guid: number = 0;
 
+    private getNext = () => this.guid++;
+    
     constructor(props:any) {
         super(props);
 
         this.state = (props.commands || []).reduce((acc:any, curr:any) => {
-            acc.commands[getNext()] = curr;
+            acc.commands[this.getNext()] = curr;
             return acc;
         }, {commands: {}});
     }
@@ -91,12 +92,17 @@ export class Console extends React.Component<any,any> {
     }
 
     public push = (command: any) => {
-        const next = getNext();
-        this.setState({commands: Object.assign({}, this.state.commands, {[next]: command})});
+        const next = this.getNext();
+
+        this.setState((state: any) => ({
+            commands: Object.assign({}, state.commands, {[next]: command})
+        }));
     }
 
     public clear = () => {
-        this.setState({commands: {}});
+        this.setState(() => ({
+            commands: {}
+        }));
     }
 
     public error = (...rest: any[]) => {
