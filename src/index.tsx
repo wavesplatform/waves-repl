@@ -49,6 +49,16 @@ export class Repl extends React.Component<IReplProps> {
         this.methods = new WavesConsoleMethods(this.consoleRef);
     }
 
+    shouldComponentUpdate(nextProps: IReplProps) {
+        const prevProps = this.props;
+
+        const shouldUpdate = prevProps.theme === nextProps.theme && prevProps.readOnly === nextProps.readOnly;
+
+        return shouldUpdate
+            ? false
+            : true;
+    }
+
     render() {
         const {theme, readOnly, ...rest} = this.props;
         return (
