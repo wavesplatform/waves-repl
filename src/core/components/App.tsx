@@ -102,7 +102,6 @@ export class App extends React.Component<IAppProps, any> {
         bindAPItoIFrame(this.props.api, this.consoleRef);
 
         const query = decodeURIComponent(window.location.search.substr(1));
-        console.log(query,this.props.withoutWelcome )
         if (query) {
             this.onRun(query);
         } else if (!this.props.withoutWelcome) {
