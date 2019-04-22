@@ -16,6 +16,7 @@ interface IReplProps {
     className?: string
     style?: Record<string, React.CSSProperties>
     env?: object
+    withoutWelcome?: boolean
 }
 
 export class Repl extends React.Component<IReplProps> {
@@ -68,7 +69,8 @@ export class Repl extends React.Component<IReplProps> {
                     consoleRef={(el: Console) => this.consoleRef = el}
                     api={this.API}
                     methods={this.methods}
-                />
+                    withoutWelcome={this.props.withoutWelcome}
+            />
             </Provider>
         );
     }
