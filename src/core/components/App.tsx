@@ -5,7 +5,7 @@ import classnames from 'classnames';
 import { Console } from './Console';
 import { Input } from '../containers/Input';
 
-import run, { bindConsole, createContainer } from '../lib/run';
+import run, { bindConsole, createContainer, getContainer } from '../lib/run';
 import internalCommands from '../lib/internal-commands';
 import { bindAPItoIFrame } from '../lib/contextBinding';
 import { WavesConsoleAPI } from '../../WavesConsoleAPI';
@@ -21,10 +21,8 @@ export interface IAppProps {
     readOnly: boolean,
     className?: string
     style?: Record<string, number>,
-    consoleRef: any,
-    withoutWelcome?: boolean
+    consoleRef: any
 }
-
 export class App extends React.Component<IAppProps, any> {
     private consoleRef: any;
     private app: any;
@@ -42,7 +40,7 @@ export class App extends React.Component<IAppProps, any> {
     async onRun(command: string) {
         const console = this.consoleRef;
 
-        command = (command === "clear()") ? ":clear" : command; //TODO do without hack
+        command =  (command === "clear()") ? ":clear" : command; //TODO do without hack
 
         if (command[0] !== ':') {
             console.push({
@@ -104,7 +102,7 @@ export class App extends React.Component<IAppProps, any> {
         const query = decodeURIComponent(window.location.search.substr(1));
         if (query) {
             this.onRun(query);
-        } else if (!this.props.withoutWelcome) {
+        } else if (!this.props.readOnly) {
             this.onRun(':welcome');
         }
 
@@ -118,11 +116,11 @@ export class App extends React.Component<IAppProps, any> {
 
         //this.input.focus();
     }
-
+    
     setConsoleRef = (el: Console) => {
         this.consoleRef = el;
         this.props.consoleRef(el);
-    };
+    }
 
     render() {
         const {commands = [], theme, readOnly, layout, className: classNameProp, style} = this.props;
@@ -143,7 +141,7 @@ export class App extends React.Component<IAppProps, any> {
                     reverse={layout === 'top'}
                 />
                 <Input
-                    inputRef={(e: any) => (this.input = e)}
+                    inputRef={(e:any) => (this.input = e)}
                     onRun={this.onRun}
                     autoFocus={window.top === window}
                     onClear={() => {
