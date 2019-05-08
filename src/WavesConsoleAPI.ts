@@ -17,6 +17,10 @@ export class WavesConsoleAPI {
         WavesConsoleAPI.env = env;
     }
 
+    private currentAddress() {
+        return libs.crypto.address(WavesConsoleAPI.env.SEED, WavesConsoleAPI.env.CHAIN_ID);
+    }
+
     private bufferToBase64(buf: Uint8Array) {
         const binstr = Array.prototype.map.call(buf, (ch: number) => String.fromCharCode(ch)).join('');
         return btoa(binstr);
@@ -54,9 +58,25 @@ export class WavesConsoleAPI {
 
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
-    public addressBalance = (address: string, apiBase?: string) => wt.addressBalance(address, apiBase || WavesConsoleAPI.env.API_BASE);
 
-    public addressDataByKey = (address: string, key: string, apiBase?: string) => wt.addressDataByKey(address, key, apiBase || WavesConsoleAPI.env.API_BASE);
+    public balance = (address?: string, apiBase?: string) =>
+        wt.nodeInteraction.balance(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public assetBalance = async (assetId: string, address?: string, apiBase?: string) =>
+        wt.nodeInteraction.assetBalance(assetId, address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public balanceDetails = async (address?: string, apiBase?: string) =>
+        wt.nodeInteraction.balanceDetails(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+
+
+    public accountData = (address?: string, apiBase?: string) =>
+        wt.nodeInteraction.accountData(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public accountDataByKey = (key: string, address?: string, apiBase?: string) =>
+        wt.nodeInteraction.accountDataByKey(key, address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+
+    public currentHeight = async (apiBase?: string) =>
+        wt.nodeInteraction.currentHeight(apiBase || WavesConsoleAPI.env.API_BASE);
 
     public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
 
@@ -198,19 +218,40 @@ export class WavesConsoleAPIHelp {
      * @member {object} texts
      */
     public static texts: { [key: string]: IWavesConsoleAPIHelpCommand } = {
-        addressBalance: {
+        balance: {
             summary: '' +
                 'Retrieve information about waves account balance',
             description: '' +
                 'Returns Promise<number>.',
             params: ['address', 'nodeUrl']
         },
-        addressDataByKey: {
+        assetBalance: {
+            summary: '' +
+                'Retrieve information about asset account balance',
+            description: '' +
+                'Returns Promise<number>.',
+            params: ['assetId', 'address', 'nodeUrl']
+        },
+        balanceDetails: {
+            summary: '' +
+                'Retrieve full waves balance details',
+            description: '' +
+                'Returns Promise<Object>.',
+            params: ['address', 'nodeUrl']
+        },
+        accountData: {
+            summary: '' +
+                'Get all data from account dictionary ',
+            description: '' +
+                'Returns Promise<Object>.',
+            params: ['address', 'nodeUrl']
+        },
+        accountDataByKey: {
             summary: '' +
                 'Get data from account dictionary by key',
             description: '' +
-                'Returns Promise<number | Uint8Array | string | null>.',
-            params: ['address', 'key', 'nodeUrl']
+                'Returns Promise<Data>.',
+            params: ['key', 'address', 'nodeUrl']
         },
         clear: {
             summary: '' +
