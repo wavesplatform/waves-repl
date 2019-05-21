@@ -1,6 +1,6 @@
 import * as React from 'react';
 import which from '../../lib/which-type';
-import {ITypeState} from "./ITypeState";
+import { ITypeState } from "./ITypeState";
 
 interface IPromiseTypeProps {
     allowOpen: boolean,
@@ -83,8 +83,8 @@ export class PromiseType extends React.Component<any, IPromiseTypeState> {
 
         if (!open) {
             return (
-                <div onClick={this.toggle} className="type entry closed">
-                    <em>Promise</em>
+                <div className="type entry closed">
+                    <em onClick={this.toggle}>Promise</em>
                     {'{ '}
                     <div className="object-item key-value">
                         <span className="key">[[PromiseStatus]]:</span>
@@ -93,14 +93,15 @@ export class PromiseType extends React.Component<any, IPromiseTypeState> {
                     <span className="arb-info">, </span>
                     <div className="object-item key-value">
                         <span className="key">[[PromiseValue]]:</span>
-                        <span className="value">
-              <Value
-                  filter={filter}
-                  shallow={true}
-                  allowOpen={open}
-                  value={promiseValue}
-              />
-            </span>
+                        <span className="value"
+                              onClick={this.toggle}>
+                            <Value
+                                filter={filter}
+                                shallow={true}
+                                allowOpen={open}
+                                value={promiseValue}
+                            />
+                        </span>
                     </div>
                     {' }'}
                 </div>
@@ -108,9 +109,9 @@ export class PromiseType extends React.Component<any, IPromiseTypeState> {
         }
 
         return (
-            <div onClick={this.toggle} className="type promise">
+            <div className="type promise">
                 <div className="header">
-                    <em>Promise</em>
+                    <em onClick={this.toggle}>Promise</em>
                     <span>{'{'}</span>
                 </div>
                 <div className="group">
@@ -121,12 +122,12 @@ export class PromiseType extends React.Component<any, IPromiseTypeState> {
                     <div className="object-item key-value">
                         <span className="key">[[PromiseValue]]:</span>
                         <span className="value">
-              <Value
-                  filter={filter}
-                  shallow={true}
-                  allowOpen={open}
-                  value={promiseValue}
-              />
+                            <Value
+                                filter={filter}
+                                shallow={true}
+                                allowOpen={open}
+                                value={promiseValue}
+                            />
             </span>
                     </div>
                 </div>
