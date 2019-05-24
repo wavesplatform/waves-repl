@@ -2,7 +2,7 @@ import * as wt from '@waves/waves-transactions';
 import { libs, TTx, TTxParams, TSeedTypes } from '@waves/waves-transactions/';
 import { compile as cmpl } from '@waves/ride-js';
 
-const {keyPair, address} = libs.crypto;
+const {keyPair, address, stringToUint8Array, signBytes} = wt.libs.crypto;
 
 
 export class WavesConsoleAPI {
@@ -58,6 +58,9 @@ export class WavesConsoleAPI {
 
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
+    public stringToUint8Array = stringToUint8Array;
+
+    public signBytes = (bytes: Uint8Array, seed?: string) => signBytes(bytes, seed || WavesConsoleAPI.env.SEED);
 
     public balance = (address?: string, apiBase?: string) =>
         wt.nodeInteraction.balance(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
