@@ -30,9 +30,9 @@ export class Repl extends React.Component<IReplProps> {
         readOnly: false
     };
 
-    constructor(props: IReplProps){
+    constructor(props: IReplProps) {
         super(props);
-
+        // const devtools = (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__();
         this.store = configureStore();
 
         this.API = new WavesConsoleAPI();
@@ -44,7 +44,7 @@ export class Repl extends React.Component<IReplProps> {
 
     public updateEnv = (env: any): void => {
         this.store.dispatch(setEnv(env));
-    }
+    };
 
     componentDidMount() {
         this.methods = new WavesConsoleMethods(this.consoleRef);
@@ -70,7 +70,7 @@ export class Repl extends React.Component<IReplProps> {
                     api={this.API}
                     methods={this.methods}
                     withoutWelcome={this.props.withoutWelcome}
-            />
+                />
             </Provider>
         );
     }

@@ -1,9 +1,21 @@
 import * as wt from '@waves/waves-transactions';
-import { libs, TTx, TTxParams, TSeedTypes } from '@waves/waves-transactions/';
+import { libs, TSeedTypes, TTx, TTxParams } from '@waves/waves-transactions/';
 import { compile as cmpl } from '@waves/ride-js';
 
 const {keyPair, address, stringToUint8Array, signBytes} = wt.libs.crypto;
 
+export type TSignature = {
+    name: string
+    args: TArg[]
+    doc?: string
+    description?: string
+};
+
+export type TArg = {
+    name: string
+    type: string
+    doc?: string
+};
 
 export class WavesConsoleAPI {
     static env: any;
@@ -119,7 +131,7 @@ export class WavesConsoleAPI {
         return this['broadcast'](setScriptTx);
     };
 
-    public help = (func?: Function): string => {
+    public help = (func?: Function): TSignature[] | string => {
         let
             pos: number = -1,
             al0: string = '',
@@ -553,35 +565,10 @@ export class WavesConsoleAPIHelp {
      *
      * @param {Array} aliases
      *
-     * @returns {string}
+     * @returns {TSignature[]}
      */
-    public static compileText(aliases: Array<string>): string {
-        let
-            last = aliases.length - 1,
-            module: any = WavesConsoleAPIHelp,
-            full: boolean = aliases.length === 1,
-            text: string = '';
-
-        // Compile text for each command
-        aliases.forEach((alias: any, index: number) => {
-            text = this.compileTextSlice(alias, full, text);
-
-            // Add ; or .
-            if (!full) {
-                if (index == last) {
-                    text = `${text}.`;
-                } else {
-                    text = `${text};`;
-                }
-            }
-        });
-
-        // Add header for commands list
-        if (full === false) {
-            text = `${module.common.list.header}\n${text}`;
-        }
-
-        return text;
+    public static compileText(aliases: Array<string>): TSignature[] {
+        return aliases.map((alias: any): TSignature => this.compileTextSlice(alias));
     }
 
     /**
@@ -595,46 +582,20 @@ export class WavesConsoleAPIHelp {
      *
      * @returns {string}
      */
-    public static compileTextArguments(args: Array<string>, text: string): string {
-        let
-            last: number = args.length - 1,
-            type: string = '',
-            summary: string = '',
-            module: any = WavesConsoleAPIHelp;
-
-        // Add arguments list header
-        text = `${text}\n\n${module.common.args.header}`;
-
-        // Add each argument info
-        args.forEach((argument: string, index: number) => {
-            text = `${text}\n${index + 1}. ${argument}`;
-
+    public static compileTextArguments(args: Array<string>): TArg[] {
+        let module: any = WavesConsoleAPIHelp;
+        const out: TArg[] = [];
+        args.forEach((argument: string) => {
             if (module.types[argument]) {
-                summary = module.types[argument].summary;
-                summary = summary.substring(0, 1).toLowerCase() + summary.substring(1);
-                type = module.types[argument].type;
-                type = type ? type : '';
-
-                // Add argument type
-                if (type) {
-                    text = `${text}: ${type}`;
-                }
-
-                // Add argument summary
-                if (summary) {
-                    text = `${text} — ${summary}`;
-                }
-
-                // Add ; or .
-                if (index == last) {
-                    text = `${text}.`;
-                } else {
-                    text = `${text};`;
-                }
+                out.push({
+                    name: argument,
+                    type: module.types[argument].type,
+                    doc: module.types[argument].summary
+                });
             }
-        });
 
-        return text;
+        });
+        return out;
     }
 
     /**
@@ -644,21 +605,22 @@ export class WavesConsoleAPIHelp {
      * @method compileTextSlice
      *
      * @param {string} alias
-     * @param {boolean} full
-     * @param {string} text
      *
      * @returns {string}
      */
-    public static compileTextSlice(alias: string, full: boolean, text: string): string {
+    public static compileTextSlice(alias: string): TSignature {
+        const signature: TSignature = {
+            name: alias,
+            args: [],
+            doc: '',
+            description: ''
+        };
         let
             module: any = WavesConsoleAPIHelp,
-            summary: string = '',
             params: Array<string> = module.texts[alias] && module.texts[alias].params ?
                 module.texts[alias].params :
                 [],
-            description: string = '',
             args: Array<string> = params.slice();
-
         // Check optional and obligatory function params
         if (args) {
             args = args.map((arg) => {
@@ -666,39 +628,21 @@ export class WavesConsoleAPIHelp {
             });
         }
 
-        // Add common function info
-        if (full) {
-            text = `${alias}(${args.join(', ')})`;
-        } else {
-            text = `${text}\n${alias}(${args.join(', ')})`;
-        }
-
         if (module.texts[alias]) {
             // Add summary text
             if (module.texts[alias].summary) {
-                summary = module.texts[alias].summary;
-                summary = summary.substring(0, 1).toLowerCase() +
-                    summary.substring(1);
-                text = `${text} — ${summary}`;
-
-                if (full) {
-                    text = `${text}.`;
-                }
+                signature.doc =  module.texts[alias].summary;
             }
-
             // Add arguments description
-            if (full && args.length) {
-                text = module.compileTextArguments(params, text);
+            if (args.length) {
+                signature.args = module.compileTextArguments(params);
             }
-
             // Add full description
-            if (full && module.texts[alias].description) {
-                description = module.texts[alias].description;
-                text = `${text}\n\n${description}`;
+            if ( module.texts[alias].description) {
+                signature.description = module.texts[alias].description;
             }
         }
-
-        return text;
+        return signature;
     }
 
 }
