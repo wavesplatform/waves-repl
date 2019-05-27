@@ -662,7 +662,7 @@ export class WavesConsoleAPIHelp {
         // Check optional and obligatory function params
         if (args) {
             args = args.map((arg) => {
-                return module.types[arg].optional ? `[${arg}]` : `${arg}`;
+                return module.types[arg] && module.types[arg].optional ? `[${arg}]` : `${arg}`;
             });
         }
 
