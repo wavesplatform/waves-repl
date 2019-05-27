@@ -8,7 +8,7 @@ interface IProps {
 export default class Help extends React.Component <IProps> {
 
      getHelpItem = (sig: TSignature, i: number, isFull?: boolean) => isFull
-        ? <div key={i}>{`${sig.name}(${sig.args.map(a => `${a.name}: ${a.type}}`)})`}</div>
+        ? <div key={i}>{`${sig.name}(${sig.args.map(a => `${a.name}: ${a.type}`)})`}</div>
         : <div key={i}>{`${sig.name}(${sig.args.map(a => `${a.name}: ${a.type}`)})`}</div>;
 
     render() {
