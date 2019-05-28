@@ -1,27 +1,16 @@
 /**
- * Generates API method arguments description
+ * Test function returns input string + '!'
  *
  * @static
  * @method compileTextArguments
  *
- * @param {Array} args
  *
- * @returns {TArg[]}
+ * @returns {string}
+ * @param in1
+ * @param in2
+ * @param opt
  */
-import { TArg, WavesConsoleAPIHelp } from '../src/WavesConsoleAPI';
-
-function compileTextArguments(args: Array<string>): TArg[] {
-    let module: any = WavesConsoleAPIHelp;
-    const out: TArg[] = [];
-    args.forEach((argument: string) => {
-        if (module.types[argument]) {
-            out.push({
-                name: argument,
-                type: module.types[argument].type,
-                doc: module.types[argument].summary
-            });
-        }
-
-    });
-    return out;
+function test(in1: string, in2: string, opt?: string) {
+    const out = in1 + in2 + '!';
+    return opt ? out + out : out;
 };

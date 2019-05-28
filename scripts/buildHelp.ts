@@ -20,24 +20,45 @@ function getProgramFromFiles(files: string[], jsonCompilerOptions: any = {}, bas
     return ts.createProgram(files, options);
 }
 
+export type TSignature = {
+    name: string
+    args: TArg[]
+    doc?: string
+    description?: string
+};
+
+export type TArg = {
+    name: string
+    type: string
+    doc?: string
+    optional?: boolean
+};
+
 const buildSchemas = () => {
 
     // const path = 'node_modules/@waves/waves-transactions/dist/transactions.d.ts';
+
+    const out: TSignature[] = [];
+
     const path = 'scripts/testFunc.ts';
     const program = getProgramFromFiles([resolve(path)]);
     const typeChecker = program.getTypeChecker();
     program.getSourceFiles().forEach((sourceFile) => {
         if (!sourceFile.fileName.includes(path)) return;
+
         function inspect(node: ts.Node) {
             if (ts.isFunctionDeclaration(node)) {
-                const signature = typeChecker.getSignatureFromDeclaration(node);
-                const returnType = typeChecker.getReturnTypeOfSignature(signature!);
-                const parameters = node.parameters; // array of Parameters
-                // const docs = node.jsDoc; // array of js docs
-                console.log(node.name!.escapedText);
-                console.log(signature);
-                console.log(returnType);
-                console.log(parameters);
+                console.log(`{
+ name: ${node.name!.escapedText},
+ args: ${JSON.stringify(node.parameters.map(p => ({
+                    name: (p.name as any).escapedText,
+                    type: p.type!.kind
+                })))}
+ doc: ,
+ 
+                    
+}`);
+// args: ${node.parameters}
             } else {
                 ts.forEachChild(node, n => inspect(n));
             }
