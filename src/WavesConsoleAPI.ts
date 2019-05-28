@@ -132,7 +132,7 @@ export class WavesConsoleAPI {
         return this['broadcast'](setScriptTx);
     };
 
-    public help = (func?: Function): TSignature[] | string => {
+    public help = (func?: Function): TSignature[] => {
         let pos: number = -1;
         let al0: string = '';
         let type: string = typeof func;
