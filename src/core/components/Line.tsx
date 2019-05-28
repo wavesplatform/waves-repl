@@ -40,11 +40,8 @@ export class Line extends React.Component<any, any> {
             );
         }
 
-        console.log(this.props.type)
-        if (this.props.type === 'help') {
-            console.log(this.props.type)
-            return <Help signatures={value}/>;
-        };
+        if (this.props.type === 'help') return <Help signatures={value}/>;
+
 
         if (type === 'log' || type === 'response') {
             if (type === 'log' && Array.isArray(value) && value.length === 0) {

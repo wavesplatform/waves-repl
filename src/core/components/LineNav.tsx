@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Filter} from './Filter';
+import { Filter } from './Filter';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 export class LineNav extends React.Component<any, any> {
@@ -55,7 +55,7 @@ export class LineNav extends React.Component<any, any> {
             value.stack = original.stack;
         }
 
-        this.setState({text: JSON.stringify(value, "" as any, 2)});
+        this.setState({text: JSON.stringify(value, '' as any, 2)});
     }
 
     toggleFilter(e: React.MouseEvent<HTMLButtonElement>) {

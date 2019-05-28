@@ -15,6 +15,7 @@ export type TArg = {
     name: string
     type: string
     doc?: string
+    optional?: boolean
 };
 
 export class WavesConsoleAPI {
@@ -132,12 +133,10 @@ export class WavesConsoleAPI {
     };
 
     public help = (func?: Function): TSignature[] | string => {
-        let
-            pos: number = -1,
-            al0: string = '',
-            type: string = typeof func,
-            params: Array<any> = [],
-            aliases: Array<string> = [];
+        let pos: number = -1;
+        let al0: string = '';
+        let type: string = typeof func;
+        let aliases: Array<string> = [];
 
         // Try to find function name
         for (al0 in this) {
@@ -153,9 +152,9 @@ export class WavesConsoleAPI {
                     return 1;
                 } else if (a < b) {
                     return -1;
+                } else {
+                    return 0;
                 }
-
-                return 0;
             });
 
             // Get position of help in list
@@ -578,9 +577,8 @@ export class WavesConsoleAPIHelp {
      * @method compileTextArguments
      *
      * @param {Array} args
-     * @param {string} text
      *
-     * @returns {string}
+     * @returns {TArg[]}
      */
     public static compileTextArguments(args: Array<string>): TArg[] {
         let module: any = WavesConsoleAPIHelp;
@@ -606,41 +604,31 @@ export class WavesConsoleAPIHelp {
      *
      * @param {string} alias
      *
-     * @returns {string}
+     * @returns {TSignature}
      */
     public static compileTextSlice(alias: string): TSignature {
-        const signature: TSignature = {
-            name: alias,
-            args: [],
-            doc: '',
-            description: ''
-        };
-        let
-            module: any = WavesConsoleAPIHelp,
-            params: Array<string> = module.texts[alias] && module.texts[alias].params ?
-                module.texts[alias].params :
-                [],
-            args: Array<string> = params.slice();
-        // Check optional and obligatory function params
-        if (args) {
-            args = args.map((arg) => {
-                return module.types[arg] && module.types[arg].optional ? `[${arg}]` : `${arg}`;
-            });
-        }
+        const signature: TSignature = {name: alias, args: []};
+        let module: any = WavesConsoleAPIHelp;
+        let params: Array<string> = module.texts[alias] && module.texts[alias].params ? module.texts[alias].params : [];
+        let args: Array<string> = params.slice();
 
         if (module.texts[alias]) {
             // Add summary text
-            if (module.texts[alias].summary) {
-                signature.doc =  module.texts[alias].summary;
-            }
-            // Add arguments description
-            if (args.length) {
-                signature.args = module.compileTextArguments(params);
-            }
+            if (module.texts[alias].summary) signature.doc = module.texts[alias].summary;
+
             // Add full description
-            if ( module.texts[alias].description) {
-                signature.description = module.texts[alias].description;
+            if (module.texts[alias].description) signature.description = module.texts[alias].description;
+
+            // Add arguments description and Check optional and obligatory function params
+            if (args.length) {
+                signature.args = module.compileTextArguments(params).map((arg: TArg) =>
+                    ({
+                        ...arg,
+                        optional: module.types[arg.name] && module.types[arg.name].optional ? `[${arg}]` : `${arg}`
+                    })
+                );
             }
+
         }
         return signature;
     }
