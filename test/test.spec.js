@@ -1,9 +1,8 @@
-const dat = require('../scripts/buildHelp')
+const w = require('../src/WavesConsoleAPI')
 
 describe('Compiler', () => {
 
     it('test', () => {
-        dat()
     });
 });
 

@@ -16,13 +16,13 @@ function getProgramFromFiles(files: string[], jsonCompilerOptions: any = {}, bas
             options[k] = compilerOptions[k];
         }
     }
-
     return ts.createProgram(files, options);
 }
 
 export type TSignature = {
     name: string
     args: TArg[]
+    result?: string
     doc?: string
     description?: string
 };
@@ -42,23 +42,26 @@ const buildSchemas = () => {
 
     const path = 'scripts/testFunc.ts';
     const program = getProgramFromFiles([resolve(path)]);
-    const typeChecker = program.getTypeChecker();
+    const tc = program.getTypeChecker();
     program.getSourceFiles().forEach((sourceFile) => {
+
         if (!sourceFile.fileName.includes(path)) return;
 
         function inspect(node: ts.Node) {
             if (ts.isFunctionDeclaration(node)) {
-                console.log(`{
- name: ${node.name!.escapedText},
- args: ${JSON.stringify(node.parameters.map(p => ({
-                    name: (p.name as any).escapedText,
-                    type: p.type!.kind
-                })))}
- doc: ,
- 
-                    
-}`);
-// args: ${node.parameters}
+                const signature = tc.getSignatureFromDeclaration(node);
+                const returnType = signature && tc.getReturnTypeOfSignature(signature);
+                out.push({
+                    name: node.name ? node.name.escapedText.toString() : 'Unknown',
+                    args: node.parameters.map((p: ts.ParameterDeclaration) => (
+                        {
+                            name: ts.isIdentifier(p.name) ? p.name.escapedText.toString() : 'Unknown',
+                            type: getArgumentType(p, tc)
+                        }
+                    )),
+                    result: returnType && tc.typeToString(returnType),
+                    doc: signature ? signature.getDocumentationComment(tc).map(({text}) => text).join('\n') : ''
+                });
             } else {
                 ts.forEachChild(node, n => inspect(n));
             }
@@ -66,7 +69,24 @@ const buildSchemas = () => {
 
         inspect(sourceFile);
     });
+    return out;
 };
 
+const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
+    if (!p.type) return 'Unknown';
+    try {
+        if (ts.isTypeReferenceNode(p.type)) {
+            return p.type.getText();
+        } else {
+            return tc.typeToString(tc.getTypeFromTypeNode(p.type));
+        }
+    } catch (e) {
+        console.log(e.toString());
+        return e.toString();
+    }
 
-buildSchemas();
+
+};
+
+// buildSchemas();
+console.log(JSON.stringify(buildSchemas(), null, 4));
