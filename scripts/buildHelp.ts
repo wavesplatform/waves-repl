@@ -76,6 +76,7 @@ const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
     if (!p.type) return 'Unknown';
     try {
         if (ts.isTypeReferenceNode(p.type)) {
+            //todo add interface signatures
             return p.type.getText();
         } else {
             return tc.typeToString(tc.getTypeFromTypeNode(p.type));
