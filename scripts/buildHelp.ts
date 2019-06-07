@@ -87,9 +87,6 @@ const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
                 // console.log(tc.getTypeOfSymbolAtLocation(symbol, p.type));
                 /*todo parse interfaces from /waves-transactions/src/transactions.ts
                   todo and parse functions
-
-
-
                 */
             }
             return out;
