@@ -76,8 +76,23 @@ const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
     if (!p.type) return 'Unknown';
     try {
         if (ts.isTypeReferenceNode(p.type)) {
-            //todo add interface signatures
-            return p.type.getText();
+            const out = p.type.getText();
+            const symbol = tc.getTypeFromTypeNode(p.type).symbol;
+            if (symbol && symbol.members) {
+                console.log(symbol.getName());
+                console.log((symbol.getJsDocTags()));
+                console.log(symbol.members.forEach(val => console.log(val.getName(), tc.typeToString(tc.getDeclaredTypeOfSymbol(symbol)))));
+                console.log('===============================================================');
+                // console.log(tc.getDeclaredTypeOfSymbol(symbol));
+                // console.log(tc.getTypeOfSymbolAtLocation(symbol, p.type));
+                /*todo parse interfaces from /waves-transactions/src/transactions.ts
+                  todo and parse functions
+
+
+
+                */
+            }
+            return out;
         } else {
             return tc.typeToString(tc.getTypeFromTypeNode(p.type));
         }
@@ -89,5 +104,5 @@ const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
 
 };
 
-// buildSchemas();
-console.log(JSON.stringify(buildSchemas(), null, 4));
+buildSchemas();
+// console.log(JSON.stringify(buildSchemas(), null, 4));
