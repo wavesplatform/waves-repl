@@ -101,5 +101,5 @@ const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
 
 };
 
-buildSchemas();
+// buildSchemas();
 // console.log(JSON.stringify(buildSchemas(), null, 4));
