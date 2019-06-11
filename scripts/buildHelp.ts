@@ -1,5 +1,9 @@
 import * as ts from 'typescript';
 import { resolve } from 'path';
+import * as fs from 'fs';
+
+import { TFunction, TType, TUnion } from '@waves/ride-js';
+import { schemas } from '@waves/tx-json-schemas';
 
 function getProgramFromFiles(files: string[], jsonCompilerOptions: any = {}, basePath: string = './'): ts.Program {
     const compilerOptions = ts.convertCompilerOptionsFromJson(jsonCompilerOptions, basePath).options;
@@ -19,26 +23,9 @@ function getProgramFromFiles(files: string[], jsonCompilerOptions: any = {}, bas
     return ts.createProgram(files, options);
 }
 
-export type TSignature = {
-    name: string
-    args: TArg[]
-    result?: string
-    doc?: string
-    description?: string
-};
-
-export type TArg = {
-    name: string
-    type: string
-    doc?: string
-    optional?: boolean
-};
-
 const buildSchemas = () => {
 
-    // const path = 'node_modules/@waves/waves-transactions/dist/transactions.d.ts';
-
-    const out: TSignature[] = [];
+    const out: TFunction[] = [];
 
     const path = 'scripts/testFunc.ts';
     const program = getProgramFromFiles([resolve(path)]);
@@ -56,10 +43,12 @@ const buildSchemas = () => {
                     args: node.parameters.map((p: ts.ParameterDeclaration) => (
                         {
                             name: ts.isIdentifier(p.name) ? p.name.escapedText.toString() : 'Unknown',
-                            type: getArgumentType(p, tc)
+                            type: getArgumentType(p, tc),
+                            optional: tc.isOptionalParameter(p),
+                            doc: '' //todo get a doc
                         }
                     )),
-                    result: returnType && tc.typeToString(returnType),
+                    resultType: returnType && tc.typeToString(returnType) || 'Unknown',//todo make normal type
                     doc: signature ? signature.getDocumentationComment(tc).map(({text}) => text).join('\n') : ''
                 });
             } else {
@@ -72,34 +61,44 @@ const buildSchemas = () => {
     return out;
 };
 
-const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker) => {
+const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker): TType => {
     if (!p.type) return 'Unknown';
-    try {
-        if (ts.isTypeReferenceNode(p.type)) {
-            const out = p.type.getText();
-            const symbol = tc.getTypeFromTypeNode(p.type).symbol;
-            if (symbol && symbol.members) {
-                console.log(symbol.getName());
-                console.log((symbol.getJsDocTags()));
-                console.log(symbol.members.forEach(val => console.log(val.getName(), tc.typeToString(tc.getDeclaredTypeOfSymbol(symbol)))));
-                console.log('===============================================================');
-                // console.log(tc.getDeclaredTypeOfSymbol(symbol));
-                // console.log(tc.getTypeOfSymbolAtLocation(symbol, p.type));
-                /*todo parse interfaces from /waves-transactions/src/transactions.ts
-                  todo and parse functions
-                */
-            }
-            return out;
-        } else {
-            return tc.typeToString(tc.getTypeFromTypeNode(p.type));
-        }
-    } catch (e) {
-        console.log(e.toString());
-        return e.toString();
+    const split = p.type.getText().split('|');
+    if (split.length === 1) {
+        return defineType(split[0].replace(' ', ''));
+    } else {
+        return (split.map((item): TType => defineType(item.replace(' ', ''))) as TUnion);
     }
-
 
 };
 
-// buildSchemas();
-// console.log(JSON.stringify(buildSchemas(), null, 4));
+const defineType = (name: string): TType => {
+    const schema = (schemas as any)[name];
+    if (schema) {
+        return {
+            typeName: schema.type,
+            fields: schema.properties && Object.keys(schema.properties).map((prop) => ({
+                    name: prop,
+                    type: schema.properties[prop].type
+                        || schema.definitions[schema.properties[prop].$ref.split('/').pop()].type,
+                    doc: schema.properties[prop].description,
+                    optional: !schema.required.includes(prop),
+                })
+            )
+        };
+    } else {
+        return name;
+    }
+
+};
+
+const filePath = './src/schemas/envFunctions.json';
+const out = JSON.stringify(buildSchemas(), null, 4);
+try {
+    fs.unlinkSync(filePath);
+} catch (e) {
+}
+fs.appendFile(filePath, (out), function (err) {
+    if (err) throw err;
+    console.log('✅ -> Schemas were saved to ' + filePath);
+});
