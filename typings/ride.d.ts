@@ -1,1 +1,0 @@
-declare module '@waves/ride-js'
