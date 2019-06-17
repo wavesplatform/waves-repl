@@ -2,6 +2,7 @@
   "compilerOptions": {
     "strict": true,
     "target": "es6",
+    "skipLibCheck": true,
     "jsx": "react",
     "module": "commonjs",
     "lib": [

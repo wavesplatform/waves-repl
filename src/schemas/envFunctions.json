@@ -112,7 +112,7 @@
             }
         ],
         "resultType": "IAliasTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates alias transaction or signs already formed one. Creates alias for address.\nAlias could be used in place of address later"
     },
     {
         "name": "burn",
@@ -241,7 +241,7 @@
             }
         ],
         "resultType": "IBurnTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates burn transaction or signs already formed one. Burn transaction destroys tokens. You cannot burn WAVES"
     },
     {
         "name": "cancelLease",
@@ -356,7 +356,7 @@
             }
         ],
         "resultType": "ICancelLeaseTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates cancel-lease transaction or signs already formed one"
     },
     {
         "name": "cancelOrder",
@@ -375,7 +375,7 @@
             }
         ],
         "resultType": "ICancelOrder",
-        "doc": ""
+        "doc": "Creates cancel-order request or signs already formed one"
     },
     {
         "name": "data",
@@ -475,7 +475,7 @@
             }
         ],
         "resultType": "IDataTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates data transaction or signs already formed one"
     },
     {
         "name": "issue",
@@ -644,7 +644,7 @@
             }
         ],
         "resultType": "IIssueTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates issue transaction or signs already formed one"
     },
     {
         "name": "reissue",
@@ -783,7 +783,7 @@
             }
         ],
         "resultType": "IReissueTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates reissue transaction or signs already formed one"
     },
     {
         "name": "lease",
@@ -896,7 +896,7 @@
             }
         ],
         "resultType": "ILeaseTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates lease transaction or signs already formed one"
     },
     {
         "name": "massTransfer",
@@ -1023,7 +1023,7 @@
             }
         ],
         "resultType": "IMassTransferTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates mass-transfer transaction or signs already formed one"
     },
     {
         "name": "order",
@@ -1045,7 +1045,7 @@
             }
         ],
         "resultType": "(IOrderV1<string | number> & WithId) | (IOrderV2<string | number> & WithId) | (IOrderV3<string | number> & WithId)",
-        "doc": ""
+        "doc": "Creates order or signs already formed one"
     },
     {
         "name": "transfer",
@@ -1204,7 +1204,7 @@
             }
         ],
         "resultType": "ITransferTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates transfer transaction or signs already formed one"
     },
     {
         "name": "setScript",
@@ -1327,7 +1327,7 @@
             }
         ],
         "resultType": "ISetScriptTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates set-script transaction or signs already formed one"
     },
     {
         "name": "setAssetScript",
@@ -1457,7 +1457,7 @@
             }
         ],
         "resultType": "ISetAssetScriptTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates set-asset-script transaction or signs already formed one"
     },
     {
         "name": "invokeScript",
@@ -1608,7 +1608,7 @@
             }
         ],
         "resultType": "IInvokeScriptTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates invoke-script transaction or signs already formed one"
     },
     {
         "name": "sponsorship",
@@ -1726,7 +1726,7 @@
             }
         ],
         "resultType": "ISponsorshipTransaction<string | number> & WithId",
-        "doc": ""
+        "doc": "Creates sponsorship transaction or signs already formed one"
     },
     {
         "name": "signTx",
@@ -1748,7 +1748,7 @@
             }
         ],
         "resultType": "TTx<string | number>",
-        "doc": ""
+        "doc": "Signs arbitrary transaction"
     },
     {
         "name": "waitForTx",
@@ -1767,7 +1767,7 @@
             }
         ],
         "resultType": "Promise<TTx<string | number>>",
-        "doc": ""
+        "doc": "Resolves when specified txId is mined into the block\nBy default has 20s timeout and uses current environment node"
     },
     {
         "name": "waitForTxWithNConfirmations",
@@ -1792,7 +1792,7 @@
             }
         ],
         "resultType": "Promise<TTx<string | number>>",
-        "doc": ""
+        "doc": "Resolves N blocks after specified txId is mined into the block\nBy default has 20s timeout and uses current environment node"
     },
     {
         "name": "waitNBlocks",
@@ -1811,7 +1811,7 @@
             }
         ],
         "resultType": "Promise<number>",
-        "doc": ""
+        "doc": "Resolves N blocks after current blockchain height\nBy default has 20s timeout and uses current environment node"
     },
     {
         "name": "currentHeight",
@@ -1824,7 +1824,7 @@
             }
         ],
         "resultType": "Promise<number>",
-        "doc": ""
+        "doc": "Current blockchain height\nBy default has 20s timeout and uses current environment node"
     },
     {
         "name": "waitForHeight",
@@ -1843,7 +1843,7 @@
             }
         ],
         "resultType": "Promise<number>",
-        "doc": ""
+        "doc": "Resolves after target height has been reached\nBy default has 20s timeout and uses current environment node"
     },
     {
         "name": "balance",
@@ -1862,7 +1862,7 @@
             }
         ],
         "resultType": "Promise<number>",
-        "doc": ""
+        "doc": "Get account effective balance\nBy default uses current environment address and node"
     },
     {
         "name": "assetBalance",
@@ -1887,7 +1887,7 @@
             }
         ],
         "resultType": "Promise<any>",
-        "doc": ""
+        "doc": "Retrieve information about specific asset account balance\nBy default uses current environment address and node"
     },
     {
         "name": "balanceDetails",
@@ -1906,7 +1906,7 @@
             }
         ],
         "resultType": "Promise<any>",
-        "doc": ""
+        "doc": "Retrieve full information about waves account balance. Effective, generating etc\nBy default uses current environment address and node"
     },
     {
         "name": "accountData",
@@ -1925,7 +1925,7 @@
             }
         ],
         "resultType": "Promise<Record<string, IDataEntry>>",
-        "doc": ""
+        "doc": "Get full account dictionary\nBy default uses current environment address and node"
     },
     {
         "name": "accountDataByKey",
@@ -1950,13 +1950,13 @@
             }
         ],
         "resultType": "Promise<IDataEntry>",
-        "doc": ""
+        "doc": "Get data from account dictionary by key\nBy default uses current environment address and node"
     },
     {
         "name": "stateChanges",
         "args": [
             {
-                "name": "txId",
+                "name": "invokeScriptTxId",
                 "type": "string",
                 "optional": false,
                 "doc": ""
@@ -1969,7 +1969,7 @@
             }
         ],
         "resultType": "Promise<IStateChangeResponse>",
-        "doc": ""
+        "doc": "Get invokeScript tx state changes\nBy default uses current environment address and node"
     },
     {
         "name": "broadcast",
@@ -1988,7 +1988,7 @@
             }
         ],
         "resultType": "Promise<any>",
-        "doc": ""
+        "doc": "Sends transaction to waves node\nBy default uses current environment address and node"
     },
     {
         "name": "file",
@@ -2001,13 +2001,13 @@
             }
         ],
         "resultType": "Promise<string>",
-        "doc": ""
+        "doc": "Returns file content as string. Either from 'ride' folder or WEB IDE storage"
     },
     {
         "name": "contract",
         "args": [],
         "resultType": "Promise<string>",
-        "doc": ""
+        "doc": "Shorthand for file()"
     },
     {
         "name": "keyPair",
@@ -2020,7 +2020,7 @@
             }
         ],
         "resultType": "KeyPair",
-        "doc": ""
+        "doc": "Generates key pair from seed\nBy default uses current environment seed"
     },
     {
         "name": "publicKey",
@@ -2033,7 +2033,7 @@
             }
         ],
         "resultType": "string",
-        "doc": ""
+        "doc": "Generates public key from seed\nBy default uses current environment seed"
     },
     {
         "name": "privateKey",
@@ -2046,7 +2046,7 @@
             }
         ],
         "resultType": "string",
-        "doc": ""
+        "doc": "Generates private key from seed\nBy default uses current environment seed"
     },
     {
         "name": "address",
@@ -2065,7 +2065,7 @@
             }
         ],
         "resultType": "string",
-        "doc": ""
+        "doc": "Generates address\nBy default uses current environment seed and chainId"
     },
     {
         "name": "compile",
@@ -2078,7 +2078,7 @@
             }
         ],
         "resultType": "string",
-        "doc": ""
+        "doc": "Returns base64 representations of compiled ride file"
     },
     {
         "name": "signBytes",
@@ -2097,7 +2097,7 @@
             }
         ],
         "resultType": "string",
-        "doc": ""
+        "doc": "Signs arbitrary bytes\nBy default uses current environment seed and chainId"
     },
     {
         "name": "setupAccounts",
@@ -2110,12 +2110,12 @@
             },
             {
                 "name": "options",
-                "type": "ISetupAccsOpts",
+                "type": "ISetupAccountsOptions",
                 "optional": true,
                 "doc": ""
             }
         ],
-        "resultType": "Promise<void>",
-        "doc": ""
+        "resultType": "Promise<Record<string, string>>",
+        "doc": "Generates test accounts with balances. Sends waves to generated accounts from master seed. Saves account seeds to global.env.accounts\nE.g.: setupAccounts({foo:1000}). Now global.env.accounts['foo'] contains seed phrase for account and this account has\n1000 wavelets\nBy default uses current environment node and seed as masterSeed"
     }
 ]

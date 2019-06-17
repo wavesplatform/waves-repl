@@ -27,7 +27,7 @@ const buildSchemas = () => {
 
     const out: TFunction[] = [];
 
-    const path = 'scripts/testFunc.ts';
+    const path = 'node_modules/@waves/js-test-env/index.d.ts';
     const program = getProgramFromFiles([resolve(path)]);
     const tc = program.getTypeChecker();
     program.getSourceFiles().forEach((sourceFile) => {
@@ -38,18 +38,19 @@ const buildSchemas = () => {
             if (ts.isFunctionDeclaration(node)) {
                 const signature = tc.getSignatureFromDeclaration(node);
                 const returnType = signature && tc.getReturnTypeOfSignature(signature);
+
                 out.push({
                     name: node.name ? node.name.escapedText.toString() : 'Unknown',
                     args: node.parameters.map((p: ts.ParameterDeclaration) => (
                         {
                             name: ts.isIdentifier(p.name) ? p.name.escapedText.toString() : 'Unknown',
-                            type: getArgumentType(p, tc),
+                            type: getArgumentType(p),
                             optional: tc.isOptionalParameter(p),
-                            doc: '' //todo get a doc
+                            doc: ts.getJSDocType(p) !== undefined ? ts.getJSDocType(p)!.toString() : ''
                         }
                     )),
-                    resultType: returnType && tc.typeToString(returnType) || 'Unknown',//todo make normal type
-                    doc: signature ? signature.getDocumentationComment(tc).map(({text}) => text).join('\n') : ''
+                    resultType: returnType && tc.typeToString(returnType) || 'Unknown', //todo make normal type
+                    doc: ''//todo fix doc
                 });
             } else {
                 ts.forEachChild(node, n => inspect(n));
@@ -61,7 +62,7 @@ const buildSchemas = () => {
     return out;
 };
 
-const getArgumentType = (p: ts.ParameterDeclaration, tc: ts.TypeChecker): TType => {
+const getArgumentType = (p: ts.ParameterDeclaration): TType => {
     if (!p.type) return 'Unknown';
     const split = p.type.getText().split('|');
     if (split.length === 1) {
