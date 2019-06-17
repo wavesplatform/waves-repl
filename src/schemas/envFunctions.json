@@ -1,0 +1,3138 @@
+[
+    {
+        "name": "help",
+        "resultType": "",
+        "resultTypeTips": [],
+        "args": [
+            {
+                "name": "func",
+                "type": "string",
+                "doc": "You can use help(functionName) to get info for the specified function."
+            }
+        ],
+        "doc": "Help for the available API functions\n\nYou can use help() to get list of available functions or help(functionName) to get info for the specified function."
+    },
+    {
+        "name": "clear",
+        "resultType": "",
+        "resultTypeTips": [],
+        "args": [],
+        "doc": "clear console"
+    },
+    {
+        "name": "deploy",
+        "resultType": "",
+        "resultTypeTips": [],
+        "args": [
+            {
+                "name": "params",
+                "type": "{ fee?: number, senderPublicKey?: string, script?: string }",
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "doc": ""
+            }
+        ],
+        "doc": "Compile currently selected contract and deploy it to default account"
+    },
+    {
+        "name": "alias",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "alias",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "alias",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IAliasTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 16
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "alias",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates alias transaction or signs already formed one. Creates alias for address.\nAlias could be used in place of address later"
+    },
+    {
+        "name": "burn",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "quantity",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "quantity",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IBurnTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 15
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "assetId",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "quantity",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates burn transaction or signs already formed one. Burn transaction destroys tokens. You cannot burn WAVES"
+    },
+    {
+        "name": "cancelLease",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "leaseId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "leaseId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ICancelLeaseTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 22
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "leaseId",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates cancel-lease transaction or signs already formed one"
+    },
+    {
+        "name": "cancelOrder",
+        "args": [
+            {
+                "name": "params",
+                "type": "ICancelOrderParams",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ICancelOrder",
+        "resultTypeTips": [],
+        "doc": "Creates cancel-order request or signs already formed one"
+    },
+    {
+        "name": "data",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "data",
+                                "type": "array",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "data",
+                                "type": "array",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IDataTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 15
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "data",
+                            "type": "array",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates data transaction or signs already formed one"
+    },
+    {
+        "name": "issue",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "name",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "description",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "quantity",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "decimals",
+                                "type": "number",
+                                "optional": true
+                            },
+                            {
+                                "name": "reissuable",
+                                "type": "boolean",
+                                "optional": true
+                            },
+                            {
+                                "name": "script",
+                                "type": "string",
+                                "optional": true
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "name",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "description",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "decimals",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "quantity",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "reissuable",
+                                "type": "boolean",
+                                "optional": false
+                            },
+                            {
+                                "name": "script",
+                                "type": "string",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IIssueTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 16
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "name",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "description",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "decimals",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "quantity",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "reissuable",
+                            "type": "boolean",
+                            "optional": false
+                        },
+                        {
+                            "name": "script",
+                            "type": "string",
+                            "optional": true
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates issue transaction or signs already formed one"
+    },
+    {
+        "name": "reissue",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "quantity",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "reissuable",
+                                "type": "boolean",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "quantity",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "reissuable",
+                                "type": "boolean",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IReissueTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 18
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "assetId",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "quantity",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "reissuable",
+                            "type": "boolean",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates reissue transaction or signs already formed one"
+    },
+    {
+        "name": "lease",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "recipient",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "amount",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "leaseId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ILeaseTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 16
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "amount",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "recipient",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates lease transaction or signs already formed one"
+    },
+    {
+        "name": "massTransfer",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "transfers",
+                                "type": "array",
+                                "optional": false
+                            },
+                            {
+                                "name": "attachment",
+                                "type": "string",
+                                "doc": "Bytearray encoded as base string",
+                                "optional": true
+                            },
+                            {
+                                "name": "assetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "transfers",
+                                "type": "array",
+                                "optional": false
+                            },
+                            {
+                                "name": "attachment",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IMassTransferTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 23
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "transfers",
+                            "type": "array",
+                            "optional": false
+                        },
+                        {
+                            "name": "attachment",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "assetId",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "optional": true
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates mass-transfer transaction or signs already formed one"
+    },
+    {
+        "name": "order",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    "IOrderParams",
+                    "TOrder"
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "(IOrderV1<string | number> & WithId) | (IOrderV2<string | number> & WithId) | (IOrderV3<string | number> & WithId)",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 1,
+                    "end": 6
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": true
+                        },
+                        {
+                            "name": "orderType",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "assetPair",
+                            "type": "object",
+                            "optional": false
+                        },
+                        {
+                            "name": "price",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "amount",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "expiration",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "matcherFee",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "matcherPublicKey",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates order or signs already formed one"
+    },
+    {
+        "name": "transfer",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "recipient",
+                                "type": "string",
+                                "doc": "Can be either address(base58 encoded 24 byte address) or alias.\nAlias should be used like 'alias:{chainId}:{alias}>'. E.g.:\nIf we have alias 'foo', and we want TESTNET transaction, recipient should be 'alias:T:foo'",
+                                "optional": false
+                            },
+                            {
+                                "name": "amount",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "feeAssetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "doc": "Fee can be paid in custom token if sponsorship has been set for this token",
+                                "optional": true
+                            },
+                            {
+                                "name": "attachment",
+                                "type": "string",
+                                "doc": "Bytearray encoded as base58 string",
+                                "optional": true
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "recipient",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "amount",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "attachment",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "feeAssetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "assetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ITransferTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 19
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "recipient",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "amount",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "attachment",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "feeAssetId",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "optional": true
+                        },
+                        {
+                            "name": "assetId",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "optional": true
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates transfer transaction or signs already formed one"
+    },
+    {
+        "name": "setScript",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "script",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "doc": "Compiled script encoded as base64 string",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "script",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "doc": "Compiled script encoded as base64 string",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ISetScriptTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 20
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "script",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "doc": "Compiled script encoded as base64 string",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates set-script transaction or signs already formed one"
+    },
+    {
+        "name": "setAssetScript",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "script",
+                                "type": "string",
+                                "doc": "Compiled script encoded as base64 string",
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "script",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "doc": "Compiled script encoded as base64 string",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ISetAssetScriptTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 25
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "assetId",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "script",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "doc": "Compiled script encoded as base64 string",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates set-asset-script transaction or signs already formed one"
+    },
+    {
+        "name": "invokeScript",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "dApp",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "feeAssetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "call",
+                                "type": "object",
+                                "optional": true
+                            },
+                            {
+                                "name": "payment",
+                                "type": "array",
+                                "optional": true
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            },
+                            {
+                                "name": "chainId",
+                                "type": [
+                                    "string",
+                                    "number"
+                                ],
+                                "doc": "Network byte. Could be set as number or as char.\nIf set as char(string), charCodeAt(0) will be used. E.g.,\n'W' will be converted to '87'\nIf not set, 87 will be used as default",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "dApp",
+                                "type": "string",
+                                "optional": false
+                            },
+                            {
+                                "name": "feeAssetId",
+                                "type": [
+                                    "null",
+                                    "string"
+                                ],
+                                "optional": true
+                            },
+                            {
+                                "name": "call",
+                                "type": "object",
+                                "optional": true
+                            },
+                            {
+                                "name": "payment",
+                                "type": "array",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            },
+                            {
+                                "name": "chainId",
+                                "type": "number",
+                                "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "IInvokeScriptTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 23
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "dApp",
+                            "type": "string",
+                            "optional": false
+                        },
+                        {
+                            "name": "feeAssetId",
+                            "type": [
+                                "null",
+                                "string"
+                            ],
+                            "optional": true
+                        },
+                        {
+                            "name": "call",
+                            "type": "object",
+                            "optional": true
+                        },
+                        {
+                            "name": "payment",
+                            "type": "array",
+                            "optional": true
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        },
+                        {
+                            "name": "chainId",
+                            "type": "number",
+                            "doc": "Network byte.\nE.g.,\n87 is used for Waves mainnet, 84 for Waves testnet",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates invoke-script transaction or signs already formed one"
+    },
+    {
+        "name": "sponsorship",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "doc": "AssetID of sponsored token",
+                                "optional": false
+                            },
+                            {
+                                "name": "minSponsoredAssetFee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Minimal fee amount in sponsored asset. To disable sponsorship set it to 0",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Transaction fee. If not set, fee will be calculated automatically",
+                                "optional": true
+                            },
+                            {
+                                "name": "additionalFee",
+                                "type": "number",
+                                "doc": "If fee is not set, this value will be added to automatically calculated fee. E.x.:\nAccount is scripted and 400000 fee more is required.",
+                                "optional": true
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "If not set, public key will be derived from seed phrase. You should provide senderPublicKey in two cases:\n1. Account, from which this tx should be sent, differs from tx signer. E.g., we have smart account that requires 2 signatures.\n2. You to create tx without proof. Therefore no seed is provided.",
+                                "optional": true
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "doc": "Transaction timestamp. If not set current timestamp will be used. Date.now()",
+                                "optional": true
+                            }
+                        ]
+                    },
+                    {
+                        "typeName": "object",
+                        "fields": [
+                            {
+                                "name": "type",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "minSponsoredAssetFee",
+                                "type": [
+                                    "number"
+                                ],
+                                "doc": "Minimal fee amount in sponsored asset. To disable sponsorship set it to 0",
+                                "optional": false
+                            },
+                            {
+                                "name": "assetId",
+                                "type": "string",
+                                "doc": "AssetID of sponsored token",
+                                "optional": false
+                            },
+                            {
+                                "name": "timestamp",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "fee",
+                                "type": [
+                                    "number"
+                                ],
+                                "optional": false
+                            },
+                            {
+                                "name": "version",
+                                "type": "number",
+                                "optional": false
+                            },
+                            {
+                                "name": "proofs",
+                                "type": "array",
+                                "doc": "ITransaction signatures",
+                                "optional": false
+                            },
+                            {
+                                "name": "senderPublicKey",
+                                "type": "string",
+                                "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                                "optional": false
+                            }
+                        ]
+                    }
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "ISponsorshipTransaction<string | number> & WithId",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 22
+                },
+                "type": {
+                    "typeName": "object",
+                    "fields": [
+                        {
+                            "name": "type",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "minSponsoredAssetFee",
+                            "type": [
+                                "number"
+                            ],
+                            "doc": "Minimal fee amount in sponsored asset. To disable sponsorship set it to 0",
+                            "optional": false
+                        },
+                        {
+                            "name": "assetId",
+                            "type": "string",
+                            "doc": "AssetID of sponsored token",
+                            "optional": false
+                        },
+                        {
+                            "name": "timestamp",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "fee",
+                            "type": [
+                                "number"
+                            ],
+                            "optional": false
+                        },
+                        {
+                            "name": "version",
+                            "type": "number",
+                            "optional": false
+                        },
+                        {
+                            "name": "proofs",
+                            "type": "array",
+                            "doc": "ITransaction signatures",
+                            "optional": false
+                        },
+                        {
+                            "name": "senderPublicKey",
+                            "type": "string",
+                            "doc": "Account public key. This account will pay fee and this account's script will be executed if exists",
+                            "optional": false
+                        }
+                    ]
+                }
+            }
+        ],
+        "doc": "Creates sponsorship transaction or signs already formed one"
+    },
+    {
+        "name": "signTx",
+        "args": [
+            {
+                "name": "params",
+                "type": [
+                    {},
+                    "TTxParams & WithTxType"
+                ],
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "TSeedTypes",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "TTx<string | number>",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 0,
+                    "end": 2
+                },
+                "type": {}
+            }
+        ],
+        "doc": "Signs arbitrary transaction"
+    },
+    {
+        "name": "waitForTx",
+        "args": [
+            {
+                "name": "txId",
+                "type": "string",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "options",
+                "type": "wt.nodeInteraction.INodeRequestOptions",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<TTx<string | number>>",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 8,
+                    "end": 10
+                },
+                "type": {}
+            }
+        ],
+        "doc": "Resolves when specified txId is mined into the block\nBy default has 20s timeout and uses current environment node"
+    },
+    {
+        "name": "waitForTxWithNConfirmations",
+        "args": [
+            {
+                "name": "txId",
+                "type": "string",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "confirmations",
+                "type": "number",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "options",
+                "type": "wt.nodeInteraction.INodeRequestOptions",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<TTx<string | number>>",
+        "resultTypeTips": [
+            {
+                "range": {
+                    "start": 8,
+                    "end": 10
+                },
+                "type": {}
+            }
+        ],
+        "doc": "Resolves N blocks after specified txId is mined into the block\nBy default has 20s timeout and uses current environment node"
+    },
+    {
+        "name": "waitNBlocks",
+        "args": [
+            {
+                "name": "blocksCount",
+                "type": "number",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "options",
+                "type": "wt.nodeInteraction.INodeRequestOptions",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<number>",
+        "resultTypeTips": [],
+        "doc": "Resolves N blocks after current blockchain height\nBy default has 20s timeout and uses current environment node"
+    },
+    {
+        "name": "currentHeight",
+        "args": [
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<number>",
+        "resultTypeTips": [],
+        "doc": "Current blockchain height\nBy default has 20s timeout and uses current environment node"
+    },
+    {
+        "name": "waitForHeight",
+        "args": [
+            {
+                "name": "target",
+                "type": "number",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "options",
+                "type": "wt.nodeInteraction.INodeRequestOptions",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<number>",
+        "resultTypeTips": [],
+        "doc": "Resolves after target height has been reached\nBy default has 20s timeout and uses current environment node"
+    },
+    {
+        "name": "balance",
+        "args": [
+            {
+                "name": "address",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<number>",
+        "resultTypeTips": [],
+        "doc": "Get account effective balance\nBy default uses current environment address and node"
+    },
+    {
+        "name": "assetBalance",
+        "args": [
+            {
+                "name": "assetId",
+                "type": "string",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "address",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<any>",
+        "resultTypeTips": [],
+        "doc": "Retrieve information about specific asset account balance\nBy default uses current environment address and node"
+    },
+    {
+        "name": "balanceDetails",
+        "args": [
+            {
+                "name": "address",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<any>",
+        "resultTypeTips": [],
+        "doc": "Retrieve full information about waves account balance. Effective, generating etc\nBy default uses current environment address and node"
+    },
+    {
+        "name": "accountData",
+        "args": [
+            {
+                "name": "address",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<Record<string, IDataEntry>>",
+        "resultTypeTips": [],
+        "doc": "Get full account dictionary\nBy default uses current environment address and node"
+    },
+    {
+        "name": "accountDataByKey",
+        "args": [
+            {
+                "name": "key",
+                "type": "string",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "address",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<IDataEntry>",
+        "resultTypeTips": [],
+        "doc": "Get data from account dictionary by key\nBy default uses current environment address and node"
+    },
+    {
+        "name": "stateChanges",
+        "args": [
+            {
+                "name": "invokeScriptTxId",
+                "type": "string",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<IStateChangeResponse>",
+        "resultTypeTips": [],
+        "doc": "Get invokeScript tx state changes\nBy default uses current environment address and node"
+    },
+    {
+        "name": "broadcast",
+        "args": [
+            {
+                "name": "tx",
+                "type": "wt.TTx",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "apiBase",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<any>",
+        "resultTypeTips": [],
+        "doc": "Sends transaction to waves node\nBy default uses current environment address and node"
+    },
+    {
+        "name": "file",
+        "args": [
+            {
+                "name": "name",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<string>",
+        "resultTypeTips": [],
+        "doc": "Returns file content as string. Either from 'ride' folder or WEB IDE storage"
+    },
+    {
+        "name": "contract",
+        "args": [],
+        "resultType": "Promise<string>",
+        "resultTypeTips": [],
+        "doc": "Shorthand for file()"
+    },
+    {
+        "name": "keyPair",
+        "args": [
+            {
+                "name": "seed",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "KeyPair",
+        "resultTypeTips": [],
+        "doc": "Generates key pair from seed\nBy default uses current environment seed"
+    },
+    {
+        "name": "publicKey",
+        "args": [
+            {
+                "name": "seed",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "string",
+        "resultTypeTips": [],
+        "doc": "Generates public key from seed\nBy default uses current environment seed"
+    },
+    {
+        "name": "privateKey",
+        "args": [
+            {
+                "name": "seed",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "string",
+        "resultTypeTips": [],
+        "doc": "Generates private key from seed\nBy default uses current environment seed"
+    },
+    {
+        "name": "address",
+        "args": [
+            {
+                "name": "seed",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            },
+            {
+                "name": "chainId",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "string",
+        "resultTypeTips": [],
+        "doc": "Generates address\nBy default uses current environment seed and chainId"
+    },
+    {
+        "name": "compile",
+        "args": [
+            {
+                "name": "code",
+                "type": "string",
+                "optional": false,
+                "doc": ""
+            }
+        ],
+        "resultType": "string",
+        "resultTypeTips": [],
+        "doc": "Returns base64 representations of compiled ride file"
+    },
+    {
+        "name": "signBytes",
+        "args": [
+            {
+                "name": "bytes",
+                "type": "Uint8Array",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "seed",
+                "type": "string",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "string",
+        "resultTypeTips": [],
+        "doc": "Signs arbitrary bytes\nBy default uses current environment seed and chainId"
+    },
+    {
+        "name": "setupAccounts",
+        "args": [
+            {
+                "name": "balances",
+                "type": "Record<string,number>",
+                "optional": false,
+                "doc": ""
+            },
+            {
+                "name": "options",
+                "type": "ISetupAccountsOptions",
+                "optional": true,
+                "doc": ""
+            }
+        ],
+        "resultType": "Promise<Record<string, string>>",
+        "resultTypeTips": [],
+        "doc": "Generates test accounts with balances. Sends waves to generated accounts from master seed. Saves account seeds to global.env.accounts\nE.g.: setupAccounts({foo:1000}). Now global.env.accounts['foo'] contains seed phrase for account and this account has\n1000 wavelets\nBy default uses current environment node and seed as masterSeed"
+    }
+]

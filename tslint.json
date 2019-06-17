@@ -4,7 +4,7 @@
   "jsRules": {},
   "rules": {
     "no-reference": true,
-    "no-var-requires": true,
+//    "no-var-requires": true,
     "prefer-for-of": true,
     "ban-comma-operator": true,
     "curly": [

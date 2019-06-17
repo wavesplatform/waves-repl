@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {LineNav} from './LineNav';
+import { LineNav } from './LineNav';
 import which from '../lib/which-type';
+import Help from './Help';
 
 export class Line extends React.Component<any, any> {
     constructor(props: any) {
@@ -39,17 +40,21 @@ export class Line extends React.Component<any, any> {
             );
         }
 
+        if (this.props.type === 'help') return <Help signatures={value}/>;
+
+
         if (type === 'log' || type === 'response') {
             if (type === 'log' && Array.isArray(value) && value.length === 0) {
                 return null;
             }
+
 
             // for LineNav I do a bit of a giggle so if it's a log, we copy the single
             // value, which is nicer for the user
             line = (
                 <div className={`prompt output ${type} ${error ? 'error' : ''}`}>
                     <LineNav
-                        onFilter={(filter:any) => {
+                        onFilter={(filter: any) => {
                             this.setState({filter});
                         }}
                         value={
