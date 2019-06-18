@@ -19,7 +19,6 @@ export const getTypeDoc = (item: TStructField, isRec?: Boolean): string => {
                         .map((v) => `${v.name}: ${getTypeDoc(v, true)}`).join(', ') + '}';
                 break;
             case isUnion(type):
-                console.log(type);
                 typeDoc = isRec
                     ? (type as TUnion).map(field => isStruct(field) ? field.typeName : field).join('|')
                     : (type as TUnion).map(field => isStruct(field) ? getTypeDoc({

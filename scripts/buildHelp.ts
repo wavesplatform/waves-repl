@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { resolve } from 'path';
 import * as fs from 'fs';
-import {  TList, TPrimitive, TStruct, TStructField, TType, TUnion } from '@waves/ride-js';
+import {  TType, TUnion } from '@waves/ride-js';
 import { schemas } from '@waves/tx-json-schemas';
 import { TSeedTypes } from '@waves/waves-transactions';
 
@@ -41,7 +41,7 @@ export type TArgument = {
 
 export type TSchemaType = {
     name: string
-    resultType: TType
+    resultType: string
     resultTypeTips: TResultTypeTip[]
     args: TArgument[]
     doc?: string

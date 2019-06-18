@@ -33,9 +33,17 @@ const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
                 <Argument a={a} key={i} isLast={sig.args.length - 1 === i}/>)
             }
             <div>)</div>
-            <Tooltip placement="top" trigger={['hover']} overlay={<span>{sig.resultType}</span>} destroyTooltipOnHide>
-                <div className="hov">{sig.resultType === '' ? '' : ': ' + sig.resultType}</div>
-            </Tooltip>
+            {sig.resultType === ''
+                ? ''
+                : <>
+                    <div>:&nbsp;</div>
+                    {sig.resultTypeTips.length > 0
+                        ? <div className="flex">
+                            <ResultType sig={sig}/>
+                        </div>
+                        : <div>{sig.resultType}</div>
+                    }
+                </>}
         </div>
         {doc}
     </>;
@@ -49,3 +57,28 @@ const Argument = ({a, isLast}: { a: TArgument, isLast: boolean }) =>
             :&nbsp;{tc.getTypeDoc(a, true)}{!isLast && <>,&nbsp;</>}
         </div>
     </Tooltip>;
+
+const ResultType = ({sig}: { sig: TSchemaType }) => {
+    const type = sig.resultType;
+    const typeOut: string[] = [];
+    const sortedTips = sig.resultTypeTips.sort((a, b) => (a.range.start > b.range.start) ? 1 : -1);
+    //todo check sort func
+    sortedTips.forEach((tip, i) => {
+        if (tip.range.start !== 0 && i === 0) {
+            typeOut.push(type.slice(0, tip.range.start));
+        } else {
+            typeOut.push(type.slice(tip.range.start, tip.range.end + 1));
+            if (i === sortedTips.length - 1) {
+                if (tip.range.end < type.length - 1) {
+                    typeOut.push(type.slice(tip.range.end + 1, type.length));
+                }
+            } else {
+                typeOut.push(type.slice(tip.range.end, sortedTips[i + 1].range.start));
+            }
+        }
+    });
+    console.log(typeOut);
+    return <Tooltip placement="top" trigger={['hover']} overlay={<span>{sig.resultType}</span>} destroyTooltipOnHide>
+        <div>{sig.resultType}</div>
+    </Tooltip>;
+};

@@ -696,7 +696,7 @@
             }
         ],
         "resultType": "IDataTransaction<string | number> & WithId",
-        "resultTypeTips": [
+            "resultTypeTips": [
             {
                 "range": {
                     "start": 0,

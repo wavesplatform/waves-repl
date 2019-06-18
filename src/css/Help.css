@@ -4,6 +4,10 @@
     color: #4CAF50
 }
 
+.flex {
+    display: flex;
+}
+
 .docStyle {
     display: flex;
     padding: 0.3rem 0.3rem 0.3rem 1.4rem;
@@ -11,5 +15,5 @@
 }
 
 .hov:hover {
-border-bottom: 1px solid #4CAF50;
+    border-bottom: 1px solid #4CAF50;
 }
