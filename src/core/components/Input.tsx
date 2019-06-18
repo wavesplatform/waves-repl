@@ -69,7 +69,6 @@ export class Input extends React.Component<IInputProps, IInputState> {
         // Bind some methods to instance
         this.onChange = this.onChange.bind(this);
         this.onKeyPress = this.onKeyPress.bind(this);
-        console.log(Input.commandsVocabulary, Input.commandsList)
     }
 
     onChange() {

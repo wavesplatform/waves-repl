@@ -2,16 +2,13 @@ import { getContainer } from './run';
 import { WavesConsoleAPI } from '../../WavesConsoleAPI';
 import { libs, TTx } from '@waves/waves-transactions/';
 import axios from 'axios';
-import * as envFuncs from '@waves/js-test-env';
 
 import { Console } from '..';
 
 export const updateIFrameEnv = (env: any) => {
     try {
-       Object.keys(envFuncs).forEach(name => env[name] = (envFuncs as any)[name]);
         WavesConsoleAPI.setEnv(env);
         const iframeWindow = getContainer().contentWindow;
-        console.log(env)
         iframeWindow['env'] = env;
     } catch (e) {
         console.error(e);

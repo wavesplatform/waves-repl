@@ -1,0 +1,15 @@
+.lineStyle {
+    display: flex;
+    padding: 0.3rem 0.3rem 0.3rem 1.4rem;
+    color: #4CAF50
+}
+
+.docStyle {
+    display: flex;
+    padding: 0.3rem 0.3rem 0.3rem 1.4rem;
+    color: #4CAF50
+}
+
+.hov:hover {
+border-bottom: 1px solid #4CAF50;
+}

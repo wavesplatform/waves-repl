@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { resolve } from 'path';
 import * as fs from 'fs';
-import { TFunctionArgument, TType, TUnion } from '@waves/ride-js';
+import {  TList, TPrimitive, TStruct, TStructField, TType, TUnion } from '@waves/ride-js';
 import { schemas } from '@waves/tx-json-schemas';
 import { TSeedTypes } from '@waves/waves-transactions';
 
@@ -32,14 +32,20 @@ type TResultTypeTip = {
     }
 };
 
+export type TArgument = {
+    name: string
+    type: TType
+    optional?: boolean
+    doc?: string
+};
+
 export type TSchemaType = {
     name: string
     resultType: TType
     resultTypeTips: TResultTypeTip[]
-    args: TFunctionArgument[]
+    args: TArgument[]
     doc?: string
 };
-
 
 const replFuncs: TSchemaType[] = [
     {
@@ -49,6 +55,7 @@ const replFuncs: TSchemaType[] = [
         args: [{
             name: 'func',
             type: 'string',
+            optional: true,
             doc: 'You can use help(functionName) to get info for the specified function.'
         }],
         doc: 'Help for the available API functions\n\nYou can use help() to get list of available functions ' +
@@ -68,13 +75,13 @@ const replFuncs: TSchemaType[] = [
         args: [
             {
                 name: 'params',
+                optional: true,
                 type: '{ fee?: number, senderPublicKey?: string, script?: string }',
-                doc: ''
             },
             {
                 name: 'seed',
+                optional: true,
                 type: 'TSeedTypes',
-                doc: ''
             },
         ],
         doc: 'Compile currently selected contract and deploy it to default account'
@@ -147,7 +154,7 @@ const defineType = (name: string): TType => {
     const schema = (schemas as any)[name];
     if (schema) {
         return {
-            typeName: schema.type,
+            typeName: name,
             fields: schema.properties && Object.keys(schema.properties).map((prop) => ({
                     name: prop,
                     type: schema.properties[prop].type
@@ -166,11 +173,6 @@ const defineType = (name: string): TType => {
 
 const filePath = './src/schemas/envFunctions.json';
 
-//     name: string
-//     resultType: TType
-//     resultTypeTips: TResultTypeTip[]
-//     args: TFunctionArgument[]
-//     doc?: string
 
 const out = JSON.stringify(buildSchemas(), null, 4);
 try {

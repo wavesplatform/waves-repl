@@ -1,9 +1,8 @@
-import * as wt from '@waves/waves-transactions';
-import {  TSeedTypes, TTx} from '@waves/waves-transactions/';
-import { compile as cmpl } from '@waves/ride-js';
+import {  TSeedTypes } from '@waves/waves-transactions/';
 import { TSchemaType } from '../scripts/buildHelp';
 
 const envFuncsSchema = require('./schemas/envFunctions.json');
+import * as envFuncs from '@waves/js-test-env';
 
 export class WavesConsoleAPI {
     static env: any;
@@ -14,24 +13,9 @@ export class WavesConsoleAPI {
         WavesConsoleAPI.env = env;
     }
 
-    public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
-
-    public file = (tabName?: string): string => {
-        if (typeof WavesConsoleAPI.env.file !== 'function') {
-            throw new Error('File content API is not available. Please provide it to the console');
-        }
-        return WavesConsoleAPI.env.file(tabName);
-    };
-
-    public contract = (): string => this.file();
-
-
-    public compile = (code: string): string => {
-        const resultOrError = cmpl(code);
-        if ('error' in resultOrError) throw new Error(resultOrError.error);
-
-        return resultOrError.result.base64;
-    };
+    constructor(){
+        Object.keys(envFuncs).forEach(name => this[name] = (envFuncs as any)[name]);
+    }
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: TSeedTypes) => {
         let txParams = {additionalFee: 400000, script: this.compile(this.contract()), ...params};

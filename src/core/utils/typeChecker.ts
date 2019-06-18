@@ -15,8 +15,8 @@ export const getTypeDoc = (item: TStructField, isRec?: Boolean): string => {
                 break;
             case isStruct(type):
                 typeDoc = isRec ? (type as TStruct).typeName :
-                    `${(type as TStruct).typeName}<\n- ` + (type as TStruct).fields
-                        .map((v) => `${v.name}: ${getTypeDoc(v, true)}`).join('\n- ') + '\n\n>';
+                    `${(type as TStruct).typeName}{` + (type as TStruct).fields
+                        .map((v) => `${v.name}: ${getTypeDoc(v, true)}`).join(', ') + '}';
                 break;
             case isUnion(type):
                 console.log(type);
@@ -25,7 +25,7 @@ export const getTypeDoc = (item: TStructField, isRec?: Boolean): string => {
                     : (type as TUnion).map(field => isStruct(field) ? getTypeDoc({
                         name: field.typeName,
                         type: field
-                    }) : field).join('|');
+                    }) : field).join(' | ');
 
                 break;
             case isList(type):

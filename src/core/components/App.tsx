@@ -53,7 +53,6 @@ export class App extends React.Component<IAppProps, any> {
                 command,
                 value: command,
             });
-
             const res = await run(command);
             console.push({
                 command,
@@ -107,7 +106,8 @@ export class App extends React.Component<IAppProps, any> {
         if (query) {
             this.onRun(query);
         } else if (!this.props.readOnly) {
-            this.onRun(':welcome');
+            // this.onRun(':welcome');
+            this.onRun('help()');
         }
 
         this.consoleRef.scrollToBottom();

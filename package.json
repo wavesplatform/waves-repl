@@ -30,6 +30,7 @@
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
     "mocha": "^6.1.4",
+    "rc-tooltip": "^3.7.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
