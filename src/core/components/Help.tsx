@@ -34,7 +34,7 @@ const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
             }
             <div>)</div>
             <Tooltip placement="top" trigger={['hover']} overlay={<span>{sig.resultType}</span>} destroyTooltipOnHide>
-                <div>{sig.resultType === '' ? '' : ': ' + sig.resultType}</div>
+                <div className="hov">{sig.resultType === '' ? '' : ': ' + sig.resultType}</div>
             </Tooltip>
         </div>
         {doc}
