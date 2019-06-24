@@ -1,12 +1,11 @@
-import { TList, TPrimitive, TStruct, TStructField, TType, TUnion } from '@waves/ride-js';
+import { TList, TPrimitive, TStruct, TType, TUnion } from '@waves/ride-js';
 
 export const isPrimitive = (item: TType): item is TPrimitive => typeof item === 'string';
 export const isStruct = (item: TType): item is TStruct => typeof item === 'object' && 'typeName' in item;
 export const isList = (item: TType): item is TList => typeof item === 'object' && 'listOf' in item;
 export const isUnion = (item: TType): item is TUnion => Array.isArray(item);
 
-export const getTypeDoc = (item: TStructField, isRec?: Boolean): string => {
-    const type = item.type;
+export const getTypeDoc = (name: string, type: TType, isRec?: Boolean): string => {
     let typeDoc = 'Unknown';
     try {
         switch (true) {
@@ -14,25 +13,23 @@ export const getTypeDoc = (item: TStructField, isRec?: Boolean): string => {
                 typeDoc = type as string;
                 break;
             case isStruct(type):
-                typeDoc = isRec ? (type as TStruct).typeName :
-                    `${(type as TStruct).typeName}{` + (type as TStruct).fields
-                        .map((v) => `${v.name}: ${getTypeDoc(v, true)}`).join(', ') + '}';
+                typeDoc = isRec ? name || 'object' :
+                    `${name}{` + (type as TStruct).fields
+                        .map((v) => `${v.name}: ${getTypeDoc(v.name, v.type, true)}`).join(', ') + '}';
                 break;
             case isUnion(type):
-                typeDoc = isRec
-                    ? (type as TUnion).map(field => isStruct(field) ? field.typeName : field).join('|')
-                    : (type as TUnion).map(field => isStruct(field) ? getTypeDoc({
-                        name: field.typeName,
-                        type: field
-                    }) : field).join(' | ');
+                typeDoc = (type as TUnion).map(field => isStruct(field)
+                    ? getTypeDoc(field.typeName, field, isRec)
+                    : getTypeDoc('', field, isRec)
+                ).join(' | ');
 
                 break;
             case isList(type):
                 typeDoc = `LIST[ ${((type as TList).listOf as TStruct).typeName || (type as TList).listOf}]`;
                 break;
         }
-    }catch (e) {
+    } catch (e) {
+        console.log(e);
     }
     return typeDoc;
 };
-

@@ -1,7 +1,7 @@
 import * as ts from 'typescript';
 import { resolve } from 'path';
 import * as fs from 'fs';
-import {  TType, TUnion } from '@waves/ride-js';
+import { TType, TUnion } from '@waves/ride-js';
 import { schemas } from '@waves/tx-json-schemas';
 import { TSeedTypes } from '@waves/waves-transactions';
 
@@ -41,17 +41,22 @@ export type TArgument = {
 
 export type TSchemaType = {
     name: string
-    resultType: string
-    resultTypeTips: TResultTypeTip[]
+    resultType: TReturnType[]
     args: TArgument[]
     doc?: string
 };
 
+export type TReturnType = {
+    val: string,
+    tip?: TType;
+};
+
+export  type TStructField = { name: string, type: TType, doc?: string, optional?: boolean };
+
 const replFuncs: TSchemaType[] = [
     {
         name: 'help',
-        resultType: '',
-        resultTypeTips: [],
+        resultType: [],
         args: [{
             name: 'func',
             type: 'string',
@@ -63,20 +68,25 @@ const replFuncs: TSchemaType[] = [
     },
     {
         name: 'clear',
-        resultType: '',
-        resultTypeTips: [],
+        resultType: [],
         args: [],
         doc: 'clear console'
     },
     {
         name: 'deploy',
-        resultType: '',
-        resultTypeTips: [],
+        resultType: [],
         args: [
             {
                 name: 'params',
                 optional: true,
-                type: '{ fee?: number, senderPublicKey?: string, script?: string }',
+                type: ({
+                    typeName: 'TDeployParams',
+                    fields: [
+                        {name: 'fee', type: 'number'},
+                        {name: 'senderPublicKey', type: 'string'},
+                        {name: 'script', type: 'string'},
+                    ]
+                }),
             },
             {
                 name: 'seed',
@@ -111,7 +121,7 @@ const buildSchemas = () => {
                     Object.keys(schemas).forEach(type =>
                         returnType.includes(type) && returnTypeTips.push({
                             range: {start: returnType.search(type), end: returnType.search(type) + type.length - 1},
-                            type: defineType(type)
+                            type: getTypeByName(type)
                         })
                     );
                 }
@@ -125,8 +135,7 @@ const buildSchemas = () => {
                             doc: ts.getJSDocType(p) !== undefined ? ts.getJSDocType(p)!.toString() : ''
                         }
                     )),
-                    resultType: returnType,
-                    resultTypeTips: returnTypeTips,
+                    resultType: getReturnType(returnType, returnTypeTips),
                     doc: ((node as any).jsDoc || []).map(({comment}: any) => comment).join('\n')
                 });
             } else {
@@ -139,36 +148,88 @@ const buildSchemas = () => {
     return out;
 };
 
+function getReturnType(type: string, tips: TResultTypeTip[]): TReturnType[] {
+    const typeOut: TReturnType[] = [];
+    const sortedTips = tips.sort((a, b) => (a.range.start > b.range.start) ? 1 : -1);
+    sortedTips.forEach((tip, i) => {
+        if (tip.range.start !== 0 && i === 0) {
+            typeOut.push({val: type.slice(0, tip.range.start)});
+        }
+        typeOut.push({val: type.slice(tip.range.start, tip.range.end + 1), tip: tip.type});
+        if (i === sortedTips.length - 1) {
+            if (tip.range.end < type.length - 1) {
+                typeOut.push({val: type.slice(tip.range.end + 1, type.length)});
+            }
+        } else {
+            typeOut.push({val: type.slice(tip.range.end + 1, sortedTips[i + 1].range.start)});
+        }
+    });
+    return typeOut;
+}
+
 const getArgumentType = (p: ts.ParameterDeclaration): TType => {
+
     if (!p.type) return 'Unknown';
     const split = p.type.getText().split('|');
     if (split.length === 1) {
-        return defineType(split[0].replace(' ', ''));
+        return getTypeByName(split[0].replace(' ', ''));
     } else {
-        return (split.map((item): TType => defineType(item.replace(' ', ''))) as TUnion);
+        return (split.map((item): TType => getTypeByName(item.replace(' ', ''))) as TUnion);
     }
 
 };
 
-const defineType = (name: string): TType => {
+const getTypeByName = (name: string): TType => {
     const schema = (schemas as any)[name];
-    if (schema) {
-        return {
-            typeName: name,
-            fields: schema.properties && Object.keys(schema.properties).map((prop) => ({
-                    name: prop,
-                    type: schema.properties[prop].type
-                        || schema.definitions[schema.properties[prop].$ref.split('/').pop()].type,
-                    doc: schema.properties[prop].description,
-                    optional: !schema.required.includes(prop),
-                })
-            )
-        };
-    } else {
-        return name;
+    return schema ? defineType(schema, name) : name;
+};
+
+
+function defineType(typeObject: any, name?: string): TType {
+
+    //array
+    if (typeObject.type === 'array') return {'listOf': defineType(typeObject.items)};
+
+    //union
+    if (Array.isArray(typeObject.type)) return typeObject.type.map((item: any) => defineType(item));
+
+    if (Array.isArray(typeObject.anyOf)) return typeObject.anyOf.map((item: any) => defineType(item));
+
+
+    //structure
+    if (typeObject.type === 'object') {
+        if (typeObject.patternProperties) {
+            return {
+                typeName: typeObject.type,
+                fields: [{name: '[key:number]', type: defineType(typeObject.patternProperties['^[0-9]+$'])}]
+            };
+        } else {
+            return {
+                typeName: name || typeObject.type,
+                fields: Object.keys(typeObject.properties).map((prop): TStructField => ({
+                        name: prop,
+                        type: defineType(typeObject.properties[prop], name),
+                        optional: !typeObject.required.includes(prop)
+                    })
+                )
+            };
+        }
     }
 
-};
+    //bullshit
+    if (typeObject.$ref) {
+        const split = typeObject.$ref.split('/').pop();
+        return typeObject.definitions && typeObject.definitions[split].type
+            ? defineType(typeObject.definitions[split].type)
+            : split;
+    }
+
+    //primitive
+    if (typeof typeObject === 'string') return typeObject;
+
+    //else
+    return typeObject.type;
+}
 
 
 const filePath = './src/schemas/envFunctions.json';

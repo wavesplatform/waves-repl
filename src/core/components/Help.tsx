@@ -23,6 +23,30 @@ export default class Help extends React.Component <IProps> {
 
 const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
     const doc = (sig.doc !== '' && isDoc) ? <div className="docStyle">{sig.doc}</div> : <></>;
+    let returnType = <></>;
+    if (sig.resultType.length > 0) {
+        returnType = <>
+            <div>:&nbsp;</div>
+            <div className="flex">
+                {
+                    sig.resultType.map((item, i) => {
+                        console.log(item);
+                        return item.tip != null
+                            ? <Tooltip
+                                key={i}
+                                placement="top"
+                                trigger={['hover']}
+                                overlay={<span>{tc.getTypeDoc(item.val, item.tip)}</span>}
+                                destroyTooltipOnHide
+                            >
+                                <div className="hov">{item.val}</div>
+                            </Tooltip>
+                            : <div key={i}>{item.val}</div>;
+                    })
+                }
+            </div>
+        </>;
+    }
     return <>
         <div className="lineStyle">
             <Tooltip placement="top" trigger={['hover']} overlay={<span>{sig.doc}</span>} destroyTooltipOnHide>
@@ -33,52 +57,19 @@ const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
                 <Argument a={a} key={i} isLast={sig.args.length - 1 === i}/>)
             }
             <div>)</div>
-            {sig.resultType === ''
-                ? ''
-                : <>
-                    <div>:&nbsp;</div>
-                    {sig.resultTypeTips.length > 0
-                        ? <div className="flex">
-                            <ResultType sig={sig}/>
-                        </div>
-                        : <div>{sig.resultType}</div>
-                    }
-                </>}
+            {returnType}
         </div>
         {doc}
     </>;
 };
 
 const Argument = ({a, isLast}: { a: TArgument, isLast: boolean }) =>
-    <Tooltip placement="top" trigger={['hover']} overlay={<span>{tc.getTypeDoc(a)}</span>} destroyTooltipOnHide>
+    <> <Tooltip placement="top" trigger={['hover']} overlay={<span>{tc.getTypeDoc(a.name, a.type)}</span>}
+                destroyTooltipOnHide>
         <div className="hov">
             {a.name}
             {a.optional && '?'}
-            :&nbsp;{tc.getTypeDoc(a, true)}{!isLast && <>,&nbsp;</>}
+            :&nbsp;{tc.getTypeDoc( a.name, a.type, true)}
         </div>
-    </Tooltip>;
+    </Tooltip>{!isLast && <>,&nbsp;</>}</>;
 
-const ResultType = ({sig}: { sig: TSchemaType }) => {
-    const type = sig.resultType;
-    const typeOut: string[] = [];
-    const sortedTips = sig.resultTypeTips.sort((a, b) => (a.range.start > b.range.start) ? 1 : -1);
-    //todo check sort func
-    sortedTips.forEach((tip, i) => {
-        if (tip.range.start !== 0 && i === 0) {
-            typeOut.push(type.slice(0, tip.range.start));
-        } else {
-            typeOut.push(type.slice(tip.range.start, tip.range.end + 1));
-            if (i === sortedTips.length - 1) {
-                if (tip.range.end < type.length - 1) {
-                    typeOut.push(type.slice(tip.range.end + 1, type.length));
-                }
-            } else {
-                typeOut.push(type.slice(tip.range.end, sortedTips[i + 1].range.start));
-            }
-        }
-    });
-    console.log(typeOut);
-    return <Tooltip placement="top" trigger={['hover']} overlay={<span>{sig.resultType}</span>} destroyTooltipOnHide>
-        <div>{sig.resultType}</div>
-    </Tooltip>;
-};
