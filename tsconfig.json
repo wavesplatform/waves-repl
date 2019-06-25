@@ -3,6 +3,8 @@
     "strict": true,
     "target": "es6",
     "jsx": "react",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "module": "commonjs",
     "lib": [
       "es7",

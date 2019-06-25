@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { typeChecker as tc } from '../utils';
-import { TArgument, TSchemaType } from '../../../scripts/buildHelp';
+import { TArgument, TSchemaType } from '../../schemas/buildHelp';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
 import '../../css/Help.css';

@@ -1,7 +1,7 @@
 import {  TSeedTypes } from '@waves/waves-transactions/';
-import { TSchemaType } from '../scripts/buildHelp';
+import { TSchemaType } from './schemas/buildHelp';
 
-const envFuncsSchema = require('./schemas/envFunctions.json');
+import envFuncsSchema from './schemas/envFunctions.json';
 import * as envFuncs from '@waves/js-test-env';
 
 export class WavesConsoleAPI {
@@ -14,6 +14,7 @@ export class WavesConsoleAPI {
     }
 
     constructor(){
+        // @ts-ignore
         Object.keys(envFuncs).forEach(name => this[name] = (envFuncs as any)[name]);
     }
 

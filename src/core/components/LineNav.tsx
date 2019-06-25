@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Filter } from './Filter';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
+import CopyToClipboard from 'react-copy-to-clipboard';
 
 export class LineNav extends React.Component<any, any> {
     private filter?: Filter | null;

@@ -209,7 +209,7 @@ function defineType(typeObject: any, name?: string): TType {
                 fields: Object.keys(typeObject.properties).map((prop): TStructField => ({
                         name: prop,
                         type: defineType(typeObject.properties[prop], name),
-                        optional: !typeObject.required.includes(prop)
+                        optional: !(typeObject.required && typeObject.required.includes(prop))
                     })
                 )
             };

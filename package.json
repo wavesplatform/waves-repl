@@ -9,8 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development",
     "copyCssSvg": "copyfiles -f src/css/* dist/css && copyfiles -f src/svg/* dist/svg && copyfiles -f src/core/jsconsole.css src/core/logo.svg dist/core",
-    "dist": "rimraf dist && tsc && npm run copyCssSvg",
-    "prepublishOnly": "npm run dist"
+    "dist": "npm run buildSchema && rimraf dist && tsc && npm run copyCssSvg",
+    "prepublishOnly": "npm run dist",
+    "buildSchema": "ts-node ./src/schemas/buildHelp.ts"
   },
   "author": "wavesplatform",
   "license": "MIT",
@@ -21,7 +22,7 @@
   },
   "dependencies": {
     "@types/mocha": "^5.2.7",
-    "@waves/js-test-env": "^0.1.1",
+    "@waves/js-test-env": "^0.2.0",
     "@waves/tx-json-schemas": "^0.2.0",
     "@waves/waves-transactions": "^3.10.1",
     "axios": "^0.19.0",
@@ -33,8 +34,7 @@
     "rc-tooltip": "^3.7.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-redux": "^5.0.7",
-    "redux": "^4.0.0",
-    "ts-node": "^8.3.0"
+    "redux": "^4.0.0"
   },
   "devDependencies": {
     "@types/babylon": "^6.16.3",
@@ -64,6 +64,7 @@
     "typescript": "^3.1.1",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
-    "webpack-dev-server": "^3.1.14"
+    "webpack-dev-server": "^3.1.14",
+    "ts-node": "^8.3.0"
   }
 }

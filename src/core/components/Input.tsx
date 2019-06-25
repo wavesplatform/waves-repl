@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { strsCommonPrefix } from '../utils';
-import { TSchemaType } from '../../../scripts/buildHelp';
+import { TSchemaType } from '../../schemas/buildHelp';
 // TODO import Autocomplete from './Autocomplete';
 import keycodes from '../lib/keycodes';
 
-const envFuncsSchema = require('../../schemas/envFunctions.json');
+import envFuncsSchema from '../../schemas/envFunctions.json';
 
 export interface IInputProps {
     inputRef: any,
@@ -41,10 +41,10 @@ export interface ISuggestItemProps {
 export class Input extends React.Component<IInputProps, IInputState> {
     private input?: HTMLTextAreaElement | null;
 
-    static commandsVocabulary: Record<string, TSchemaType> = envFuncsSchema
+    static commandsVocabulary: Record<string, TSchemaType> = (envFuncsSchema as any)
         .reduce((res: Record<string, TSchemaType>, el: TSchemaType) => ({...res, [el.name]: el}), {});
 
-    static commandsList: Array<string> = [...envFuncsSchema.map(({name}: TSchemaType) => name)];
+    static commandsList: Array<string> = [...(envFuncsSchema as any).map(({name}: TSchemaType) => name)];
 
     static commasAndQuotes: { [key: string]: string } = {
         '(': ')',
