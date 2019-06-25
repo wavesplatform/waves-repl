@@ -35,6 +35,7 @@ type TResultTypeTip = {
 export type TArgument = {
     name: string
     type: TType
+    typeName?: string
     optional?: boolean
     doc?: string
 };
@@ -131,6 +132,7 @@ const buildSchemas = () => {
                         {
                             name: ts.isIdentifier(p.name) ? p.name.escapedText.toString() : 'Unknown',
                             type: getArgumentType(p),
+                            typeName: p.type && p.type.getText(),
                             optional: tc.isOptionalParameter(p),
                             doc: ts.getJSDocType(p) !== undefined ? ts.getJSDocType(p)!.toString() : ''
                         }

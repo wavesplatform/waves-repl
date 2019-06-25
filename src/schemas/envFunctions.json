@@ -143,6 +143,7 @@
                         ]
                     }
                 ],
+                "typeName": "IAliasParams | IAliasTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -166,6 +167,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -342,6 +344,7 @@
                         ]
                     }
                 ],
+                "typeName": "IBurnParams | IBurnTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -365,6 +368,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -536,6 +540,7 @@
                         ]
                     }
                 ],
+                "typeName": "ICancelLeaseParams | ICancelLeaseTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -559,6 +564,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -639,6 +645,7 @@
             {
                 "name": "params",
                 "type": "ICancelOrderParams",
+                "typeName": "ICancelOrderParams",
                 "optional": false,
                 "doc": ""
             },
@@ -662,6 +669,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -755,6 +763,7 @@
                         ]
                     }
                 ],
+                "typeName": "IDataParams | IDataTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -778,6 +787,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -991,6 +1001,7 @@
                         ]
                     }
                 ],
+                "typeName": "IIssueParams | IIssueTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -1014,6 +1025,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -1225,6 +1237,7 @@
                         ]
                     }
                 ],
+                "typeName": "IReissueParams | IReissueTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -1248,6 +1261,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -1421,6 +1435,7 @@
                         ]
                     }
                 ],
+                "typeName": "ILeaseParams | ICancelLeaseTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -1444,6 +1459,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -1627,6 +1643,7 @@
                         ]
                     }
                 ],
+                "typeName": "IMassTransferParams | IMassTransferTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -1650,6 +1667,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -1743,6 +1761,7 @@
                     "IOrderParams",
                     "TOrder"
                 ],
+                "typeName": "IOrderParams | TOrder",
                 "optional": false,
                 "doc": ""
             },
@@ -1766,6 +1785,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -2012,6 +2032,7 @@
                         ]
                     }
                 ],
+                "typeName": "ITransferParams | ITransferTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -2035,6 +2056,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -2228,6 +2250,7 @@
                         ]
                     }
                 ],
+                "typeName": "ISetScriptParams | ISetScriptTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -2251,6 +2274,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -2433,6 +2457,7 @@
                         ]
                     }
                 ],
+                "typeName": "ISetAssetScriptParams | ISetAssetScriptTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -2456,6 +2481,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -2704,6 +2730,7 @@
                         ]
                     }
                 ],
+                "typeName": "IInvokeScriptParams | IInvokeScriptTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -2727,6 +2754,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -2910,6 +2938,7 @@
                         ]
                     }
                 ],
+                "typeName": "ISponsorshipParams | ISponsorshipTransaction",
                 "optional": false,
                 "doc": ""
             },
@@ -2933,6 +2962,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -3031,6 +3061,7 @@
                     ],
                     "TTxParams & WithTxType"
                 ],
+                "typeName": "TTx | TTxParams & WithTxType",
                 "optional": false,
                 "doc": ""
             },
@@ -3054,6 +3085,7 @@
                     },
                     "string"
                 ],
+                "typeName": "TSeedTypes",
                 "optional": true,
                 "doc": ""
             }
@@ -3090,6 +3122,7 @@
             {
                 "name": "txId",
                 "type": "string",
+                "typeName": "string",
                 "optional": false,
                 "doc": ""
             },
@@ -3110,6 +3143,7 @@
                         }
                     ]
                 },
+                "typeName": "INodeRequestOptions",
                 "optional": true,
                 "doc": ""
             }
@@ -3149,12 +3183,14 @@
             {
                 "name": "txId",
                 "type": "string",
+                "typeName": "string",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "confirmations",
                 "type": "number",
+                "typeName": "number",
                 "optional": false,
                 "doc": ""
             },
@@ -3175,6 +3211,7 @@
                         }
                     ]
                 },
+                "typeName": "INodeRequestOptions",
                 "optional": true,
                 "doc": ""
             }
@@ -3214,6 +3251,7 @@
             {
                 "name": "blocksCount",
                 "type": "number",
+                "typeName": "number",
                 "optional": false,
                 "doc": ""
             },
@@ -3234,6 +3272,7 @@
                         }
                     ]
                 },
+                "typeName": "INodeRequestOptions",
                 "optional": true,
                 "doc": ""
             }
@@ -3247,6 +3286,7 @@
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3260,6 +3300,7 @@
             {
                 "name": "target",
                 "type": "number",
+                "typeName": "number",
                 "optional": false,
                 "doc": ""
             },
@@ -3280,6 +3321,7 @@
                         }
                     ]
                 },
+                "typeName": "INodeRequestOptions",
                 "optional": true,
                 "doc": ""
             }
@@ -3293,12 +3335,14 @@
             {
                 "name": "address",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3312,18 +3356,21 @@
             {
                 "name": "assetId",
                 "type": "string",
+                "typeName": "string",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "address",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3337,12 +3384,14 @@
             {
                 "name": "address",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3356,12 +3405,14 @@
             {
                 "name": "address",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3375,18 +3426,21 @@
             {
                 "name": "key",
                 "type": "string",
+                "typeName": "string",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "address",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3400,12 +3454,14 @@
             {
                 "name": "invokeScriptTxId",
                 "type": "string",
+                "typeName": "string",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3419,12 +3475,14 @@
             {
                 "name": "tx",
                 "type": "wt.TTx",
+                "typeName": "wt.TTx",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "apiBase",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3438,6 +3496,7 @@
             {
                 "name": "name",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3457,6 +3516,7 @@
             {
                 "name": "seed",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3470,6 +3530,7 @@
             {
                 "name": "seed",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3483,6 +3544,7 @@
             {
                 "name": "seed",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3496,12 +3558,14 @@
             {
                 "name": "seed",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             },
             {
                 "name": "chainId",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3515,6 +3579,7 @@
             {
                 "name": "code",
                 "type": "string",
+                "typeName": "string",
                 "optional": false,
                 "doc": ""
             }
@@ -3528,12 +3593,14 @@
             {
                 "name": "bytes",
                 "type": "Uint8Array",
+                "typeName": "Uint8Array",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "seed",
                 "type": "string",
+                "typeName": "string",
                 "optional": true,
                 "doc": ""
             }
@@ -3547,12 +3614,14 @@
             {
                 "name": "balances",
                 "type": "Record<string,number>",
+                "typeName": "Record<string, number>",
                 "optional": false,
                 "doc": ""
             },
             {
                 "name": "options",
                 "type": "ISetupAccountsOptions",
+                "typeName": "ISetupAccountsOptions",
                 "optional": true,
                 "doc": ""
             }

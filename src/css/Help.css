@@ -15,12 +15,18 @@
 }
 
 .hov{
-    max-width: 300px;
-    text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
 }
 
 .hov:hover {
     border-bottom: 1px solid #4CAF50;
+}
+
+.tooltipText{
+    font-family: Roboto;
+    font-size: 12px;
+    line-height: 1.17;
+    color: #263241;
+    padding-bottom: 9px;
 }
