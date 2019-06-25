@@ -118,7 +118,8 @@ const buildSchemas = () => {
                 const returnTypeTips: TResultTypeTip[] = [];
 
                 if (returnTypeObject) {
-                    returnType = tc.typeToString(returnTypeObject);
+                    //replace '<string | number>'
+                    returnType = tc.typeToString(returnTypeObject).replace(/<string \| number>/g, '');
                     Object.keys(schemas).forEach(type =>
                         returnType.includes(type) && returnTypeTips.push({
                             range: {start: returnType.search(type), end: returnType.search(type) + type.length - 1},
@@ -151,7 +152,7 @@ const buildSchemas = () => {
 };
 
 function getReturnType(type: string, tips: TResultTypeTip[]): TReturnType[] {
-    const typeOut: TReturnType[] = [];
+    let typeOut: TReturnType[] = [];
     const sortedTips = tips.sort((a, b) => (a.range.start > b.range.start) ? 1 : -1);
     sortedTips.forEach((tip, i) => {
         if (tip.range.start !== 0 && i === 0) {
@@ -183,55 +184,62 @@ const getArgumentType = (p: ts.ParameterDeclaration): TType => {
 
 const getTypeByName = (name: string): TType => {
     const schema = (schemas as any)[name];
+    function defineType(typeObject: any, name?: string): TType {
+
+        //array
+        if (typeObject.type === 'array') {
+            console.log(typeObject)
+            return {'listOf': defineType(typeObject.items)};
+        }
+
+        //union
+        if (Array.isArray(typeObject.type)) return typeObject.type.map((item: any) => defineType(item));
+
+        if (Array.isArray(typeObject.anyOf)) return typeObject.anyOf.map((item: any) => defineType(item));
+
+
+        //structure
+        if (typeObject.type === 'object') {
+            if (typeObject.patternProperties) {
+                return {
+                    typeName: typeObject.type,
+                    fields: [{name: '[key:number]', type: defineType(typeObject.patternProperties['^[0-9]+$'])}]
+                };
+            } else {
+                return {
+                    typeName: name || typeObject.type,
+                    fields: Object.keys(typeObject.properties).map((prop): TStructField => ({
+                            name: prop,
+                            type: defineType(typeObject.properties[prop], name),
+                            optional: !(typeObject.required && typeObject.required.includes(prop))
+                        })
+                    )
+                };
+            }
+        }
+
+        //reference
+        if (typeObject.$ref) {
+            const split = typeObject.$ref.split('/').pop();
+            return defineType(schema.definitions[split], split);
+        }
+
+        //enum
+        if (typeObject.enum) return typeObject.enum.join('|');
+
+        //primitive
+        if (typeof typeObject === 'string') return typeObject;
+
+        //else
+        return typeObject.type;
+    }
+
+
     return schema ? defineType(schema, name) : name;
 };
 
 
-function defineType(typeObject: any, name?: string): TType {
 
-    //array
-    if (typeObject.type === 'array') return {'listOf': defineType(typeObject.items)};
-
-    //union
-    if (Array.isArray(typeObject.type)) return typeObject.type.map((item: any) => defineType(item));
-
-    if (Array.isArray(typeObject.anyOf)) return typeObject.anyOf.map((item: any) => defineType(item));
-
-
-    //structure
-    if (typeObject.type === 'object') {
-        if (typeObject.patternProperties) {
-            return {
-                typeName: typeObject.type,
-                fields: [{name: '[key:number]', type: defineType(typeObject.patternProperties['^[0-9]+$'])}]
-            };
-        } else {
-            return {
-                typeName: name || typeObject.type,
-                fields: Object.keys(typeObject.properties).map((prop): TStructField => ({
-                        name: prop,
-                        type: defineType(typeObject.properties[prop], name),
-                        optional: !(typeObject.required && typeObject.required.includes(prop))
-                    })
-                )
-            };
-        }
-    }
-
-    //bullshit
-    if (typeObject.$ref) {
-        const split = typeObject.$ref.split('/').pop();
-        return typeObject.definitions && typeObject.definitions[split].type
-            ? defineType(typeObject.definitions[split].type)
-            : split;
-    }
-
-    //primitive
-    if (typeof typeObject === 'string') return typeObject;
-
-    //else
-    return typeObject.type;
-}
 
 
 const filePath = './src/schemas/envFunctions.json';

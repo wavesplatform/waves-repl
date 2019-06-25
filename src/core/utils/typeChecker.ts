@@ -5,31 +5,41 @@ export const isStruct = (item: TType): item is TStruct => typeof item === 'objec
 export const isList = (item: TType): item is TList => typeof item === 'object' && 'listOf' in item;
 export const isUnion = (item: TType): item is TUnion => Array.isArray(item);
 
-export const getTypeDoc = (name: string, type: TType, isRec?: Boolean): string => {
-    let typeDoc = 'Unknown';
+export const getTypeDoc = (name: string, type: TType, level = 0): string => {
+    let typeDoc = 'any';
+
     try {
         switch (true) {
             case isPrimitive(type):
                 typeDoc = type as string;
                 break;
             case isStruct(type):
-                typeDoc = isRec ? name || 'object' :
-                    `${name}{` + (type as TStruct).fields
-                        .map((v) => `${v.name}: ${getTypeDoc(v.name, v.type, true)}`).join(', ') + '}';
+                typeDoc = `${name} {\n ` + (type as TStruct).fields
+                    .map((v) => `${v.name}: ${getTypeDoc(v.name, v.type, level + 1)}`)
+                    .join(',\n ') + `\n} ${level > 0 ? '' : '\n'}`;
                 break;
             case isUnion(type):
-                typeDoc = (type as TUnion).map(field => isStruct(field)
-                    ? getTypeDoc(field.typeName, field, isRec)
-                    : getTypeDoc('', field, isRec)
-                ).join(' | ');
 
+                if (name === 'TTx') {
+                    typeDoc = (type as TUnion).map(field => isStruct(field) ? field.typeName : field).join('\n');
+                    break;
+                }
+                const split = name && name.split('|').map(x => x.trim());
+                //if(split.length > 1)                debugger
+                const typeDocArray = (type as TUnion).map((field, i) => isStruct(field)
+                    ? getTypeDoc(field.typeName, field, level + 1)
+                    : getTypeDoc(split && split.length > 1 ? split[i] : '', field, level + 1)
+                );
+                typeDoc = typeDocArray.join(level > 1 ? ' | ' : '\n');
                 break;
             case isList(type):
-                typeDoc = `LIST[ ${((type as TList).listOf as TStruct).typeName || (type as TList).listOf}]`;
+                typeDoc = ` ${getTypeDoc('', (type as TList).listOf, level + 1)}[]`;
                 break;
         }
     } catch (e) {
         console.log(e);
     }
-    return typeDoc;
+    return typeDoc
+        .replace(/<string \| number>/g, '')
+        .replace(/<LONG>/g, '');
 };

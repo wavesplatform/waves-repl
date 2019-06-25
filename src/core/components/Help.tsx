@@ -35,12 +35,12 @@ const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
                                 key={i}
                                 placement="top"
                                 trigger={['hover']}
-                                overlay={<span className="tooltipText">{tc.getTypeDoc(item.val, item.tip)}</span>}
+                                overlay={<pre className="tooltipText">{tc.getTypeDoc(item.val, item.tip)}</pre>}
                                 destroyTooltipOnHide
                             >
                                 <div className="hov">{item.val}</div>
                             </Tooltip>
-                            : <div key={i}>{item.val}</div>;
+                            : item.val.split(' ').map((item, i) => <div key={i}>{item}&nbsp;</div>);
                     })
                 }
             </div>
@@ -48,7 +48,8 @@ const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
     }
     return <>
         <div className="lineStyle">
-            <Tooltip placement="top" trigger={['hover']} overlay={<span className="tooltipText" >{sig.doc}</span>} destroyTooltipOnHide>
+            <Tooltip placement="top" trigger={['hover']} overlay={<pre className="tooltipText">{sig.doc}</pre>}
+                     destroyTooltipOnHide>
                 <div className="hov">{sig.name}</div>
             </Tooltip>
             <div>&nbsp;(</div>
@@ -62,13 +63,23 @@ const Signature = ({sig, isDoc}: { sig: TSchemaType, isDoc?: boolean }) => {
     </>;
 };
 
+
 const Argument = ({a, isLast}: { a: TArgument, isLast: boolean }) =>
-    <> <Tooltip placement="top" trigger={['hover']} overlay={<span className="tooltipText">{tc.getTypeDoc(a.name, a.type)}</span>}
-                destroyTooltipOnHide>
-        <div className="hov">
-            {a.name}
-            {a.optional && '?'}
-            :&nbsp;{a.typeName || tc.getTypeDoc( a.name, a.type, true)}
-        </div>
-    </Tooltip>{!isLast && <>,&nbsp;</>}</>;
+    <>
+        {!tc.isPrimitive(a.type)
+            ? <Tooltip
+                placement="top"
+                trigger={['hover']}
+                overlay={<pre className="tooltipText">{tc.getTypeDoc(a.typeName || a.name, a.type)}</pre>}
+                destroyTooltipOnHide
+            >
+                <div className="hov">
+                    {a.name}
+                    {a.optional && '?'}
+                    :&nbsp;{a.typeName || tc.getTypeDoc(a.typeName || a.name, a.type)}
+                </div>
+            </Tooltip>
+            : <div>{a.name}{a.optional && '?'}:&nbsp;{a.type}</div>}
+        {!isLast && <>,&nbsp;</>}
+    </>;
 
