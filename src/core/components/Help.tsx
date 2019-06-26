@@ -7,12 +7,13 @@ import '../../css/Help.css';
 
 interface IProps {
     signatures: any[]
+    className?: string
 }
 
 export default class Help extends React.Component <IProps> {
 
     render() {
-        return <div>
+        return <div className={this.props.className}>
             {this.props.signatures.length ? this.props.signatures.map((sig, i) =>
                 <Signature sig={sig} key={i} isDoc={this.props.signatures.length === 1}/>
             ) : `${this.props.signatures}`}

@@ -187,10 +187,8 @@ const getTypeByName = (name: string): TType => {
     function defineType(typeObject: any, name?: string): TType {
 
         //array
-        if (typeObject.type === 'array') {
-            console.log(typeObject)
-            return {'listOf': defineType(typeObject.items)};
-        }
+        if (typeObject.type === 'array') return {'listOf': defineType(typeObject.items)};
+
 
         //union
         if (Array.isArray(typeObject.type)) return typeObject.type.map((item: any) => defineType(item));
