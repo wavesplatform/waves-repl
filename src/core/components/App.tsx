@@ -27,8 +27,7 @@ export class App extends React.Component<IAppProps, any> {
     private consoleRef: any;
     private app: any;
     private input: any;
-
-    frame: any;
+    private frame: any;
 
     static contextTypes = {store: PropTypes.object};
 

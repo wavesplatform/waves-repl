@@ -25,4 +25,4 @@ class App extends React.Component {
         return <Repl theme="dark" ref={this.consoleRef}/>
     }
 }
-render(<div><App/><App/></div>, document.getElementById('root'));
+render(<App/>, document.getElementById('root'));

@@ -1,5 +1,5 @@
 /*global document window */
-import {parse} from 'babylon';
+import { parse } from 'babylon';
 import * as walk from 'babylon-walk';
 
 import * as copy from 'copy-to-clipboard';
@@ -43,19 +43,19 @@ export function createContainer() {
     return container;
 }
 
-export function setContainer(iframe:any) {
+export function setContainer(iframe: any) {
     container = iframe;
     const win = container.contentWindow;
     const doc = container.contentDocument;
 
     win.copy = copy;
-    win.$$ = (s:any) => Array.from(doc.querySelectorAll(s));
-    win.$ = (s:any) => doc.querySelector(s);
+    win.$$ = (s: any) => Array.from(doc.querySelectorAll(s));
+    win.$ = (s: any) => doc.querySelector(s);
 }
 
-export default async function run(command:any, frame:any) {
+export default async function run(command: any, frame: any) {
     return new Promise(async resolve => {
-        const res:any = {
+        const res: any = {
             error: false,
             command,
         };
@@ -94,7 +94,7 @@ export default async function run(command:any, frame:any) {
                     type: 'application/javascript',
                 });
                 script.src = URL.createObjectURL(blob);
-                frame.contentWindow.onerror = (message:any, file:any, line:any, col:any, error:any) => {
+                frame.contentWindow.onerror = (message: any, file: any, line: any, col: any, error: any) => {
                     res.error = true;
                     res.value = error;
                     resolve(res);
@@ -116,25 +116,26 @@ export default async function run(command:any, frame:any) {
     });
 }
 
-export function preProcess(content:any) {
+export function preProcess(content: any) {
     var wrapped = '(async () => {' + content + '})()';
     var root = parse(wrapped, {ecmaVersion: 8} as any);
     var body = (root.program.body[0] as any).expression.callee.body;
 
-    var changes:any = [];
+    var changes: any = [];
     var containsAwait = false;
     var containsReturn = false;
 
     const visitors = {
-        ClassDeclaration(node:any) {
-            if (node.parent === body)
+        ClassDeclaration(node: any) {
+            if (node.parent === body) {
                 changes.push({
                     text: node.id.name + '=',
                     start: node.start,
                     end: node.start,
                 });
+            }
         },
-        FunctionDeclaration(node:any) {
+        FunctionDeclaration(node: any) {
             changes.push({
                 text: node.id.name + '=',
                 start: node.start,
@@ -142,13 +143,13 @@ export function preProcess(content:any) {
             });
             return node;
         },
-        AwaitExpression(node:any) {
+        AwaitExpression(node: any) {
             containsAwait = true;
         },
-        ReturnStatement(node:any) {
+        ReturnStatement(node: any) {
             containsReturn = true;
         },
-        VariableDeclaration(node:any) {
+        VariableDeclaration(node: any) {
             if (node.kind !== 'var' && node.parent !== body) return;
             var onlyOneDeclaration = node.declarations.length === 1;
             changes.push({
@@ -206,9 +207,11 @@ export function preProcess(content:any) {
             start: last.start,
             end: last.start,
         });
-        if (wrapped[last.end - 1] !== ';')
+        if (wrapped[last.end - 1] !== ';') {
             changes.push({text: ')', start: last.end, end: last.end});
-        else changes.push({text: ')', start: last.end - 1, end: last.end - 1});
+        } else {
+            changes.push({text: ')', start: last.end - 1, end: last.end - 1});
+        }
     }
 
     if (last.type === 'VariableDeclaration' && last.kind === 'const') {
