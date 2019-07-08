@@ -1,12 +1,12 @@
 /*global document window */
-import {parse} from 'babylon';
+import { parse } from 'babylon';
 import * as walk from 'babylon-walk';
 
 import * as copy from 'copy-to-clipboard';
 
 let container: any = null;
 
-export const bindConsole = (__console: any) => {
+export const bindConsole = (__console: any, frame: any) => {
     // supported methods
     const apply = [
         'log',
@@ -20,7 +20,7 @@ export const bindConsole = (__console: any) => {
     ];
 
     apply.forEach(method => {
-        container.contentWindow.console[method] = (...args: any[]) => {
+        frame.contentWindow.console[method] = (...args: any[]) => {
             (window as any).console[method].apply(window.console, args);
             __console[method].apply(__console, args);
         };
@@ -30,31 +30,32 @@ export const bindConsole = (__console: any) => {
 export const getContainer = () => container;
 
 export function createContainer() {
-    container = document.createElement('iframe');
-    container.width = container.height = 1;
-    container.style.opacity = 0;
-    container.style.border = 0;
+    let container = document.createElement('iframe');
+    container.width = container.height = '1';
+    container.style.opacity = '0';
+    container.style.border = '0';
     container.style.position = 'absolute';
     container.style.top = '-100px';
     container.setAttribute('name', '<proxy>');
     // container.src = './waves-loaded.html';
     document.body.appendChild(container);
     setContainer(container);
+    return container;
 }
 
-export function setContainer(iframe:any) {
+export function setContainer(iframe: any) {
     container = iframe;
     const win = container.contentWindow;
     const doc = container.contentDocument;
 
     win.copy = copy;
-    win.$$ = (s:any) => Array.from(doc.querySelectorAll(s));
-    win.$ = (s:any) => doc.querySelector(s);
+    win.$$ = (s: any) => Array.from(doc.querySelectorAll(s));
+    win.$ = (s: any) => doc.querySelector(s);
 }
 
-export default async function run(command:any) {
+export default async function run(command: any, frame: any) {
     return new Promise(async resolve => {
-        const res:any = {
+        const res: any = {
             error: false,
             command,
         };
@@ -75,32 +76,32 @@ export default async function run(command:any) {
             // the original constructor from ({}).toString.call(value)
 
             if (content.startsWith('(async () => ')) {
-                res.value = await container.contentWindow.eval(content);
+                res.value = await frame.contentWindow.eval(content);
             } else {
-                res.value = container.contentWindow.eval(content);
+                res.value = frame.contentWindow.eval(content);
             }
 
             // if there's no extra code (usually to block out a const), then let's
             // go ahead and store the result in $_
             if (!additionalCode) {
-                container.contentWindow.$_ = res.value;
+                frame.contentWindow.$_ = res.value;
             }
 
             if (additionalCode !== null) {
-                const doc = container.contentDocument;
+                const doc = frame.contentDocument;
                 const script = doc.createElement('script');
                 const blob = new Blob([additionalCode], {
                     type: 'application/javascript',
                 });
                 script.src = URL.createObjectURL(blob);
-                container.contentWindow.onerror = (message:any, file:any, line:any, col:any, error:any) => {
+                frame.contentWindow.onerror = (message: any, file: any, line: any, col: any, error: any) => {
                     res.error = true;
                     res.value = error;
                     resolve(res);
                 };
                 script.onload = () => {
                     resolve(res);
-                    container.contentWindow.onerror = () => {
+                    frame.contentWindow.onerror = () => {
                     };
                 };
                 doc.documentElement.appendChild(script);
@@ -115,25 +116,26 @@ export default async function run(command:any) {
     });
 }
 
-export function preProcess(content:any) {
+export function preProcess(content: any) {
     var wrapped = '(async () => {' + content + '})()';
     var root = parse(wrapped, {ecmaVersion: 8} as any);
     var body = (root.program.body[0] as any).expression.callee.body;
 
-    var changes:any = [];
+    var changes: any = [];
     var containsAwait = false;
     var containsReturn = false;
 
     const visitors = {
-        ClassDeclaration(node:any) {
-            if (node.parent === body)
+        ClassDeclaration(node: any) {
+            if (node.parent === body) {
                 changes.push({
                     text: node.id.name + '=',
                     start: node.start,
                     end: node.start,
                 });
+            }
         },
-        FunctionDeclaration(node:any) {
+        FunctionDeclaration(node: any) {
             changes.push({
                 text: node.id.name + '=',
                 start: node.start,
@@ -141,13 +143,13 @@ export function preProcess(content:any) {
             });
             return node;
         },
-        AwaitExpression(node:any) {
+        AwaitExpression(node: any) {
             containsAwait = true;
         },
-        ReturnStatement(node:any) {
+        ReturnStatement(node: any) {
             containsReturn = true;
         },
-        VariableDeclaration(node:any) {
+        VariableDeclaration(node: any) {
             if (node.kind !== 'var' && node.parent !== body) return;
             var onlyOneDeclaration = node.declarations.length === 1;
             changes.push({
@@ -205,9 +207,11 @@ export function preProcess(content:any) {
             start: last.start,
             end: last.start,
         });
-        if (wrapped[last.end - 1] !== ';')
+        if (wrapped[last.end - 1] !== ';') {
             changes.push({text: ')', start: last.end, end: last.end});
-        else changes.push({text: ')', start: last.end - 1, end: last.end - 1});
+        } else {
+            changes.push({text: ')', start: last.end - 1, end: last.end - 1});
+        }
     }
 
     if (last.type === 'VariableDeclaration' && last.kind === 'const') {
