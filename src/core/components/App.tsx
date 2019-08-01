@@ -27,6 +27,7 @@ export class App extends React.Component<IAppProps, any> {
     private consoleRef: any;
     private app: any;
     private input: any;
+    private frame: any;
 
     static contextTypes = {store: PropTypes.object};
 
@@ -40,7 +41,7 @@ export class App extends React.Component<IAppProps, any> {
     async onRun(command: string) {
         const console = this.consoleRef;
 
-        command =  (command === "clear()") ? ":clear" : command; //TODO do without hack
+        command =  (command === 'clear()') ? ':clear' : command; //TODO do without hack
 
         if (command[0] !== ':') {
             console.push({
@@ -49,7 +50,7 @@ export class App extends React.Component<IAppProps, any> {
                 value: command,
             });
 
-            const res = await run(command);
+            const res = await run(command, this.frame);
 
             console.push({
                 command,
@@ -95,9 +96,9 @@ export class App extends React.Component<IAppProps, any> {
     }
 
     componentDidMount() {
-        createContainer();
-        bindConsole(this.consoleRef);
-        bindAPItoIFrame(this.props.api, this.consoleRef);
+        this.frame = createContainer();
+        bindConsole(this.consoleRef, this.frame);
+        bindAPItoIFrame(this.props.api, this.consoleRef, this.frame);
 
         const query = decodeURIComponent(window.location.search.substr(1));
         if (query) {

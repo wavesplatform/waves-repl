@@ -1,6 +1,6 @@
 import { getContainer } from './run';
 import { WavesConsoleAPI } from '../../WavesConsoleAPI';
-import { TTx, libs } from '@waves/waves-transactions/';
+import { libs, TTx } from '@waves/waves-transactions/';
 import axios from 'axios';
 
 import { Console } from '..';
@@ -17,11 +17,11 @@ export const updateIFrameEnv = (env: any) => {
     }
 };
 
-export const bindAPItoIFrame = (consoleApi: WavesConsoleAPI, console: Console) => {
+export const bindAPItoIFrame = (consoleApi: WavesConsoleAPI, console: Console, frame: any) => {
     const apiMethodWrappers: IApiMethodWrappers = getApiMethodWrappers(consoleApi, console);
 
     try {
-        const iframeWindow = getContainer().contentWindow;
+        const iframeWindow = frame.contentWindow;
 
         Object.keys(consoleApi)
             .forEach(key => {
