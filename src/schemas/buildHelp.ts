@@ -2,7 +2,7 @@ import * as ts from 'typescript';
 import { resolve } from 'path';
 import * as fs from 'fs';
 import { TType, TUnion } from '@waves/ride-js';
-import { schemas } from '@waves/tx-json-schemas';
+import { schemas } from '@waves/tx-json-schemas/';
 import { TSeedTypes } from '@waves/waves-transactions';
 
 function getProgramFromFiles(files: string[], jsonCompilerOptions: any = {}, basePath: string = './'): ts.Program {
@@ -103,7 +103,7 @@ const buildSchemas = () => {
 
     const out: TSchemaType [] = replFuncs;
 
-    const path = 'node_modules/@waves/js-test-env/index.d.ts';
+    const path = 'node_modules/@waves/js-test-env/dist/augmentedGlobal.d.ts';
     const program = getProgramFromFiles([resolve(path)]);
     const tc = program.getTypeChecker();
     program.getSourceFiles().forEach((sourceFile) => {

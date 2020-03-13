@@ -14,8 +14,9 @@ export class WavesConsoleAPI {
     }
 
     constructor(){
-        // @ts-ignore
-        Object.keys(envFuncs).forEach(name => this[name] = (envFuncs as any)[name]);
+        envFuncs.addEnvFunctionsToGlobal(this)
+        // Object.keys(envFuncs).forEach(name => this[name] = (envFuncs as any)[name]);
+        // console.log(envFuncs)
     }
 
     public deploy = async (params?: { fee?: number, senderPublicKey?: string, script?: string }, seed?: TSeedTypes) => {
