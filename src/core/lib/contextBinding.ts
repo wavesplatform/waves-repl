@@ -54,7 +54,7 @@ const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console): IA
         broadcast: async (tx: TTx, apiBaseParam?: string) => {
             const apiBase = new URL(apiBaseParam || WavesConsoleAPI.env.API_BASE).href;
 
-            const nodes = ['https://nodes.wavesplatform.com/', 'https://testnodes.wavesnodes.com/'];
+            const nodes = ['https://nodes.wavesplatform.com/', 'https://nodes-testnet.wavesnodes.com/'];
 
             const pushExplorerLinkToConsole = (href: string) => {
                 const htmlString = `<a href="${href}" target="_blank">Link to transaction in wavesexplorer</a>`;
