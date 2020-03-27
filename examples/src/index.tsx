@@ -15,7 +15,7 @@ class App extends React.Component {
 
         (global as any)['updateEnv']({
             SEED: 'abracadabra',
-            API_BASE: 'https://testnodes.wavesnodes.com',
+            API_BASE: 'https://nodes-testnet.wavesnodes.com',
             CHAIN_ID: 'T',
             file: () => 'Placeholder file content'
         });
