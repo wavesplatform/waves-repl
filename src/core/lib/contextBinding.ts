@@ -80,7 +80,7 @@ const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console): IA
                     ? 'W'
                     : 'T';
 
-                const href = generateExplorerLinkToTx(networkByte, res.id);
+                const href = generateExplorerLinkToTx(networkByte, (res as any).id);
 
                 pushExplorerLinkToConsole(href);
             } else {
@@ -90,7 +90,7 @@ const getApiMethodWrappers = (consoleApi: WavesConsoleAPI, console: Console): IA
                     const isWavesNetwork = networkByte === 'W' || networkByte === 'T';
 
                     if (isWavesNetwork) {
-                        const href = generateExplorerLinkToTx(networkByte, res.id);
+                        const href = generateExplorerLinkToTx(networkByte, (res as any).id);
 
                         pushExplorerLinkToConsole(href);
                     }
