@@ -106,7 +106,7 @@ export class WavesConsoleAPI {
     );
 
     public compile = (code: string): string => {
-        const resultOrError = cmpl(code);
+        const resultOrError = cmpl(code, 3);
         if ('error' in resultOrError) throw new Error(resultOrError.error);
 
         return resultOrError.result.base64;
