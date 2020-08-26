@@ -56,6 +56,8 @@ export class WavesConsoleAPI {
 
     public sponsorship = WavesConsoleAPI.injectEnv(wt.sponsorship);
 
+    public updateAssetInfo = WavesConsoleAPI.injectEnv(wt.updateAssetInfo);
+
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
     public stringToUint8Array = stringToBytes;
@@ -476,6 +478,16 @@ export class WavesConsoleAPIHelp {
                 'In this case it will sign transaction accordingly ' +
                 'and will add one proof per seed. Also you can use ' +
                 'already signed CancelLeaseTransaction as a second argument.',
+            params: ['params', 'seed']
+        },
+        updateAssetInfo: {
+            summary: '' +
+                'Creates signed updateAssetInfo transaction',
+            description: '' +
+                'You can use this function with multiple seeds. ' +
+                'In this case it will sign transaction accordingly ' +
+                'and will add one proof per seed. Also you can use ' +
+                'already signed updateAssetInfo as a second argument.',
             params: ['params', 'seed']
         },
         signTx: {
