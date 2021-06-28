@@ -20,7 +20,7 @@
     "@waves/ride-js": "^2.1.1"
   },
   "dependencies": {
-    "@waves/waves-transactions": "^4.0.0-beta.23",
+    "@waves/waves-transactions": "^4.1.8",
     "axios": "^0.19.0",
     "babylon": "^6.18.0",
     "babylon-walk": "^1.0.2",
