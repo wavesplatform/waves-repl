@@ -70,7 +70,7 @@ export class WavesConsoleAPI {
     public assetBalance = async (assetId: string, address?: string, apiBase?: string) =>
         wt.nodeInteraction.assetBalance(assetId, address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
 
-    public balanceDetails = async (address?: string, apiBase?: string) =>
+    public balanceDetails: any = async (address?: string, apiBase?: string) =>
         wt.nodeInteraction.balanceDetails(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
 
 

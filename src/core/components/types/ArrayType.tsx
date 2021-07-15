@@ -48,6 +48,7 @@ export class ArrayType extends React.Component<any, ITypeState> {
 
         let types = value.slice(0, open ? value.length : 10).map((_:string, i: number) => {
             const Type = which(_);
+
             return (
                 <Type
                     allowOpen={open}

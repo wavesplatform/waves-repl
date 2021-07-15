@@ -23,7 +23,8 @@ type GenericType =
     | typeof SetType
     | typeof PromiseType
 
-function whichType(value: any): GenericType {
+// function whichType(value: any): GenericType {
+function whichType(value: any): any { // TODO fix typing
     let type = '[object Object]';
     try {
         type = ({}).toString.call(value);

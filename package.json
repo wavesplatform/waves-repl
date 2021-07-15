@@ -1,6 +1,6 @@
 {
   "name": "@waves/waves-repl",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.0-beta.5",
   "description": "Javascript console to interact with waves blockchain. React component",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -20,7 +20,7 @@
     "@waves/ride-js": "^2.1.1"
   },
   "dependencies": {
-    "@waves/waves-transactions": "^4.1.8",
+    "@waves/waves-transactions": "^4.2.1",
     "axios": "^0.19.0",
     "babylon": "^6.18.0",
     "babylon-walk": "^1.0.2",
@@ -34,12 +34,14 @@
     "@types/babylon": "^6.16.3",
     "@types/babylon-walk": "^3.10.1",
     "@types/classnames": "^2.2.6",
+    "@types/hoist-non-react-statics": "^3.3.1",
     "@types/lodash": "^4.14.116",
     "@types/long": "^4.0.0",
-    "@types/react": "^16.4.14",
+    "@types/node": "^15.0.0",
+    "@types/react": "^16.3.2",
     "@types/react-copy-to-clipboard": "^4.2.6",
-    "@types/react-dom": "^16.0.8",
-    "@types/react-redux": "^6.0.9",
+    "@types/react-dom": "^16.3.2",
+    "@types/react-redux": "^7.0.1",
     "@waves/ride-js": "^2.1.1",
     "autoprefixer": "^9.1.5",
     "copy-webpack-plugin": "^4.5.2",
@@ -55,7 +57,7 @@
     "style-loader": "^0.23.0",
     "ts-loader": "^5.2.1",
     "tslint": "^5.12.1",
-    "typescript": "^3.1.1",
+    "typescript": "^3.9.10",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.14"

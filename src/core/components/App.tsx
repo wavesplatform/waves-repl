@@ -50,7 +50,7 @@ export class App extends React.Component<IAppProps, any> {
                 value: command,
             });
 
-            const res = await run(command, this.frame);
+            const res: any = await run(command, this.frame);
 
             console.push({
                 command,
