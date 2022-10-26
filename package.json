@@ -1,6 +1,6 @@
 {
   "name": "@waves/waves-repl",
-  "version": "3.0.0-beta.3",
+  "version": "3.0.1",
   "description": "Javascript console to interact with waves blockchain. React component",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -15,9 +15,9 @@
   "author": "wavesplatform",
   "license": "MIT",
   "peerDependencies": {
-    "react": "^16.3.2",
-    "react-dom": "^16.3.2",
-    "@waves/ride-js": "^2.1.1"
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "@waves/ride-js": "^2.2.1"
   },
   "dependencies": {
     "@waves/waves-transactions": "^4.1.8",
@@ -27,8 +27,8 @@
     "classnames": "^2.2.6",
     "copy-to-clipboard": "^3.0.8",
     "react-copy-to-clipboard": "^5.0.1",
-    "react-redux": "^5.0.7",
-    "redux": "^4.0.0"
+    "react-redux": "^5.1.2",
+    "redux": "^4.2.0"
   },
   "devDependencies": {
     "@types/babylon": "^6.16.3",
@@ -36,11 +36,12 @@
     "@types/classnames": "^2.2.6",
     "@types/lodash": "^4.14.116",
     "@types/long": "^4.0.0",
-    "@types/react": "^16.4.14",
+    "@types/node": "7.0.7",
+    "@types/react": "^16.14.33",
     "@types/react-copy-to-clipboard": "^4.2.6",
-    "@types/react-dom": "^16.0.8",
-    "@types/react-redux": "^6.0.9",
-    "@waves/ride-js": "^2.1.1",
+    "@types/react-dom": "^16.9.16",
+    "@types/react-redux": "^6.0.20",
+    "@waves/ride-js": "^2.2.1",
     "autoprefixer": "^9.1.5",
     "copy-webpack-plugin": "^4.5.2",
     "copyfiles": "^2.1.0",
@@ -55,7 +56,7 @@
     "style-loader": "^0.23.0",
     "ts-loader": "^5.2.1",
     "tslint": "^5.12.1",
-    "typescript": "^3.1.1",
+    "typescript": "^3.9.10",
     "webpack": "^4.20.2",
     "webpack-cli": "^3.1.2",
     "webpack-dev-server": "^3.1.14"

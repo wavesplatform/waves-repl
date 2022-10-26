@@ -123,6 +123,7 @@ export class ObjectType extends React.Component<any, ITypeState> {
             return {
                 key,
                 value: (
+                    // @ts-ignore
                     <Type
                         allowOpen={open}
                         key={`objectType-${i + 1}`}

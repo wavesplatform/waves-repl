@@ -13,7 +13,8 @@
       "typings"
     ],
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "examples",

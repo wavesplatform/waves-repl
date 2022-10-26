@@ -1,6 +1,6 @@
 import * as React from 'react';
 import which from '../../lib/which-type';
-import {ITypeState} from "./ITypeState";
+import { ITypeState } from "./ITypeState";
 
 interface IEntryTypeProps {
     allowOpen: boolean,
@@ -43,11 +43,13 @@ export class EntryType extends React.Component<any, ITypeState> {
                 <div onClick={this.toggle} className="type entry closed">
                     <div className="object-item key-value">
             <span className="key">
-              <Key allowOpen={open} value={key}/>
+            {/* @ts-ignore */}
+                <Key allowOpen={open} value={key}/>
             </span>
-                        <span className="arb-info">=> </span>
+                        <span className="arb-info">{`=>`} </span>
                         <span className="value">
-              <Value allowOpen={open} value={value}/>
+                            {/* @ts-ignore */}
+                            <Value allowOpen={open} value={value}/>
             </span>
                     </div>
                 </div>
@@ -61,12 +63,14 @@ export class EntryType extends React.Component<any, ITypeState> {
                     <div className="object-item key-value">
                         <span className="key">key:</span>
                         <span className="value">
+                            {/* @ts-ignore */}
               <Key allowOpen={open} value={key}/>
             </span>
                     </div>
                     <div className="object-item key-value">
                         <span className="key">value:</span>
                         <span className="value">
+                            {/* @ts-ignore */}
               <Value allowOpen={open} value={value}/>
             </span>
                     </div>

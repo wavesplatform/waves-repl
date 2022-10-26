@@ -73,6 +73,7 @@ export class Line extends React.Component<any, any> {
                             }
                             const Type = which(value);
                             return (
+                                // @ts-ignore
                                 <Type
                                     filter={filter}
                                     html={html}

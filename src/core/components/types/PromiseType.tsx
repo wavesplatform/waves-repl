@@ -95,6 +95,7 @@ export class PromiseType extends React.Component<any, IPromiseTypeState> {
                         <span className="key">[[PromiseValue]]:</span>
                         <span className="value"
                               onClick={this.toggle}>
+                            {/* @ts-ignore */}
                             <Value
                                 filter={filter}
                                 shallow={true}
@@ -122,6 +123,7 @@ export class PromiseType extends React.Component<any, IPromiseTypeState> {
                     <div className="object-item key-value">
                         <span className="key">[[PromiseValue]]:</span>
                         <span className="value">
+                            {/* @ts-ignore */}
                             <Value
                                 filter={filter}
                                 shallow={true}

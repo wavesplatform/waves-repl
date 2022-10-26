@@ -55,6 +55,7 @@ export class App extends React.Component<IAppProps, any> {
             console.push({
                 command,
                 type: 'response',
+                // @ts-ignore
                 ...res,
             });
             return;
