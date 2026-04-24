@@ -94,7 +94,8 @@ export class WavesConsoleAPI {
 
     public contract = (): string => this.file();
 
-    public keyPair = (seed?: string) => keyPair(seed || WavesConsoleAPI.env.SEED);
+    public keyPair = (seed?: string): { publicKey: string; privateKey: string } =>
+        keyPair(seed || WavesConsoleAPI.env.SEED) as { publicKey: string; privateKey: string };
 
     public publicKey = (seed?: string): string =>
         this.keyPair(seed).publicKey;
@@ -588,8 +589,7 @@ export class WavesConsoleAPIHelp {
             }
         });
 
-        // Add header for commands list
-        if (full === false) {
+        if (!full) {
             text = `${module.common.list.header}\n${text}`;
         }
 

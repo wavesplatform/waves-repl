@@ -1,6 +1,5 @@
 /*global document window */
-import { parse } from 'babylon';
-import * as walk from 'babylon-walk';
+import { parse } from '@babel/parser';
 
 import * as copy from 'copy-to-clipboard';
 
@@ -118,7 +117,7 @@ export default async function run(command: any, frame: any) {
 
 export function preProcess(content: any) {
     var wrapped = '(async () => {' + content + '})()';
-    var root = parse(wrapped, {ecmaVersion: 8} as any);
+    var root = parse(wrapped);
     var body = (root.program.body[0] as any).expression.callee.body;
 
     var changes: any = [];
@@ -126,8 +125,8 @@ export function preProcess(content: any) {
     var containsReturn = false;
 
     const visitors = {
-        ClassDeclaration(node: any) {
-            if (node.parent === body) {
+        ClassDeclaration(node: any, parent: any) {
+            if (parent === body) {
                 changes.push({
                     text: node.id.name + '=',
                     start: node.start,
@@ -143,14 +142,14 @@ export function preProcess(content: any) {
             });
             return node;
         },
-        AwaitExpression(node: any) {
+        AwaitExpression() {
             containsAwait = true;
         },
-        ReturnStatement(node: any) {
+        ReturnStatement() {
             containsReturn = true;
         },
-        VariableDeclaration(node: any) {
-            if (node.kind !== 'var' && node.parent !== body) return;
+        VariableDeclaration(node: any, parent: any) {
+            if (node.kind !== 'var' && parent !== body) return;
             var onlyOneDeclaration = node.declarations.length === 1;
             changes.push({
                 text: onlyOneDeclaration ? 'void' : 'void (',
@@ -189,7 +188,7 @@ export function preProcess(content: any) {
         },
     };
 
-    walk.simple(body, visitors, undefined);
+    traverseNode(body, null, visitors);
 
     var last = body.body[body.body.length - 1];
     let additionalCode = null;
@@ -245,4 +244,34 @@ export function preProcess(content: any) {
     }
 
     return {content: wrapped, additionalCode};
+}
+
+function traverseNode(node: any, parent: any, visitors: Record<string, (node: any, parent: any) => void>) {
+    if (!node || typeof node !== 'object') {
+        return;
+    }
+
+    if (typeof node.type === 'string') {
+        const visitor = visitors[node.type];
+        if (visitor) {
+            visitor(node, parent);
+        }
+    }
+
+    for (const key of Object.keys(node)) {
+        const value = node[key];
+
+        if (Array.isArray(value)) {
+            for (const item of value) {
+                if (item && typeof item === 'object' && typeof item.type === 'string') {
+                    traverseNode(item, node, visitors);
+                }
+            }
+            continue;
+        }
+
+        if (value && typeof value === 'object' && typeof value.type === 'string') {
+            traverseNode(value, node, visitors);
+        }
+    }
 }

@@ -51,14 +51,12 @@ export class ObjectType extends React.Component<any, ITypeState> {
         }
 
         if (this.props.filter === undefined) {
-            return false; // this prevents bananas amount of rendering
-        }
-
-        if (this.props.filter === nextProps.filter) {
             return false;
         }
 
-        return true;
+        return this.props.filter !== nextProps.filter;
+
+
     }
 
     toggle(e: React.MouseEvent) {
@@ -106,11 +104,9 @@ export class ObjectType extends React.Component<any, ITypeState> {
                     return true;
                 }
 
-                if ((value[prop] + '').toLowerCase().includes(filter)) {
-                    return true;
-                }
+                return (value[prop] + '').toLowerCase().includes(filter);
 
-                return false;
+
             });
         }
 
@@ -187,7 +183,7 @@ export class ObjectType extends React.Component<any, ITypeState> {
                 <div className="type object closed" onClick={this.toggle}>
                     <em>{displayName}</em>
                     <span>{'{'} </span>
-                    {types.map((obj, i) => {
+                    {(types as any[]).map((obj, i) => {
                         if (obj && obj.key && obj.value) {
                             return (
                                 <span className="object-item key-value" key={`subtype-${i}`}>
@@ -211,7 +207,7 @@ export class ObjectType extends React.Component<any, ITypeState> {
                     <span>{'{'}</span>
                 </div>
                 <div className="group">
-                    {types.map((obj, i) => {
+                    {(types as any[]).map((obj, i) => {
                         return (
                             <div className="object-item key-value" key={`subtype-${i}`}>
                                 <span className="key">{obj.key}:</span>

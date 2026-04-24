@@ -4,6 +4,7 @@
     "target": "es6",
     "jsx": "react",
     "module": "commonjs",
+    "rootDir": ".",
     "lib": [
       "es7",
       "dom"
@@ -14,7 +15,8 @@
     ],
     "declaration": true,
     "outDir": "dist",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true
   },
   "exclude": [
     "examples",

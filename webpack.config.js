@@ -1,19 +1,23 @@
-/*** webpack.config.js ***/
-const autoprefixer = require('autoprefixer')
+const autoprefixer = require('autoprefixer');
 const path = require('path');
-const HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+// 1. Импортируем установленный плагин
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+
 const htmlWebpackPlugin = new HtmlWebpackPlugin({
-    template: path.join(__dirname, "examples/src/index.html"),
-    filename: "./index.html"
+    template: path.join(__dirname, 'examples/src/index.html'),
+    filename: './index.html',
 });
+
 module.exports = {
-    entry: path.join(__dirname, "examples/src/index.tsx"),
+    entry: path.join(__dirname, 'examples/src/index.tsx'),
     module: {
         rules: [
+            // ... (ваши правила для ts и css остаются без изменений)
             {
                 test: /\.(ts|tsx)$/,
-                use: "ts-loader",
-                exclude: /node_modules/
+                use: 'ts-loader',
+                exclude: /node_modules/,
             },
             {
                 test: /\.css$/,
@@ -28,33 +32,35 @@ module.exports = {
                     {
                         loader: require.resolve('postcss-loader'),
                         options: {
-                            // Necessary for external CSS imports to work
-                            // https://github.com/facebookincubator/create-react-app/issues/2677
-                            ident: 'postcss',
-                            plugins: () => [
-                                require('postcss-flexbugs-fixes'),
-                                require('postcss-inline-svg'),
-                                autoprefixer({
-                                    browsers: [
-                                        '>1%',
-                                        'last 4 versions',
-                                        'Firefox ESR',
-                                        'not ie < 9', // React doesn't support IE8 anyway
-                                    ],
-                                    flexbox: 'no-2009',
-                                }),
-                            ],
+                            postcssOptions: {
+                                plugins: [
+                                    require('postcss-flexbugs-fixes'),
+                                    require('postcss-inline-svg'),
+                                    autoprefixer({
+                                        overrideBrowserslist: [
+                                            '>1%',
+                                            'last 4 versions',
+                                            'Firefox ESR',
+                                            'not ie < 9',
+                                        ],
+                                        flexbox: 'no-2009',
+                                    }),
+                                ],
+                            },
                         },
                     },
                 ],
-            }
-        ]
+            },
+        ],
     },
-    plugins: [htmlWebpackPlugin],
+    plugins: [
+        htmlWebpackPlugin,
+        new NodePolyfillPlugin(),
+    ],
     resolve: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"]
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
     },
     devServer: {
-        port: 3001
-    }
+        port: 3001,
+    },
 };
