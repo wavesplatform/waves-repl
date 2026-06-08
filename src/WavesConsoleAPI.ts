@@ -1,8 +1,11 @@
 import * as wt from '@waves/waves-transactions';
 import { libs, TTx, TTxParams, TSeedTypes } from '@waves/waves-transactions/';
+import { create as createNodeApi } from '@waves/node-api-js';
 import { compile as cmpl } from '@waves/ride-js';
 
 const {keyPair, address, stringToBytes, signBytes} = wt.libs.crypto;
+
+type InjectedTxFunction = (params: TTxParams, seed?: TSeedTypes | null) => any;
 
 
 export class WavesConsoleAPI {
@@ -10,8 +13,12 @@ export class WavesConsoleAPI {
 
     [key: string]: any;
 
-    private static injectEnv = <T extends (pp: any, ...args: any) => any>(f: T) => (po: TTxParams, seed?: TSeedTypes | null): ReturnType<typeof f> =>
+    private static injectEnv = (f: (pp: any, ...args: any[]) => any): InjectedTxFunction => (po: TTxParams, seed?: TSeedTypes | null): any =>
         f({chainId: WavesConsoleAPI.env.CHAIN_ID, ...po}, seed === null ? null : seed || WavesConsoleAPI.env.SEED);
+
+    private static nodeApi(apiBase?: string): ReturnType<typeof createNodeApi> {
+        return createNodeApi(apiBase || WavesConsoleAPI.env.API_BASE);
+    }
 
     public static setEnv(env: any) {
         WavesConsoleAPI.env = env;
@@ -60,30 +67,36 @@ export class WavesConsoleAPI {
 
     public signTx = WavesConsoleAPI.injectEnv(wt.signTx);
 
-    public stringToUint8Array = stringToBytes;
+    public stringToUint8Array = stringToBytes as (input: string) => Uint8Array;
 
     public signBytes = (bytes: Uint8Array, seed?: string) => signBytes(bytes, seed || WavesConsoleAPI.env.SEED);
 
-    public balance = (address?: string, apiBase?: string) =>
-        wt.nodeInteraction.balance(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+    public balance = async (address?: string, apiBase?: string): Promise<any> =>
+        WavesConsoleAPI.nodeApi(apiBase).addresses.fetchBalance(address || this.currentAddress()).then(({balance}) => balance);
 
-    public assetBalance = async (assetId: string, address?: string, apiBase?: string) =>
-        wt.nodeInteraction.assetBalance(assetId, address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+    public assetBalance = async (assetId: string, address?: string, apiBase?: string): Promise<any> =>
+        WavesConsoleAPI.nodeApi(apiBase).assets.fetchBalanceAddressAssetId(address || this.currentAddress(), assetId).then(({balance}) => balance);
 
-    public balanceDetails = async (address?: string, apiBase?: string) =>
-        wt.nodeInteraction.balanceDetails(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+    public balanceDetails = async (address?: string, apiBase?: string): Promise<any> =>
+        WavesConsoleAPI.nodeApi(apiBase).addresses.fetchBalanceDetails(address || this.currentAddress());
 
 
-    public accountData = (address?: string, apiBase?: string) =>
-        wt.nodeInteraction.accountData(address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+    public accountData = (address?: string, apiBase?: string): Promise<any> =>
+        WavesConsoleAPI.nodeApi(apiBase).addresses.data(address || this.currentAddress())
+            .then((data) => data.reduce((acc, item) => ({...acc, [item.key]: item}), {}));
 
-    public accountDataByKey = (key: string, address?: string, apiBase?: string) =>
-        wt.nodeInteraction.accountDataByKey(key, address || this.currentAddress(), apiBase || WavesConsoleAPI.env.API_BASE);
+    public accountDataByKey = (key: string, address?: string, apiBase?: string): Promise<any> =>
+        WavesConsoleAPI.nodeApi(apiBase).addresses.fetchDataKey(address || this.currentAddress(), key)
+            .catch((e) => {
+                if (e.error === 304) return null;
+                throw e;
+            });
 
-    public currentHeight = async (apiBase?: string) =>
-        wt.nodeInteraction.currentHeight(apiBase || WavesConsoleAPI.env.API_BASE);
+    public currentHeight = async (apiBase?: string): Promise<number> =>
+        WavesConsoleAPI.nodeApi(apiBase).blocks.fetchHeight().then(({height}) => height);
 
-    public broadcast = (tx: TTx, apiBase?: string) => wt.broadcast(tx, apiBase || WavesConsoleAPI.env.API_BASE);
+    public broadcast = (tx: TTx, apiBase?: string): Promise<any> =>
+        WavesConsoleAPI.nodeApi(apiBase).transactions.broadcast(tx as any);
 
     public file = (tabName?: string): string => {
         if (typeof WavesConsoleAPI.env.file !== 'function') {
@@ -575,11 +588,9 @@ export class WavesConsoleAPIHelp {
             full: boolean = aliases.length === 1,
             text: string = '';
 
-        // Compile text for each command
         aliases.forEach((alias: any, index: number) => {
             text = this.compileTextSlice(alias, full, text);
 
-            // Add ; or .
             if (!full) {
                 if (index == last) {
                     text = `${text}.`;

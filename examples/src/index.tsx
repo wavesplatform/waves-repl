@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Repl } from '../../src';
+declare const global: typeof globalThis;
 
 class App extends React.Component {
     public consoleRef = React.createRef<Repl>();

@@ -3,6 +3,7 @@
     "strict": true,
     "target": "es6",
     "jsx": "react",
+
     "module": "commonjs",
     "rootDir": ".",
     "lib": [
@@ -18,8 +19,14 @@
     "allowSyntheticDefaultImports": true,
     "skipLibCheck": true
   },
+  "include": [
+    "src/**/*",
+    "examples/**/*",
+    "typings/**/*"
+  ],
   "exclude": [
-    "examples",
-    "node_modules"
+    "node_modules",
+    "dist",
+    "**/node_modules/**"
   ]
 }
