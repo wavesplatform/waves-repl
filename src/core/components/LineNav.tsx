@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Filter} from './Filter';
-import * as CopyToClipboard from 'react-copy-to-clipboard';
+import CopyToClipboard = require('react-copy-to-clipboard');
 
 export class LineNav extends React.Component<any, any> {
     private filter?: Filter | null;
@@ -79,7 +79,9 @@ export class LineNav extends React.Component<any, any> {
             <div className="LineNav">
                 {typeof value === 'object' &&
                 <Filter
-                    ref={e => (this.filter = e)}
+                    ref={e => {
+                        this.filter = e;
+                    }}
                     onFilter={onFilter}
                     enabled={filter}
                 >

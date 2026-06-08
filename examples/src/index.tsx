@@ -1,6 +1,7 @@
 import * as React from 'react';
-import { render } from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import { Repl } from '../../src';
+declare const global: typeof globalThis;
 
 class App extends React.Component {
     public consoleRef = React.createRef<Repl>();
@@ -25,4 +26,7 @@ class App extends React.Component {
         return <Repl theme="dark" ref={this.consoleRef}/>
     }
 }
-render(<App/>, document.getElementById('root'));
+const rootNode = document.getElementById('root');
+if (rootNode) {
+    createRoot(rootNode).render(<App/>);
+}

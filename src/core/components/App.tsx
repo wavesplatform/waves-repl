@@ -1,16 +1,14 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import classnames from 'classnames';
 
 import { Console } from './Console';
 import { Input } from '../containers/Input';
 
-import run, { bindConsole, createContainer, getContainer } from '../lib/run';
+import run, { bindConsole, createContainer } from '../lib/run';
 import internalCommands from '../lib/internal-commands';
 import { bindAPItoIFrame } from '../lib/contextBinding';
 import { WavesConsoleAPI } from '../../WavesConsoleAPI';
 
-// this is lame, but it's a list of key.code that do stuff in the input that we _want_.
 const doStuffKeys = /^(Digit|Key|Num|Period|Semi|Comma|Slash|IntlBackslash|Backspace|Delete|Enter)/;
 
 export interface IAppProps {
@@ -28,8 +26,6 @@ export class App extends React.Component<IAppProps, any> {
     private app: any;
     private input: any;
     private frame: any;
-
-    static contextTypes = {store: PropTypes.object};
 
     constructor(props: any) {
         super(props);
@@ -134,7 +130,9 @@ export class App extends React.Component<IAppProps, any> {
                 style={style}
                 tabIndex={-1}
                 onKeyDown={this.triggerFocus}
-                ref={e => (this.app = e)}
+                ref={e => {
+                    this.app = e;
+                }}
                 className={className}
             >
                 <Console
@@ -143,7 +141,9 @@ export class App extends React.Component<IAppProps, any> {
                     reverse={layout === 'top'}
                 />
                 <Input
-                    inputRef={(e:any) => (this.input = e)}
+                    inputRef={(e:any) => {
+                        this.input = e;
+                    }}
                     onRun={this.onRun}
                     autoFocus={window.top === window}
                     onClear={() => {
