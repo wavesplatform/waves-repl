@@ -29,7 +29,7 @@
   },
   "dependencies": {
     "@babel/parser": "^7.29.7",
-    "@waves/node-api-js": "1.4.0-snapshot.3",
+    "@waves/node-api-js": "^1.4.0",
     "@waves/waves-transactions": "^5.0.0",
     "axios": "^1.17.0",
     "classnames": "^2.5.1",
